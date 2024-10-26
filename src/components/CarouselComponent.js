@@ -1,0 +1,110 @@
+import React from "react";
+import Slider from "react-slick";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <FontAwesomeIcon
+      className={`${className} carousel-icon-size`}
+      style={{
+        display: "block",
+        background: "#212529",
+        color: "white",
+        borderRadius: "0%",
+      }}
+      onClick={onClick}
+      icon={faChevronLeft}
+    />
+  );
+}
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <FontAwesomeIcon
+      className={`${className} carousel-icon-size`}
+      style={{
+        display: "block",
+        background: "#212529",
+        color: "white",
+        borderRadius: "0%",
+      }}
+      onClick={onClick}
+      icon={faChevronRight}
+    />
+  );
+}
+
+const CarouselComponent = (prop) => {
+  const partners = prop.partners;
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 8,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    prevArrow: <SamplePrevArrow />,
+    nextArrow: <SampleNextArrow />,
+
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          dots: false,
+          infinite: true,
+          speed: 500,
+          slidesToShow: 7,
+          slidesToScroll: 1,
+          initialSlide: 0,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          dots: false,
+          infinite: true,
+          speed: 500,
+          slidesToShow: 4,
+          slidesToScroll: 1,
+          initialSlide: 0,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          dots: false,
+          infinite: true,
+          speed: 500,
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          initialSlide: 0,
+        },
+      },
+    ],
+  };
+  return (
+    <div className="slider-container">
+      <Slider {...settings}>
+        {partners &&
+          partners.map((el, i) => (
+            <div key={i} className="partner-carousel-images-container">
+              <img
+                className={`partner-carousel-image partner-carousel-image-${
+                  i + 1
+                }`}
+                src={el.logo}
+                alt=""
+              />
+            </div>
+          ))}
+      </Slider>
+    </div>
+  );
+};
+
+export default CarouselComponent;
