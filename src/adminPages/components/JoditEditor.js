@@ -53,7 +53,7 @@ const JoditEditorComponent = () => {
   const config = {
     uploader: {
       insertImageAsBase64URI: true,
-      url: "http://localhost:5000/api/upload", // Your image upload API endpoint
+      url: "https://design-union-backend.vercel.app/api/upload", // Your image upload API endpoint
       format: "json",
       method: "POST",
       process: (resp) => {

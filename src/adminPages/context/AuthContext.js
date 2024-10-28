@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     console.log('Logging out...');
     localStorage.removeItem('token'); // Remove the token
     setUser(null); // Clear user state
-    navigate('/admin'); // Redirect to login page
+    navigate('/login'); // Redirect to login page
   };
 
   return (

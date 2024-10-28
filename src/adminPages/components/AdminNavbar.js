@@ -18,6 +18,8 @@ const AdminNavbar = () => {
     logout(navigate); // Pass navigate to logout
   };
 
+  
+
   return (
     <Navbar expand="md" className="bg-body-tertiary">
       <Container>

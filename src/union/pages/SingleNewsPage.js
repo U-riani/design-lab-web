@@ -37,7 +37,7 @@ const GetSingleNews = () => {
           </Row>
 
           {/* <img src={news.image} alt={news.title} className="img-fluid" /> */}
-          <Row className="single-news-image-row">{news.image && <img src={`/${news.image}`} alt="news" />}</Row>
+          <Row className="single-news-image-row">{news.image && <img src={news.image} alt="news" />}</Row>
           <div
             className="article-body"
             dangerouslySetInnerHTML={{ __html: news.text }}

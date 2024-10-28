@@ -7,27 +7,35 @@ import {
 } from "../../data/newsSlice2";
 import { useParams } from "react-router-dom";
 
-const JoditEditorComponent = (prop) => {
-  // const {newsId} = useParams();
+const JoditUpdateEditor = (prop) => {
+  const { newsId } = useParams();
 
   // console.log(newsId);
-  // const {data: news, isLoading, error} = useGetSingleNewsQuery(newsId)
+  const { data: news, isLoading, error } = useGetSingleNewsQuery(newsId);
   const [title, setTitle] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [editorContent, setEditorContent] = useState("");
   const editorRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  const [createNews] = useCreateNewsMutation();
-  // const [updateNews] = useUpdateNewsMutation();
+//   const [createNews] = useCreateNewsMutation();
+  const [updateNews] = useUpdateNewsMutation();
 
-  // useEffect(() => {
-  //   if (news) {
-  //     setTitle(news.title);
-  //     setEditorContent(news.text);
-  //   }
-  //   console.log(news);
-  // }, [news]);
+//   useEffect(() => {
+//     if (data) {
+//         console.log(data);
+//     }
+//   }, [data]);
+
+
+  useEffect(() => {
+    if (news) {
+      setTitle(news.title);
+      setEditorContent(news.text);
+      setEditorContent(news.text);
+      setImageFile(news.image);
+    }
+  }, [news]);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -38,23 +46,23 @@ const JoditEditorComponent = (prop) => {
   };
 
   const handleSubmit = async () => {
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("text", editorContent);
-    if (imageFile) formData.append("image", imageFile);
-    console.log(formData);
-
     try {
-      // Create new article
-      await createNews(formData).unwrap();
-
-      alert("News saved successfully!");
+      if (news) {
+        await updateNews({
+          id: news._id,
+          title,
+          text: editorContent,
+          image: imageFile ? imageFile : null,
+        }).unwrap();
+      }
+      alert("News updated successfully!");
       handleClearContent();
     } catch (error) {
-      console.log("error", error);
-      alert("Failed to save content: " + error.message);
+      console.log("error", error, error.message);
+      alert("Failed to update content joditUpdate: " + error.message);
     }
   };
+  
 
   const handleClearContent = () => {
     setTitle("");
@@ -91,7 +99,7 @@ const JoditEditorComponent = (prop) => {
 
   return (
     <div className="joditComponent-container">
-      {/* <h2>{news ? "Edit News Article" : "Create News Article"}</h2> */}
+      <h2>Edit News Article</h2>
       <label htmlFor="title">Title</label>
       <input
         id="title"
@@ -117,7 +125,7 @@ const JoditEditorComponent = (prop) => {
       />
       <div className="mt-3">
         <button onClick={handleSubmit} className="btn btn-primary">
-          Save News Article
+          Update News Article
         </button>
         <button onClick={handleClearContent} className="btn btn-secondary ms-2">
           Clear Content
@@ -127,4 +135,4 @@ const JoditEditorComponent = (prop) => {
   );
 };
 
-export default JoditEditorComponent;
+export default JoditUpdateEditor;

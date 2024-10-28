@@ -30,7 +30,7 @@ const QuillEditorComponent = () => {
         formData.append('image', image);
       }
 
-      const response = await fetch('http://localhost:5000/api/news', {
+      const response = await fetch('https://design-union-backend.vercel.app/api/news', {
         method: 'POST',
         body: formData,
       });

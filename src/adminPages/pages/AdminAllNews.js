@@ -100,7 +100,7 @@ const UpdateNews = () => {
                       i + 1
                     } mb-0`}
                   >
-                    <img src={`/${el.image}`} alt="news" />
+                    <img src={el.image} alt="news" />
                   </Col>
                 </div>
               </div>

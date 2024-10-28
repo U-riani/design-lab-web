@@ -17,7 +17,7 @@ class MyCustomUploadAdapter {
           const data = new FormData();
           data.append('image', file);
 
-          fetch('http://localhost:5000/api/upload', {
+          fetch('https://design-union-backend.vercel.app/api/upload', {
             method: 'POST',
             body: data,
           })

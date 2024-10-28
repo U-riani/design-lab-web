@@ -6,7 +6,7 @@ import {
   useDeleteNewsMutation,
 } from "../../data/newsSlice2";
 // import JoditEditorComponent from "../components/JoditEditor";
-import JoditEditorComponent2 from '../components/JoditEditor2.js'
+import JoditUpdateEditor from '../components/JoditUpdateEditor.js'
 
 const AdminSingleNews = () => {
   const { newsId } = useParams();
@@ -52,6 +52,8 @@ const AdminSingleNews = () => {
     );
   }
 
+
+
   return (
     <Container className="getNewsComponent">
       {!news ? (
@@ -62,7 +64,7 @@ const AdminSingleNews = () => {
             <h1 className="text-center">{news.title}</h1>
           </Row>
           <Row className="single-news-image-row">
-            {news.image && <img src={`/${news.image}`} alt="news" />}
+            {news.image && <img src={news.image} alt="news" />}
           </Row>
           <div
             className="article-body"
@@ -70,7 +72,7 @@ const AdminSingleNews = () => {
           />
           {showEditor && (
             <Row>
-              <JoditEditorComponent2 prop={news} />
+              <JoditUpdateEditor prop={news} />
             </Row>
           )}
           <Row>
