@@ -15,8 +15,8 @@ export const LastNewsProvider = ({ children }) => {
         last5NewsData.map((el, i) => ({
           id: i,
           title: el.title,
-          imageSrc: el.image,
-          text: el.text,
+          imageSrc: el.images,
+          
           activeNews: i, // Initially set the first slide as active
         }))
       );
@@ -32,7 +32,7 @@ export const LastNewsProvider = ({ children }) => {
           ...el,
           // activeNews:  (el.activeNews + newPosition) % last5News.length,
           activeNews:
-            (el.activeNews + 2 * step + last5News.length) % last5News.length,
+            (el.activeNews + 1 * step + last5News.length) % last5News.length,
         }))
       );
 
@@ -40,8 +40,8 @@ export const LastNewsProvider = ({ children }) => {
     });
   };
 
-  const moveSlideToNext = () => moveSlide(1);
-  const moveSlideToPrev = () => moveSlide(-1);
+  const moveSlideToNext = () => moveSlide(-1);
+  const moveSlideToPrev = () => moveSlide(1);
 
   return (
     <LastNewsContext.Provider

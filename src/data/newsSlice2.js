@@ -48,14 +48,17 @@ export const apiNewsSlice = createApi({
     }),
 
     updateNews: builder.mutation({
-      query: ({ id, title, text, image }) => {
+      query: ({ id, title, text, images }) => {
         const formData = new FormData();
-        formData.append("title", title);
-        formData.append("text", text);
-  
-        if (image) {
-          formData.append("image", image);
+        formData.append("title[ge]", title.ge);
+        formData.append("title[en]", title.en);
+        formData.append("text[ge]", text.ge);
+        formData.append("text[en]", text.en);
+
+        if (images && images.length > 0) {
+          images.forEach((image) => formData.append("images", image));
         }
+
         return {
           url: `news/${id}`,
           method: "PATCH",

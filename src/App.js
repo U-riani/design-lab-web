@@ -25,6 +25,15 @@ import AdminSingleNews from "./adminPages/pages/AdminSingleNewsPage";
 import ProtectedRoute from "./adminPages/protectedRoute/ProtectedRoute"; // Import the ProtectedRoute component
 import { AuthProvider } from "./adminPages/context/AuthContext";
 
+import 'bpg-nino-mtavruli/css/bpg-nino-mtavruli.min.css';
+import AddHero from "./adminPages/pages/AddHero";
+import AdminAllHeros from "./adminPages/pages/AdminAllHeros";
+import AdminAddPartners from "./adminPages/pages/AdminAddPartners";
+import AdminAllPartners from "./adminPages/pages/AdminAllPartners";
+import AdminAddDesigner from "./adminPages/pages/AdminAddDesigner";
+import AdminAllDesigners from "./adminPages/pages/AdminAllDesigners";
+
+
 const App = () => (
   <AuthProvider>
     <Router>
@@ -46,6 +55,30 @@ const App = () => (
           <Route
             path="all-news/:newsId"
             element={<ProtectedRoute element={<AdminSingleNews />} />}
+          />
+          <Route
+            path="add-hero"
+            element={<ProtectedRoute element={<AddHero />} />}
+          />
+          <Route
+            path="all-heros"
+            element={<ProtectedRoute element={<AdminAllHeros />} />}
+          />
+          <Route
+            path="add-partner"
+            element={<ProtectedRoute element={<AdminAddPartners />} />}
+          />
+          <Route
+            path="all-partners"
+            element={<ProtectedRoute element={<AdminAllPartners />} />}
+          />
+          <Route
+            path="add-designer"
+            element={<ProtectedRoute element={<AdminAddDesigner />} />}
+          />
+          <Route
+            path="all-designers"
+            element={<ProtectedRoute element={<AdminAllDesigners />} />}
           />
         </Route>
         {/* Add more routes as needed */}

@@ -1,66 +1,77 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import JoditEditor from "jodit-react";
-import {
-  useCreateNewsMutation,
-  useGetSingleNewsQuery,
-  useUpdateNewsMutation,
-} from "../../data/newsSlice2";
-import { useParams } from "react-router-dom";
+import { useCreateNewsMutation } from "../../data/newsSlice2";
+import { useTranslation } from "react-i18next";
 
-const JoditEditorComponent = (prop) => {
-  // const {newsId} = useParams();
-
-  // console.log(newsId);
-  // const {data: news, isLoading, error} = useGetSingleNewsQuery(newsId)
-  const [title, setTitle] = useState("");
-  const [imageFile, setImageFile] = useState(null);
-  const [editorContent, setEditorContent] = useState("");
-  const editorRef = useRef(null);
+const JoditEditorComponent = () => {
+  const [title, setTitle] = useState({ en: "", ge: "" });
+  const [imageFiles, setImageFiles] = useState([]);
+  const editorRefEn = useRef(null);
+  const editorRefGe = useRef(null);
   const fileInputRef = useRef(null);
-
+  const { t } = useTranslation();
   const [createNews] = useCreateNewsMutation();
-  // const [updateNews] = useUpdateNewsMutation();
 
-  // useEffect(() => {
-  //   if (news) {
-  //     setTitle(news.title);
-  //     setEditorContent(news.text);
-  //   }
-  //   console.log(news);
-  // }, [news]);
-
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const handleImageChange = (e) => {
-    setImageFile(e.target.files[0]);
+  const handleTitleChange = (lang, e) => {
+    setTitle((prev) => ({
+      ...prev,
+      [lang]: e.target.value,
+    }));
+    
   };
 
   const handleSubmit = async () => {
+    const editorContentEn = editorRefEn.current
+      ? editorRefEn.current.value
+      : "";
+    const editorContentGe = editorRefGe.current
+      ? editorRefGe.current.value
+      : "";
+
+    if (!editorContentEn || !editorContentGe) {
+      alert("Please provide content in both English and Georgian.");
+      return;
+    }
+
     const formData = new FormData();
-    formData.append("title", title);
-    formData.append("text", editorContent);
-    if (imageFile) formData.append("image", imageFile);
-    console.log(formData);
+    formData.append("title[en]", title.en);
+    formData.append("title[ge]", title.ge);
+    formData.append("text[en]", editorContentEn);
+    formData.append("text[ge]", editorContentGe);
+
+    // Append each selected image file using the same key
+    imageFiles.forEach((file) => {
+      formData.append("images", file); // Use "images[]" to indicate multiple files
+    });
 
     try {
-      // Create new article
       await createNews(formData).unwrap();
-
       alert("News saved successfully!");
       handleClearContent();
     } catch (error) {
-      console.log("error", error);
-      alert("Failed to save content: " + error.message);
+      console.log("Error:", error);
+      alert(
+        "Failed to save content: " + (error.data?.message || error.message)
+      ); // Improved error message
     }
   };
 
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setImageFiles((prev) => {
+      const updatedFiles = [...prev, ...files];
+      console.log("Selected images:", updatedFiles); // Log updated files
+      return updatedFiles; // Return updated state
+    });
+  };
+  
+
   const handleClearContent = () => {
-    setTitle("");
-    setImageFile(null);
-    setEditorContent("");
-    fileInputRef.current.value = "";
+    setTitle({ en: "", ge: "" });
+    setImageFiles([]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    if (editorRefEn.current) editorRefEn.current.value = "";
+    if (editorRefGe.current) editorRefGe.current.value = "";
   };
 
   const config = {
@@ -91,30 +102,62 @@ const JoditEditorComponent = (prop) => {
 
   return (
     <div className="joditComponent-container">
-      {/* <h2>{news ? "Edit News Article" : "Create News Article"}</h2> */}
-      <label htmlFor="title">Title</label>
+      <label htmlFor="titleGe">{t("Title (Georgian)")}</label>
       <input
-        id="title"
+        id="titleGe"
         type="text"
-        placeholder="Enter news title"
-        value={title}
-        onChange={handleTitleChange}
+        placeholder={t("Title (Georgian)")}
+        value={title.ge}
+        onChange={(e) => handleTitleChange("ge", e)}
         className="form-control mb-3"
       />
-      <label htmlFor="image">Upload Image</label>
+
+      <label htmlFor="image">Upload Images</label>
       <input
         id="image"
         type="file"
+        multiple
         ref={fileInputRef}
         onChange={handleImageChange}
         className="form-control mb-3"
       />
-      <JoditEditor
-        ref={editorRef}
-        value={editorContent}
-        config={config}
-        onBlur={(newContent) => setEditorContent(newContent)} // Update state on blur
+
+      {/* Preview uploaded images */}
+      <div>
+        {imageFiles.length > 0 && (
+          <div className="image-preview">
+            {imageFiles.map((file, index) => (
+              <img
+                key={index}
+                src={URL.createObjectURL(file)}
+                alt={`Preview ${index}`}
+                style={{ width: "100px", marginRight: "10px" }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="editor-section">
+        <label>{t("Content (Georgian)")}</label>
+        <JoditEditor ref={editorRefGe} config={config} />
+      </div>
+
+      <label htmlFor="titleEn">{t("Title (English)")}</label>
+      <input
+        id="titleEn"
+        type="text"
+        placeholder={t("Title (English)")}
+        value={title.en}
+        onChange={(e) => handleTitleChange("en", e)}
+        className="form-control mb-3"
       />
+
+      <div className="editor-section">
+        <label>{t("Content (English)")}</label>
+        <JoditEditor ref={editorRefEn} config={config} />
+      </div>
+
       <div className="mt-3">
         <button onClick={handleSubmit} className="btn btn-primary">
           Save News Article

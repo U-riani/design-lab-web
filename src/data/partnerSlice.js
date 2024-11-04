@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import partner1 from "../images/union/partners/partner-1.jpg";
-import partner2 from "../images/union/partners/partner-2.jpg";
-import partner3 from "../images/union/partners/partner-3.jpg";
-import partner4 from "../images/union/partners/partner-4.jpg";
-import partner5 from "../images/union/partners/partner-5.jpg";
-import partner6 from "../images/union/partners/partner-6.jpg";
-import partner7 from "../images/union/partners/partner-7.jpg";
+// import partner1 from "../images/union/partners/partner-1.jpg";
+// import partner2 from "../images/union/partners/partner-2.jpg";
+// import partner3 from "../images/union/partners/partner-3.jpg";
+// import partner4 from "../images/union/partners/partner-4.jpg";
+// import partner5 from "../images/union/partners/partner-5.jpg";
+// import partner6 from "../images/union/partners/partner-6.jpg";
+// import partner7 from "../images/union/partners/partner-7.jpg";
 
 const initialState = [
   {

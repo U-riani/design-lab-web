@@ -4,16 +4,18 @@ import he from "he";
 import { Alert, Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useGetAllNewsQuery } from "../../data/newsSlice2";
+import { useTranslation } from "react-i18next";
 
 const UpdateNews = () => {
   const { data: allNews, isLoading, error, refetch } = useGetAllNewsQuery();
-  const extractText = (html) => {
-    console.log(html);
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    return doc.body.textContent || "";
-  };
-
+  const {t, i18n} = useTranslation()
+  // const extractText = (html) => {
+  //   console.log(html);
+  //   const parser = new DOMParser();
+  //   const doc = parser.parseFromString(html, "text/html");
+  //   return doc.body.textContent || "";
+  // };
+console.log(allNews)
   const extractTextRegex = (html) => {
     const textOnly = html.replace(/<[^>]*>/g, " ");
     // Decode HTML entities
@@ -22,7 +24,7 @@ const UpdateNews = () => {
 
   useEffect(() => {
     refetch()
-  }, []);
+  }, [refetch]);
 
   if (isLoading) {
     return (
@@ -50,7 +52,7 @@ const UpdateNews = () => {
               xs={12}
               // lg={6}
               key={i}
-              className={`newsPage-col newsPage-col-${i + 1}`}
+              className={`py-3 px-md-4 py-md-4 my-3 my-md-4 my-lg-5 newsPage-col newsPage-col-${i + 1}`}
             >
               {/* <div className="newsPage-title-container">
                 <h5>{el.title || "News Title"}</h5>
@@ -72,11 +74,11 @@ const UpdateNews = () => {
                     md={5}
                     className={`newsPage-news-text-container newsPage-news-text-container-${
                       i + 1
-                    } pe-2 mb-0`}
+                    } pe-3 mb-0`}
                   >
                     <div>
-                      <h5>{el.title || "News Title"}</h5>
-                      <div>{extractTextRegex(el.text)}</div>
+                      <h5>{el.title[i18n.language] || el.title || "News Title"}</h5>
+                      <div>{extractTextRegex(el.text[i18n.language] || el.text)}</div>
                       {/* {console.log(...extractText(el.text))} */}
                       {/* {el.text.map((el) => ())} */}
                       {/* <p className="mb-0">{extractText(el.text)}</p> */}
@@ -100,7 +102,7 @@ const UpdateNews = () => {
                       i + 1
                     } mb-0`}
                   >
-                    <img src={el.image} alt="news" />
+                    <img src={el.images[0]} alt="news" />
                   </Col>
                 </div>
               </div>

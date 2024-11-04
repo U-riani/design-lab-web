@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef, useContext  } from "react";
-import { useDispatch } from "react-redux";
-import { setPosition } from "../data/newsSlice";
+import React, { useEffect, useState, useRef, useContext } from "react";
+
 import useScreenWidth from "../hooks/useScreenWidth";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,14 +10,16 @@ import {
 import { LastNewsContext } from "../context/LastNewsContext";
 
 const StackCardsSlider3 = ({ newsData }) => {
-  const { last5News, position, moveSlideToNext, moveSlideToPrev } = useContext(LastNewsContext);
+  const { last5News, moveSlideToNext, moveSlideToPrev } =
+    useContext(LastNewsContext);
 
   // const news = useSelector(state => state.news)
-  const reversedNewsData = [...newsData].reverse();
+  // const reversedNewsData = [...newsData].reverse();
   const [distance, setDistance] = useState(30);
   const screenWidth = useScreenWidth();
   const touchStartX = useRef(0); // Store the initial X coordinate of touch
   const touchEndX = useRef(0);
+  // console.log(last5News)
 
   // const moveSlideToNext = () => {
   //   // dispatch(setPosition(-1));
@@ -70,17 +71,19 @@ const StackCardsSlider3 = ({ newsData }) => {
   useEffect(() => {
     const topElement = document.querySelector(".stack-cards-carousel-top");
     if (topElement) {
-      topElement.style.zIndex = reversedNewsData.length + 5;
+      topElement.style.zIndex = last5News.length + 5;
+      // console.log("ll");
     }
-  }, [reversedNewsData.length]);
+  }, [last5News.length]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       moveSlideToNext();
+      // console.log("++");
     }, 2000);
 
     return () => clearTimeout(timer);
-  });
+  }, [last5News, moveSlideToNext]);
 
   useEffect(() => {
     const updateSlidesPosition = () => {
@@ -93,7 +96,8 @@ const StackCardsSlider3 = ({ newsData }) => {
     };
 
     updateSlidesPosition();
-  }, [reversedNewsData, distance]);
+    // console.log('--')
+  }, [last5News, distance]);
 
   return (
     <div className="stack-cards-carousel mb-0">
@@ -116,7 +120,7 @@ const StackCardsSlider3 = ({ newsData }) => {
                 className={`stack-cards-carousel-item-img stack-cards-carousel-item-img-${
                   i + 1
                 }`}
-                src={el.imageSrc}
+                src={el.imageSrc[0]}
                 alt=""
               />
             </div>

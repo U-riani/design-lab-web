@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Container, Carousel, Image } from "react-bootstrap";
+import React from "react";
+import { Container, Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 const slide1 = require("../images/union/hero-banner/slide3-b.jpg");
 

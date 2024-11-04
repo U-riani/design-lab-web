@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 const PartnersPage = () => {
   const partners = useSelector((state) => state.partners);
   return (
-    <Container fluid className="partnersPage py-5 my-0 px-4 px-sm-2">
+    <Container fluid className="partnersPage py-5 my-0">
       <Row>
         {partners &&
           partners.map((part, i) => (
@@ -15,7 +15,7 @@ const PartnersPage = () => {
               lg={4}
               xxl={3}
               key={i}
-              className={`partnersPage-col partnersPage-col-${i}`}
+              className={`partnersPage-col partnersPage-col-${i} py-3 px-3`}
             >
               <div
                 className={` partnersPage-col-inner-container partnersPage-col-inner-container-${i}`}

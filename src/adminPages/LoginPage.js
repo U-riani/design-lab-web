@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // For making HTTP requests
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate(); // Initialize navigate hook
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,8 +23,8 @@ const LoginPage = () => {
       if (response.data.token) {
         // Store token in localStorage
         localStorage.setItem('token', response.data.token);
-        // Redirect to another page, e.g., dashboard
-        window.location.href = '/admin/'; // Change to your desired route
+        // Redirect using navigate
+        navigate('/admin/'); // Change to your desired route
       }
     } catch (err) {
       setError('Login failed. Please check your credentials and try again.');
@@ -56,7 +58,7 @@ const LoginPage = () => {
           />
         </div>
         {error && <p className="error">{error}</p>}
-        <button type="submit" disabled={isLoading}>
+        <button type="submit" disabled={isLoading} className='mt-4'>
           {isLoading ? 'Logging in...' : 'Login'}
         </button>
       </form>

@@ -2,7 +2,7 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import AdminNavbar from "../components/AdminNavbar";
 import { Outlet } from "react-router-dom";
-import AdminDashboard from "../AdminDashboard";
+// import AdminDashboard from "../AdminDashboard";
 
 const AdminLayout = () => {
   return (

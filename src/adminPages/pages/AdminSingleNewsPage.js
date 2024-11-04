@@ -1,20 +1,24 @@
 import React, { useState } from "react";
 import { Spinner, Alert, Container, Row, Button } from "react-bootstrap";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import {  useParams, useNavigate } from "react-router-dom";
 import {
   useGetSingleNewsQuery,
   useDeleteNewsMutation,
 } from "../../data/newsSlice2";
 // import JoditEditorComponent from "../components/JoditEditor";
 import JoditUpdateEditor from '../components/JoditUpdateEditor.js'
+import { useTranslation } from "react-i18next";
+import SingleNewsCarousel from "../../components/SingleNewsCarousel.js";
 
 const AdminSingleNews = () => {
   const { newsId } = useParams();
   const { data: news, isLoading, error } = useGetSingleNewsQuery(newsId);
+  const {t, i18n} = useTranslation()
   const [deleteNews] = useDeleteNewsMutation();
   const navigate = useNavigate();
   const [showEditor, setShowEditor] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  console.log(news)
 
   const handleDelete = async (id) => {
     try {
@@ -55,28 +59,26 @@ const AdminSingleNews = () => {
 
 
   return (
-    <Container className="getNewsComponent">
+    <Container className="singleNewsComponent">
       {!news ? (
         <p>No news articles available.</p>
       ) : (
-        <div className="news-article mb-4">
-          <Row>
-            <h1 className="text-center">{news.title}</h1>
-          </Row>
-          <Row className="single-news-image-row">
-            {news.image && <img src={news.image} alt="news" />}
-          </Row>
-          <div
-            className="article-body"
-            dangerouslySetInnerHTML={{ __html: news.text }}
+        <div className="news-article mb-4 px-3">
+          <Row className="single-news-image-row pt-3 px-0 px-lg-3 mb-1 mb-lg-4">
+            <SingleNewsCarousel data={news.images}/>
+            {/* {news.image && <img src={news.image} alt="news" />} */}
+            </Row>
+          <Row
+            className="article-body pt-5"
+            dangerouslySetInnerHTML={{ __html: news.text[i18n.language] || news.text }}
           />
           {showEditor && (
-            <Row>
+            <Row className="d-flex justify-content-center">
               <JoditUpdateEditor prop={news} />
             </Row>
           )}
           <Row>
-            <div className="admin-buttons-container d-flex justify-content-around">
+            <div className="admin-buttons-container d-flex justify-content-around my-4">
               <Button
                 onClick={() => setShowEditor(true)}
                 className="text-dark rounded-0 bg-info border-0"

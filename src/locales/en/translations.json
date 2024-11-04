@@ -1,0 +1,16 @@
+{
+  "main": "MAIN",
+  "news":  "NEWS",
+  "designers": "DESIGNERS",
+  "projects": "PROJECTS",
+  "partners": "PARTNERS",
+  "contact": "CONTACT",
+  "menu": "MENU",
+  
+  "welcome": "English.",
+
+  "NewsTitle": "News Title",
+  "textPlaceholder": "Start writing here...",
+  "save": "Save",
+  "clear": "Clear"
+}

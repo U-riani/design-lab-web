@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function SamplePrevArrow(props) {
-  const { className, style, onClick } = props;
+  const { className, onClick } = props;
   return (
     <FontAwesomeIcon
       className={`${className} carousel-icon-size`}
@@ -23,7 +23,7 @@ function SamplePrevArrow(props) {
   );
 }
 function SampleNextArrow(props) {
-  const { className, style, onClick } = props;
+  const { className, onClick } = props;
   return (
     <FontAwesomeIcon
       className={`${className} carousel-icon-size`}
@@ -45,7 +45,7 @@ const CarouselComponent = (prop) => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 8,
+    slidesToShow: 5,
     slidesToScroll: 1,
     initialSlide: 0,
     prevArrow: <SamplePrevArrow />,
@@ -58,7 +58,7 @@ const CarouselComponent = (prop) => {
           dots: false,
           infinite: true,
           speed: 500,
-          slidesToShow: 7,
+          slidesToShow: 4,
           slidesToScroll: 1,
           initialSlide: 0,
         },
@@ -69,7 +69,7 @@ const CarouselComponent = (prop) => {
           dots: false,
           infinite: true,
           speed: 500,
-          slidesToShow: 4,
+          slidesToShow: 3,
           slidesToScroll: 1,
           initialSlide: 0,
         },
@@ -80,7 +80,7 @@ const CarouselComponent = (prop) => {
           dots: false,
           infinite: true,
           speed: 500,
-          slidesToShow: 3,
+          slidesToShow: 2,
           slidesToScroll: 1,
           initialSlide: 0,
         },

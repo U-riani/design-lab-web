@@ -9,14 +9,14 @@ import {
 
 const FooterComponent = () => {
   return (
-    <Container fluid className="footer mb-0 py-4">
-      <Row className="mb-0">
+    <Container fluid className="footer mb-0 py-5">
+      <Row className="mb-0 pt-0">
         {/* <Col sm={3}>Logo</Col> */}
         <Col sm={12} className="mb-0">
           <div>
-            <h5 className="text-center mb-0">FOLLOW US</h5>
+            <h2 className="text-center mb-0 pb-4">FOLLOW US</h2>
           </div>
-          <div className="footer-icons-container">
+          <div className="footer-icons-container pb-4">
             <a
               href="https://www.facebook.com/designlab2022"
               target="_blank"
@@ -54,7 +54,7 @@ const FooterComponent = () => {
         </Col>
       </Row>
       <Row className="mb-0">
-        <p className="fs-6">Created By © <span className="fw-bold">DESIGN-LAB.GE</span></p>
+        <p className="fs-6 mb-0">Created By © <span className="fw-bold">DESIGN-LAB.GE</span></p>
       </Row>
     </Container>
   );

@@ -2,23 +2,25 @@ import React from "react";
 import { Container } from "react-bootstrap";
 // import HeroBanner from '../../components/HeroBanner'
 import ProjectsComponent from "../../components/ProjectsComponent";
-import NewsComponent from "../../components/NewsComponent";
+// import NewsComponent from "../../components/NewsComponent";
 import NewsComponent3 from "../../components/NewsComponent3";
 // import PartnersComponent from '../../components/PartnersComponent'
-import SpaceComponent from "../../components/SpaceComponent";
+// import SpaceComponent from "../../components/SpaceComponent";
 import {LastNewsProvider} from '../.././context/LastNewsContext'
+// import { useTranslation } from "react-i18next";
 
 const UnionMainPage = () => {
-  return (
+  // const {t} = useTranslation()
+   return (
     <Container fluid className="px-0 mb-0">
       {/* <HeroBanner /> */}
+      {/* <SpaceComponent info={{h1: t('projects')}} /> */}
       <ProjectsComponent />
-      <SpaceComponent info={{ h1: "განსხვავებული", h3: "დიზაინი" }} />
+      {/* <SpaceComponent info={{ h1: t('news') }} /> */}
       {/* <NewsComponent /> */}
       <LastNewsProvider>
         <NewsComponent3 />
       </LastNewsProvider>
-      <SpaceComponent info={{ h1: "მომსახურება", h3: "პროდუქტები" }} />
       {/* <PartnersComponent /> */}
     </Container>
   );
