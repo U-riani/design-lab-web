@@ -6,15 +6,17 @@ import {
   FloatingLabel,
   Form,
   Button,
+  Spinner,
+  Alert,
 } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import SpaceComponent from "../../components/SpaceComponent";
 import { useCreateDesignerMutation } from "../../data/designersSlice2";
 
-const AdminAddDesigner = () => {
+const Registration = () => {
   const [createDesigner] = useCreateDesignerMutation();
   const { t } = useTranslation();
-  const [name, setName] = useState({ ge: "", en: "" });
-  const [text, setText] = useState({ ge: "", en: "" });
+  const [name, setName] = useState({ ge: "" });
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -23,124 +25,92 @@ const AdminAddDesigner = () => {
   const [facebook, setFacebook] = useState("");
   const [instagram, setInstagram] = useState("");
   const [companyPerson, setCompanyPerson] = useState("person");
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ text: "", variant: "" });
 
   const handleProfilePhotoChange = (e) => {
-    if (e.target.files) setProfilePhoto(e.target.files[0]);
+    setProfilePhoto(e.target.files[0]);
   };
 
   const handleProjectPhotoChange = (e) => {
-    if (e.target.files) setProjectPhoto(e.target.files[0]);
+    setProjectPhoto(e.target.files[0]);
   };
 
-  const handleCompanyPersonChange = (e) => {
-    setCompanyPerson(e.target.value);
-  };
-
-  const handleNameChange = (lang, e) => {
-    setName((prev) => ({
-      ...prev,
-      [lang]: e.target.value,
-    }));
-  };
-  const handleTextChange = (lang, e) => {
-    setText((prev) => ({
-      ...prev,
-      [lang]: e.target.value,
-    }));
+  const clearForm = () => {
+    setName({ ge: "" });
+    setEmail("");
+    setPhone("");
+    setProfilePhoto(null);
+    setProjectPhoto(null);
+    setBehance("");
+    setFacebook("");
+    setInstagram("");
+    setCompanyPerson("person");
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
+    setMessage({ text: "", variant: "" });
+
     const formData = new FormData();
     formData.append("name[ge]", name.ge);
-    formData.append("name[en]", name.en);
-    formData.append("text[ge]", text.ge);
-    formData.append("text[en]", text.en);
-    formData.append("email", email);
-    formData.append("phone", phone);
     formData.append("facebook", facebook);
     formData.append("instagram", instagram);
     formData.append("behance", behance);
     formData.append("companyPerson", companyPerson);
-    formData.append("activeStatus", "true");
 
+    // Append the images array
     if (profilePhoto) formData.append("images", profilePhoto);
     if (projectPhoto) formData.append("images", projectPhoto);
 
     try {
       await createDesigner(formData).unwrap();
+      setMessage({ text: "Successfully registered", variant: "success" });
+      clearForm();
     } catch (error) {
+      setMessage({
+        text: "Technical issue, please try again",
+        variant: "danger",
+      });
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <Container fluid className="px-0">
-      <Row>
+      <SpaceComponent info={{ h1: t("registration") }} className="w-100" />
+      <Row className="pb-4">
         <Col className="d-flex justify-content-center">
           <Form className="registration-form">
             <FloatingLabel
               controlId="floatingInput"
-              label="სრული სახელი"
+              label="Full name"
               className="mb-3"
             >
               <Form.Control
                 value={name.ge}
-                onChange={(e) => handleNameChange('ge', e)}
+                onChange={(e) => setName({ ge: e.target.value })}
                 type="text"
                 placeholder="Full name"
               />
             </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingInput"
-              label="Full name ENG"
-              className="mb-3"
-            >
-              <Form.Control
-                value={name.en}
-                onChange={(e) => handleNameChange('en', e)}
-                type="text"
-                placeholder="Full name ENG"
-              />
-            </FloatingLabel>
-
-            <textarea
-              value={text.ge}
-              rows={3}
-              onChange={(e) => handleTextChange('ge', e)}
-              type="text"
-              placeholder="ქართ ტექსტი"
-              className="mb-3"
-            />
-
-            <textarea
-              rows={3}
-              value={text.en}
-              onChange={(e) => handleTextChange('en', e)}
-              type="text"
-              placeholder="TEXT ENG"
-              className="mb-3"
-            />
-
             <div className="mb-3">
               <p>COMPANY / PERSON</p>
               <Form.Check
                 type="radio"
                 label="Company"
-                name="companyPerson"
-                value="company"
-                checked={companyPerson === "company"}
-                onChange={handleCompanyPersonChange}
+                name="radio"
+                onClick={() => setCompanyPerson("company")}
               />
               <Form.Check
                 type="radio"
                 label="Person"
-                name="companyPerson"
-                value="person"
-                checked={companyPerson === "person"}
-                onChange={handleCompanyPersonChange}
+                name="radio"
+                onClick={() => setCompanyPerson("person")}
               />
             </div>
-
             <FloatingLabel
               controlId="floatingEmail"
               label="Email address"
@@ -153,7 +123,6 @@ const AdminAddDesigner = () => {
                 placeholder="Email address"
               />
             </FloatingLabel>
-
             <FloatingLabel
               controlId="floatingPhone"
               label="Phone number"
@@ -166,7 +135,6 @@ const AdminAddDesigner = () => {
                 placeholder="Phone number"
               />
             </FloatingLabel>
-
             <FloatingLabel
               controlId="floatingProfilePhoto"
               label="Upload profile photo"
@@ -185,7 +153,6 @@ const AdminAddDesigner = () => {
                 />
               )}
             </FloatingLabel>
-
             <FloatingLabel
               controlId="floatingProjectPhoto"
               label="Upload project's photo"
@@ -204,7 +171,6 @@ const AdminAddDesigner = () => {
                 />
               )}
             </FloatingLabel>
-
             <FloatingLabel
               controlId="floatingBehance"
               label="Behance link"
@@ -217,7 +183,6 @@ const AdminAddDesigner = () => {
                 placeholder="Behance link"
               />
             </FloatingLabel>
-
             <FloatingLabel
               controlId="floatingInstagram"
               label="Instagram link"
@@ -230,7 +195,6 @@ const AdminAddDesigner = () => {
                 placeholder="Instagram link"
               />
             </FloatingLabel>
-
             <FloatingLabel
               controlId="floatingFacebook"
               label="Facebook link"
@@ -243,8 +207,22 @@ const AdminAddDesigner = () => {
                 placeholder="Facebook link"
               />
             </FloatingLabel>
-
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button
+              className="bg-black border-0 py-3 fw-bold"
+              onClick={handleSubmit}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Spinner animation="border" size="sm" />
+              ) : (
+                t("submit")
+              )}
+            </Button>
+            {message.text && (
+              <Alert variant={message.variant} className="mt-3">
+                {message.text}
+              </Alert>
+            )}
           </Form>
         </Col>
       </Row>
@@ -252,4 +230,4 @@ const AdminAddDesigner = () => {
   );
 };
 
-export default AdminAddDesigner;
+export default Registration;

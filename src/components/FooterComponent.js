@@ -14,7 +14,7 @@ const FooterComponent = () => {
         {/* <Col sm={3}>Logo</Col> */}
         <Col sm={12} className="mb-0">
           <div>
-            <h2 className="text-center mb-0 pb-4">FOLLOW US</h2>
+            <h2 className="text-center mb-0 pb-4 fw-bold">FOLLOW US</h2>
           </div>
           <div className="footer-icons-container pb-4">
             <a
@@ -54,7 +54,7 @@ const FooterComponent = () => {
         </Col>
       </Row>
       <Row className="mb-0">
-        <p className="fs-6 mb-0">Created By © <span className="fw-bold">DESIGN-LAB.GE</span></p>
+        <p className="fs-6 mb-0 text-center">Created By © <span className="fw-bold">DESIGN-LAB.GE</span></p>
       </Row>
     </Container>
   );

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginPage from "./adminPages/LoginPage";
 import AdminDashboard from "./adminPages/AdminDashboard";
 import UnionLayout from "./union/components/UnionLayout";
@@ -25,7 +20,7 @@ import AdminSingleNews from "./adminPages/pages/AdminSingleNewsPage";
 import ProtectedRoute from "./adminPages/protectedRoute/ProtectedRoute"; // Import the ProtectedRoute component
 import { AuthProvider } from "./adminPages/context/AuthContext";
 
-import 'bpg-nino-mtavruli/css/bpg-nino-mtavruli.min.css';
+import "bpg-nino-mtavruli/css/bpg-nino-mtavruli.min.css";
 import AddHero from "./adminPages/pages/AddHero";
 import AdminAllHeros from "./adminPages/pages/AdminAllHeros";
 import AdminAddPartners from "./adminPages/pages/AdminAddPartners";
@@ -33,9 +28,17 @@ import AdminAllPartners from "./adminPages/pages/AdminAllPartners";
 import AdminAddDesigner from "./adminPages/pages/AdminAddDesigner";
 import AdminAllDesigners from "./adminPages/pages/AdminAllDesigners";
 
+import { LocalStorageProvider } from "./context/LocalStorageContext"; // Adjust path as needed
+import Registration from "./union/pages/Registration";
+import AdminAddProject from "./adminPages/pages/AdminAddProject";
+import AdminAllProjects from "./adminPages/pages/AdminAllProjects";
+import SingleProject from "./union/pages/SingleProject";
+import AdminAddProjects from "./adminPages/pages/AdminAddProjects";
+import AdminSingleProject from "./adminPages/pages/AdminSingleProject";
 
 const App = () => (
   <AuthProvider>
+    <LocalStorageProvider>
     <Router>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
@@ -80,21 +83,36 @@ const App = () => (
             path="all-designers"
             element={<ProtectedRoute element={<AdminAllDesigners />} />}
           />
+          <Route
+            path="add-projects"
+            element={<ProtectedRoute element={<AdminAddProjects />} />}
+          />
+          <Route
+            path="all-projects"
+            element={<ProtectedRoute element={<AdminAllProjects />} />}
+          />
+          <Route
+            path="all-projects/:projectId"
+            element={<ProtectedRoute element={<AdminSingleProject />} />}
+          />
         </Route>
         {/* Add more routes as needed */}
-        <Route path="/" element={<UnionLayout />}>
-          <Route index element={<UnionMainPage />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/news/:newsId" element={<SingleNewsPage />} />
-          <Route path="/designers" element={<DesignersPage />} />
-          <Route path="/projects" element={<ProjectsPage />} />
-          <Route path="/partners" element={<PartnersPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/get-news" element={<GetNewsComponent />} />
-          <Route path="/get-news/:newsId" element={<GetSingleNews />} />
-        </Route>
+          <Route path="/" element={<UnionLayout />}>
+            <Route index element={<UnionMainPage />} />
+            <Route path="/news" element={<NewsPage />} />
+            <Route path="/news/:newsId" element={<SingleNewsPage />} />
+            <Route path="/designers" element={<DesignersPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/projects/:projectId" element={<SingleProject />} />
+            <Route path="/partners" element={<PartnersPage />} />
+            <Route path="/registration" element={<Registration />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/get-news" element={<GetNewsComponent />} />
+            <Route path="/get-news/:newsId" element={<GetSingleNews />} />
+          </Route>
       </Routes>
     </Router>
+        </LocalStorageProvider>
   </AuthProvider>
 );
 

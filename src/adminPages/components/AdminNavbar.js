@@ -1,12 +1,28 @@
 // src/adminPages/components/AdminNavbar.js
-import React from "react";
+import React, { useState } from "react";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useAuth } from "../context/AuthContext"; // Import the useAuth hook
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useTranslation } from "react-i18next";
 
 const AdminNavbar = () => {
+  const flagGe = require("../../images/flags/georgia.png");
+  const flagUk = require("../../images/flags/uk.png");
   const { logout } = useAuth(); // Access the logout function
   const navigate = useNavigate(); // Get the navigate function
+  const { i18n } = useTranslation();
+
+  const [toggleLang, setTogglelang] = useState(localStorage.getItem('language') || i18n.language);
+  // const []
+
+  const handleLangChange = (lang) => {
+    setTogglelang(i18n.language === "ge" ? "en" : "ge");
+    i18n.changeLanguage(toggleLang === "ge" ? "en" : "ge");
+    localStorage.setItem('language',  toggleLang === "ge" ? "en" : "ge");
+
+  };
+
+
 
   const handleLogout = () => {
     logout(navigate); // Pass navigate to logout
@@ -51,7 +67,22 @@ const AdminNavbar = () => {
               </NavDropdown.Item>
               {/* ...other dropdown items */}
             </NavDropdown>
+            <NavDropdown title="PROJECTS" id="basic-nav-dropdown">
+              <NavDropdown.Item as={Link} to="add-projects">
+                ADD PROJECTS
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="all-projects">
+                ALL PROJECTS
+              </NavDropdown.Item>
+              {/* ...other dropdown items */}
+            </NavDropdown>
           </Nav>
+          <Button
+                onClick={() => handleLangChange()}
+                className="p-1 py-1 border-0 flag-button"
+              >
+                <img src={toggleLang === 'en' ? flagUk : flagGe} alt="flag "/>
+              </Button>
         </Navbar.Collapse>
         <Button onClick={handleLogout} variant="outline-danger">
           Logout

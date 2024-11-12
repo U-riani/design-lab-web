@@ -35,16 +35,18 @@ export const designersApiSlice = createApi({
       invalidatesTags: (result, error, id) => [{ type: "Designer", id }],
     }),
     updateDesigner: builder.mutation({
-      query: ({ id, text, name, facebook, instagram, behance, image }) => {
+      query: ({ id, text, name, facebook, instagram, activeStatus, behance, images }) => {
         const formData = new FormData();
         formData.append("name[ge]", name.ge);
         formData.append("name[en]", name.en);
         formData.append("text[ge]", text.ge);
         formData.append("text[en]", text.en);
         formData.append("facebook", facebook);
+        formData.append("activeStatus", activeStatus)
         formData.append("instagram", instagram);
         formData.append("behance", behance);
-        if (image) formData.append("images", image);
+        if (images) formData.append("images", images[0]);
+        if (images) formData.append("images", images[1]);
         return {
           url: `designers/${id}`,
           method: "PATCH",

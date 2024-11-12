@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -14,16 +14,29 @@ import {
   faInstagram,
   faFacebookF,
 } from "@fortawesome/free-brands-svg-icons";
+import SpaceComponent from "../../components/SpaceComponent";
+import { useTranslation } from "react-i18next";
+import { useGetAllDesignersQuery } from "../../data/designersSlice2";
 
 const DesignersPage = () => {
   const designerBackground = require("../../images/X2oObC4.png");
   const designerPhoto = require("../../images/4FbD7mF.png");
   const designers = useSelector((state) => state.designers);
+  const {t, i18n} = useTranslation();
+  const {data: allDesigners} = useGetAllDesignersQuery();
+  const [activeDesigners, setAllDesigners] = useState([]);
+
+  useEffect(() => {
+    setAllDesigners(allDesigners?.filter(item => item.activeStatus))
+  }, [allDesigners])
+ 
   return (
     <Container fluid className="designersPage px-0 pt-3 pt-lg-5">
+        <SpaceComponent info={{h1: t('designers')}} className="w-100"/>
+      
       <Row className="desigrenspage-row">
-        {designers &&
-          designers.map((item, i) => (
+        {activeDesigners &&
+          activeDesigners.map((item, i) => (
             <Col
               key={i}
               xs={12}
@@ -35,24 +48,23 @@ const DesignersPage = () => {
               <Card className="designersPage-card">
                 <div className="designersPage-cards-images-top">
                   <div className="designersPage-background-image-container">
-                    <Card.Img src={designerBackground} />
+                    <Card.Img src={item.images[1]} />
                   </div>
                   <div className="designersPage-designer-image-container">
-                    <Card.Img src={designerPhoto} />
+                    <Card.Img className="object-fit-cover" src={item.images[0]} />
                   </div>
                 </div>
                 <Card.Body className="designersPage-card-body text-white">
-                  <Card.Title>Card Title</Card.Title>
+                  <Card.Title>{item.name[i18n.language]}</Card.Title>
                   <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
+                  {item.text[i18n.language]}
                   </Card.Text>
                   <ButtonGroup
                     aria-label="designersPage-button-group"
                     className="designersPage-button-group pb-2"
                   >
                     <Button
-                      href="http://www.google.com"
+                      href={`${item.behance}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-link"
@@ -61,7 +73,7 @@ const DesignersPage = () => {
                       <FontAwesomeIcon icon={faBehance} />
                     </Button>
                     <Button
-                      href="http://www.google.com"
+                      href={`${item.facebook}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-link"
@@ -70,7 +82,7 @@ const DesignersPage = () => {
                       <FontAwesomeIcon icon={faFacebookF} />
                     </Button>
                     <Button
-                      href="http://www.google.com"
+                      href={`${item.instagram}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-link"

@@ -6,11 +6,15 @@
   "partners": "PARTNERS",
   "contact": "CONTACT",
   "menu": "MENU",
+  "registration": "REGISTRATION",
   
   "welcome": "English.",
 
   "NewsTitle": "News Title",
   "textPlaceholder": "Start writing here...",
   "save": "Save",
-  "clear": "Clear"
+  "clear": "Clear",
+  "submit": "SUBMIT",
+  "description": "DESCRIPTION"
+
 }
