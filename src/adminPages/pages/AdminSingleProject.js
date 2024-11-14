@@ -63,7 +63,16 @@ const AdminSingleProject = () => {
     }
   };
 
-  const data2 = [1, 2, 3, 4];
+  const extractVideoId = (url) => {
+    const regex =
+      /(?:youtube\.com\/(?:[^/]+\/\S+\/|(?:v|e(?:mbed)?)\/|(?:[^&?/]+))?(\S{11}))/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+  };
+
+  // const myUrl = extractVideoId(singleProject.projectContent[1].media.youtube)
+  // console.log(myUrl)
+
   console.log(singleProject);
   return (
     <Container fluid className="single-project-page px-0 w-100">
@@ -103,29 +112,36 @@ const AdminSingleProject = () => {
                 <AdminEditProjects projectId={projectId} />
               </Col>
             )}
-            {data2 &&
-              data2.map((item, i) => (
+            {singleProject.projectContent &&
+              singleProject.projectContent.map((item, index) => (
                 <Col
                   sm={12}
-                  key={i}
+                  key={index}
                   className="project-title-carousel-youtube-container pb-5"
                 >
                   <div className="item-title-container w-100">
-                    <h2 className="text-left">TITLE</h2>
+                    <h2 className="text-left">
+                      {singleProject.projectContent[index].title[i18n.language]
+                        ? singleProject.projectContent[index].title[
+                            i18n.language
+                          ]
+                        : "title"}
+                    </h2>
                   </div>
                   {/* <SingleProjectCarousel data={data2} className="w-100"/> */}
                   <div className="projects-youtube-container">
-                    <iframe
-                      className="youtube-iframe"
-                      src="https://www.youtube.com/embed/PadKCVBIN94?list=RDPadKCVBIN94"
-                      title="Queen - Bohemian Rhapsody 1981 Live Video Full HD"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullScreen
-                    ></iframe>
+                    {singleProject.projectContent[index].media.youtube && (
+                      <div
+                      className="projects-youtube"
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            singleProject.projectContent[index].media
+                              .youtube,
+                        }}
+                      />
+                    )}
                   </div>
-                  <AdminProjectContentComponent />
+                  <AdminProjectContentComponent index={index} />
                 </Col>
               ))}
           </Row>

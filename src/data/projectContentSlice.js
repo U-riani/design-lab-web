@@ -11,14 +11,40 @@ export const projectContentApiSlice = createApi({
   }),
   tagTypes: ["Projects"],
   endpoints: (builder) => ({
-    createProjectsContent: builder.mutation({
-      query: (formData) => ({
-        url: "projects/projectContetn/:id",
+    createProjectsContentTitle: builder.mutation({
+      query: ({ title, id }) => ({
+        url: `projects/content/projectContentTitle/${id}`,
         method: "POST",
-        body: formData,
+        body: { title, id },
       }),
       invalidatesTags: ["Projects"],
     }),
+    updateProjectsContentTitle: builder.mutation({
+      query: ({ title, id, index }) => ({
+        url: `projects/content/projectContentTitle/${id}`,
+        method: "PATCH",
+        body: { title, id, index },
+      }),
+      invalidatesTags: ["Projects"],
+    }),
+
+    createProjectsContentVideo: builder.mutation({
+      query: ({ video, id, index }) => ({
+        url: `projects/content/projectContetnVideo/${id}`,
+        method: "POST",
+        body: { video, id, index },
+      }),
+      invalidatesTags: ["Projects"],
+    }),
+    updateProjectsContentVideo: builder.mutation({
+      query: ({ video, id, index }) => ({
+        url: `projects/content/projectContetnVideo/${id}`,
+        method: "PATCH",
+        body: { video, id, index },
+      }),
+      invalidatesTags: ["Projects"],
+    }),
+
     getAllProjects: builder.query({
       query: () => "projects",
       providesTags: ["Projects"],
@@ -34,66 +60,6 @@ export const projectContentApiSlice = createApi({
       }),
       invalidatesTags: (result, error, id) => [{ type: "Projects", id }],
     }),
-    // updateProjects: builder.mutation({
-    //   query: ({ projectId, name, heroes, description, mainProject }) => {
-    //     const formData = new FormData();
-    //     console.log(heroes)
-    //     // Append the project name for both Georgian and English
-    //     if (name) {
-    //       formData.append("name[ge]", name.ge);
-    //       formData.append("name[en]", name.en);
-    //     }
-
-    //     // Append the description for both Georgian and English
-    //     if (description) {
-    //       formData.append("description[ge]", description.ge);
-    //       formData.append("description[en]", description.en);
-    //     }
-
-    //     // Append the main project image (if provided)
-    //     if (mainProject && mainProject instanceof File) {
-    //       formData.append("mainProject", mainProject);
-    //     }
-
-    //     // Append hero data (heroText and image files)
-    //     heroes.forEach((hero, index) => {
-    //       formData.append(`heroText[ge]`, hero.heroText.ge);
-    //       formData.append(`heroText[en]`, hero.heroText.en);
-    //       formData.append(`images`, hero.imageFile); // Allow multiple images
-    //     });
-
-    //     // heroes.forEach((hero, index) => {
-    //     //   // Append heroText for both Georgian and English for each hero
-    //     //   if (hero.heroText) {
-    //     //     if (hero.heroText.ge) {
-    //     //       formData.append(`heroData[${index}].heroText[ge]`, hero.heroText.ge);
-    //     //     }
-    //     //     if (hero.heroText.en) {
-    //     //       formData.append(`heroData[${index}].heroText[en]`, hero.heroText.en);
-    //     //     }
-    //     //   }
-
-    //     //   // Append hero image files (if provided)
-    //     //   if (hero.imageFile instanceof File) {
-    //     //     formData.append(`images`, hero.imageFile);
-    //     //   } else if (hero.image && hero.image.length > 0) {
-    //     //     // Append existing image URLs for each hero
-    //     //     hero.image.forEach((imageUrl, imgIndex) => {
-    //     //       formData.append(`heroData[${index}].image[${imgIndex}]`, imageUrl);
-    //     //     });
-    //     //   }
-    //     // });
-
-    //     return {
-    //       url: `projects/${projectId}`, // Use the projectId for the URL
-    //       method: "PATCH",
-    //       body: formData, // Send the form data
-    //     };
-    //   },
-    //   invalidatesTags: (result, error, { projectId }) => [
-    //     { type: "Hero", id: projectId },
-    //   ],
-    // }),
     createProjectsHeroData: builder.mutation({
       query: ({ formData, projectId }) => ({
         url: `projects/heroData/${projectId}`,
@@ -204,7 +170,10 @@ export const projectContentApiSlice = createApi({
 export const {
   useGetAllProjectsQuery,
   useGetSingleProjectsQuery,
-  useCreateProjectsContentMutation,
+  useCreateProjectsContentTitleMutation,
+  useUpdateProjectsContentTitleMutation,
+  useCreateProjectsContentVideoMutation,
+  useUpdateProjectsContentVideoMutation,
   useDeleteProjectsMutation,
   useDeleteProjectsHerodataMutation,
   useCreateProjectsHeroDataMutation,
