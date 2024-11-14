@@ -10,6 +10,7 @@ import { heroApiSlice } from "./heroSlice";
 import { partnersApiSlice } from "./partnersSlice";
 import { designersApiSlice } from "./designersSlice2";
 import { projectsApiSlice } from "./projectsSlice.js";
+import { projectContentApiSlice } from "./projectContentSlice.js";
 
 const store = configureStore({
   reducer: {
@@ -18,16 +19,23 @@ const store = configureStore({
     designers: designersReducer,
     [apiNewsSlice.reducerPath]: apiNewsSlice.reducer,
     [apiVisitsSlice.reducerPath]: apiVisitsSlice.reducer,
-    [partnersApiSlice.reducerPath]:  partnersApiSlice.reducer,
-    [heroApiSlice.reducerPath]:  heroApiSlice.reducer,
+    [partnersApiSlice.reducerPath]: partnersApiSlice.reducer,
+    [heroApiSlice.reducerPath]: heroApiSlice.reducer,
     // [heroApiSlice.reducerPath]:  heroApiSlice.reducer,
-    [designersApiSlice.reducerPath]:  designersApiSlice.reducer,
-    [projectsApiSlice.reducerPath]:  projectsApiSlice.reducer,
-
+    [designersApiSlice.reducerPath]: designersApiSlice.reducer,
+    [projectsApiSlice.reducerPath]: projectsApiSlice.reducer,
+    [projectContentApiSlice.reducerPath]: projectContentApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiNewsSlice.middleware, apiVisitsSlice.middleware, heroApiSlice.middleware, partnersApiSlice.middleware, designersApiSlice.middleware, projectsApiSlice.middleware),
-
+    getDefaultMiddleware().concat(
+      apiNewsSlice.middleware,
+      apiVisitsSlice.middleware,
+      heroApiSlice.middleware,
+      partnersApiSlice.middleware,
+      designersApiSlice.middleware,
+      projectsApiSlice.middleware,
+      projectContentApiSlice.middleware,
+    ),
 });
 
 export default store;

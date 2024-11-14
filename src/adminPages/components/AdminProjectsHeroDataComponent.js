@@ -1,19 +1,31 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
+import {
+  useCreateProjectsHeroDataMutation,
+  useUpdateProjectsHeroDataMutation,
+  useDeleteProjectsHerodataMutation
+} from "../../data/projectsSlice";
+import { useParams } from "react-router-dom";
 
 const AdminProjectsHeroDataComponent = ({ data }) => {
+  const projectId = useParams().projectId;
   const [heroData, setHeroData] = useState(data.heroData || []);
+  const [updateProjectsHeroData] = useUpdateProjectsHeroDataMutation(projectId);
+  const [createProjectsHeroData] = useCreateProjectsHeroDataMutation();
+  const [deleteProjectsHerodata] = useDeleteProjectsHerodataMutation()
+  const { upData } = useUpdateProjectsHeroDataMutation(projectId);
+  console.log("upData", upData);
 
   // Function to handle text changes for hero text (for existing data)
   const handleHeroTextChange = (index, language, value) => {
     const updatedHeroData = heroData.map((hero, i) => {
       if (i === index) {
-        const updatedHero = { 
+        const updatedHero = {
           ...hero, // Ensure the hero object is copied
-          heroText: { 
+          heroText: {
             ...hero.heroText, // Copy the heroText object
-            [language]: value // Update the specific language field
-          }
+            [language]: value, // Update the specific language field
+          },
         };
         return updatedHero;
       }
@@ -27,13 +39,10 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
   const handleImageChange = (index, file) => {
     const updatedHeroData = heroData.map((hero, i) => {
       if (i === index) {
-        const updatedHero = { 
+        const updatedHero = {
           ...hero, // Clone the hero object
-          image: { 
-            ...hero.image, // Clone the image object
-            fileName: file.name, // Update the file name
-            url: URL.createObjectURL(file), // Create a preview URL for the image
-          },
+          image: file,
+          url: URL.createObjectURL(file),
           updatedAt: new Date().toISOString(), // Optionally, update the timestamp
         };
         return updatedHero;
@@ -43,6 +52,7 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
 
     setHeroData(updatedHeroData);
   };
+  console.log(heroData[0].image);
 
   // Function to handle adding a new hero (for new data)
   const handleAddHero = () => {
@@ -56,27 +66,88 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
   };
 
   // Function to handle creating a hero (for new data when the "Create Hero" button is clicked)
-  const handleCreateHero = (index) => {
+  const handleCreateHero = async (index) => {
     const newHero = heroData[index];
-    console.log("Creating Hero: ", newHero);
+  try {
+    const formData = new FormData();
+    formData.append("index", index);
+    formData.append("url", newHero.image.url);
+    formData.append("heroText[ge]", newHero.heroText.ge);
+    formData.append("heroText[en]", newHero.heroText.en);
+    formData.append("images", newHero.image);
+
+    const response = await createProjectsHeroData({ formData, projectId }).unwrap();
+    console.log("--Create HeroData res:", response)
+  } catch (error) {
+    console.log(error);
+  }
+    console.log("Creating Hero: ", newHero, index);
     // You can add additional logic here (e.g., send data to a backend API or perform validations)
   };
 
   // Function to handle updating a hero (for existing data)
-  const handleUpdateHero = (index) => {
+  // const handleUpdateHero = async (index) => {
+  //   console.log(heroData)
+  //   const heroToUpdate = heroData[index];
+  //   console.log("Updating Hero: ", heroToUpdate.heroText, index);
+  //   try{
+  //     const response = await updateProjectsHeroData({heroText: heroToUpdate.heroText, projectId, index}).unwrap();
+  //    // Assuming `projectId` and `heroData` are available
+  //   // const response = await updateProjectsHeroData({ id: projectId, heroData: updatedHeroData });
+
+  //   // Check if the update was successful
+  //   if (response.data) {
+  //     console.log("Update successful:", response.data); // The server response
+  //   } else if (response.error) {
+  //     console.error("Update failed:", response.error);
+  //   }
+  //   }catch(error) {
+  //     console.log(error)
+  //   }
+  //   // You can add more logic here to save the updated data to a backend or database
+  // };
+  const handleUpdateHero = async (index) => {
+    console.log(heroData);
     const heroToUpdate = heroData[index];
-    console.log("Updating Hero: ", heroToUpdate);
-    // You can add more logic here to save the updated data to a backend or database
+    console.log("Updating Hero:", heroToUpdate.heroText, index);
+    // const urlLastPart = heroToUpdate.image.url?.split('/').slice(-1)[0];
+    console.log(heroToUpdate.image.url);
+    try {
+      // Sending update request with hero text, project ID, and index
+      // const formData = new FormData();
+      //   formData.append("index", index)
+      //   formData.append("heroText[ge]", heroText.ge);
+      //   formData.append("heroText[en]", heroText.en);
+      //   if (image) formData.append("heroes[0][imageFile]", image);
+      const response = await updateProjectsHeroData({
+        heroText: heroToUpdate.heroText,
+        projectId,
+        index,
+        url: heroToUpdate.image.url,
+        image: heroToUpdate.image,
+      }).unwrap();
+
+      // Successful response
+      console.log("Update successful:", response);
+    } catch (error) {
+      // Handle error in case the request fails
+      console.error("Update failed:", error);
+    }
   };
 
   // Function to handle deleting a hero (for existing data)
-  const handleDeleteHero = (index) => {
+  const handleDeleteHero = async (index) => {
     const heroToDelete = heroData[index];
-    console.log("Deleting Hero: ", heroToDelete);
+    try {
+      const response = await deleteProjectsHerodata({index, id: projectId}).unwrap();
+      console.log("Deleting Hero: ", response);
+    }catch(error) {
+      console.log(error)
+    }
 
     // Remove the hero from the heroData state
-    const updatedHeroData = heroData.filter((_, i) => i !== index);
-    setHeroData(updatedHeroData);
+    // const updatedHeroData = heroData.filter((_, i) => i !== index);
+    // setHeroData(updatedHeroData);
   };
 
   return (

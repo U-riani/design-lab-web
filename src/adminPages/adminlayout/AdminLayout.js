@@ -8,7 +8,7 @@ const AdminLayout = () => {
   return (
     <>
       <AdminNavbar />
-      <Container className="Admin px-0 mb-0" fluid>
+      <Container className="Admin px-0 mb-0 w-100" fluid>
         <Outlet />
       </Container>
     </>

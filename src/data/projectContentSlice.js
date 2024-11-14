@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const projectsApiSlice = createApi({
-  reducerPath: "projectsApi",
+export const projectContentApiSlice = createApi({
+  reducerPath: "projectsContentApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/api/",
     prepareHeaders: (headers) => {
@@ -11,6 +11,14 @@ export const projectsApiSlice = createApi({
   }),
   tagTypes: ["Projects"],
   endpoints: (builder) => ({
+    createProjectsContent: builder.mutation({
+      query: (formData) => ({
+        url: "projects/projectContetn/:id",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Projects"],
+    }),
     getAllProjects: builder.query({
       query: () => "projects",
       providesTags: ["Projects"],
@@ -18,14 +26,6 @@ export const projectsApiSlice = createApi({
     getSingleProjects: builder.query({
       query: (id) => `projects/${id}`,
       providesTags: (result, error, id) => [{ type: "Projets", id }],
-    }),
-    createProjects: builder.mutation({
-      query: (formData) => ({
-        url: "projects",
-        method: "POST",
-        body: formData,
-      }),
-      invalidatesTags: ["Projects"],
     }),
     deleteProjects: builder.mutation({
       query: (id) => ({
@@ -95,7 +95,7 @@ export const projectsApiSlice = createApi({
     //   ],
     // }),
     createProjectsHeroData: builder.mutation({
-      query: ({formData, projectId}) => ({
+      query: ({ formData, projectId }) => ({
         url: `projects/heroData/${projectId}`,
         method: "POST",
         body: formData,
@@ -103,7 +103,7 @@ export const projectsApiSlice = createApi({
       invalidatesTags: ["Projects"],
     }),
     deleteProjectsHerodata: builder.mutation({
-      query: ({id, index}) => ({
+      query: ({ id, index }) => ({
         url: `projects/heroData/${id}?index=${index}`,
         method: "DELETE",
       }),
@@ -204,10 +204,10 @@ export const projectsApiSlice = createApi({
 export const {
   useGetAllProjectsQuery,
   useGetSingleProjectsQuery,
-  useCreateProjectsMutation,
+  useCreateProjectsContentMutation,
   useDeleteProjectsMutation,
   useDeleteProjectsHerodataMutation,
   useCreateProjectsHeroDataMutation,
   useUpdateProjectsDescriptionMutation,
   useUpdateProjectsHeroDataMutation,
-} = projectsApiSlice;
+} = projectContentApiSlice;

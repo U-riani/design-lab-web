@@ -7,7 +7,7 @@ function SingleProjectCarousel({ data }) {
 
   data = [image1, image2, image3]
   return (
-    <Carousel>
+    <Carousel className="w-100">
       {data &&
         data.map((item, i) => (
           <Carousel.Item key={i} className="singleProjectCarousel">

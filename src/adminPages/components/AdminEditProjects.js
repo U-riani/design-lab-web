@@ -16,7 +16,6 @@ const AdminEditProjects = ({ projectId }) => {
         <Col>
           <h2>Edit Project</h2>
           <AdminProjectDescription data={projectData} />
-
           <AdminProjectsHeroDataComponent data={projectData} />
         </Col>
       </Row>

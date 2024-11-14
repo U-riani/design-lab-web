@@ -1,43 +1,51 @@
 import React, { useState } from "react";
-import {useParams} from 'react-router-dom'
+import { useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { useUpdateProjectsDescriptionMutation, useUpdateProjectsMutation } from "../../data/projectsSlice";
+import {
+  useUpdateProjectsDescriptionMutation,
+  useUpdateProjectsMutation,
+} from "../../data/projectsSlice";
 
 const AdminProjectDescription = ({ data }) => {
-    const projectId = useParams().projectId
-    console.log(projectId)
+  const projectId = useParams().projectId;
+  // console.log(projectId);
   const [name, setName] = useState(data.name);
   const [description, setDescription] = useState(data.description);
   const [mainProject, setMainProject] = useState(data.mainProject);
-  const [updateProjectsDescription] = useUpdateProjectsDescriptionMutation(projectId);
+  const [updateProjectsDescription] =
+  useUpdateProjectsDescriptionMutation(projectId);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Here you could call the update function to save the data
-    const updatedData = {projectId, name, description, mainProject };
-    console.log(updatedData);
-    
+    const updatedData = { projectId, name, description, mainProject };
+    // console.log(updatedData);
+
     try {
       const formData = new FormData();
-      await updateProjectsDescription(updatedData).unwrap();
+      await updateProjectsDescription({
+        name,
+        description,
+        mainProject,
+        projectId,
+      }).unwrap();
 
-        if (name?.ge) formData.append("name[ge]", name.ge);
-        if (name?.en) formData.append("name[en]", name.en);
+      if (name?.ge) formData.append("name[ge]", name.ge);
+      if (name?.en) formData.append("name[en]", name.en);
 
-        if (description?.ge) formData.append("description[ge]", description.ge);
-        if (description?.en) formData.append("description[en]", description.en);
+      if (description?.ge) formData.append("description[ge]", description.ge);
+      if (description?.en) formData.append("description[en]", description.en);
 
-        if (mainProject !== undefined)
-          formData.append("mainProject", mainProject);
-    }catch(error) {
+      if (mainProject !== undefined)
+        formData.append("mainProject", mainProject);
+    } catch (error) {
       console.error(error);
     }
-
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* Project Name, Description, Main Project Checkbox */} 
+      {/* Project Name, Description, Main Project Checkbox */}
       <div>
         <label>Name (Georgian)</label>
         <input
