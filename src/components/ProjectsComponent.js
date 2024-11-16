@@ -67,8 +67,8 @@ const ProjectsComponent = () => {
             </div>
           </div>
         </Row>
-        <Row className="mb-0 py-3 py-lg-4">
-          <Col className="d-flex justify-content-end mb-0">
+        <Row className="mb-0 py-3 py-lg-4 px-0 projects-component-button-container">
+          <Col className="d-flex justify-content-end mb-0 px-0">
             <button className="see-more">
               <Link className="d-inline see-more-link ms-auto" to="/projects">
                 see more

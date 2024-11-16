@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const partnersApiSlice = createApi({
   reducerPath: "partnersApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://design-union-backend.vercel.app/api/",
+    baseUrl: "http://localhost:5000/api/",
     prepareHeaders: (headers) => {
       headers.set("Accept", "application/json");
       return headers;
@@ -35,12 +35,13 @@ export const partnersApiSlice = createApi({
       invalidatesTags: (result, error, id) => [{ type: "Partner", id }],
     }),
     updatePartner: builder.mutation({
-      query: ({ id, text, name, image }) => {
+      query: ({ id, text, name, websiteUrl, image }) => {
         const formData = new FormData();
         formData.append("name[ge]", name.ge);
         formData.append("name[en]", name.en);
         formData.append("text[ge]", text.ge);
         formData.append("text[en]", text.en);
+        formData.append("websiteUrl", websiteUrl);
         if (image) formData.append("images", image);
         return {
           url: `partners/${id}`,

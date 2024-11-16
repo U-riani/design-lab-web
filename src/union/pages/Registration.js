@@ -8,6 +8,7 @@ import {
   Button,
   Spinner,
   Alert,
+  InputGroup,
 } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import SpaceComponent from "../../components/SpaceComponent";
@@ -24,7 +25,7 @@ const Registration = () => {
   const [behance, setBehance] = useState("");
   const [facebook, setFacebook] = useState("");
   const [instagram, setInstagram] = useState("");
-  const [companyPerson, setCompanyPerson] = useState("person");
+  const [companyPerson, setCompanyPerson] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ text: "", variant: "" });
 
@@ -79,10 +80,10 @@ const Registration = () => {
   };
 
   return (
-    <Container fluid className="px-0">
+    <Container fluid className="px-0 registration-page">
       <SpaceComponent info={{ h1: t("registration") }} className="w-100" />
-      <Row className="pb-4">
-        <Col className="d-flex justify-content-center">
+      <Row className="pb-4 mx-0">
+        <Col className="d-flex justify-content-center ">
           <Form className="registration-form">
             <FloatingLabel
               controlId="floatingInput"
@@ -96,20 +97,43 @@ const Registration = () => {
                 placeholder="Full name"
               />
             </FloatingLabel>
+            <InputGroup className="mb-3 d-flex flex-row">
+              <Button
+                onClick={() => setCompanyPerson("person")}
+                className={`w-50 ${
+                  companyPerson === "person" && "bg-secondary text-light"
+                }`}
+                variant="outline-secondary"
+              >
+                PERSON
+              </Button>
+              <Button
+                onClick={() => setCompanyPerson("company")}
+                className={`w-50 ${
+                  companyPerson === "company" && "bg-secondary text-light"
+                }`}
+                variant="outline-secondary"
+              >
+                COMPANY
+              </Button>
+            </InputGroup>
             <div className="mb-3">
               <p>COMPANY / PERSON</p>
-              <Form.Check
-                type="radio"
-                label="Company"
-                name="radio"
-                onClick={() => setCompanyPerson("company")}
-              />
-              <Form.Check
-                type="radio"
-                label="Person"
-                name="radio"
-                onClick={() => setCompanyPerson("person")}
-              />
+              <div className="d-flex gap-5">
+                <Form.Check
+                  variant="outline-secondary"
+                  type="radio"
+                  label="Company"
+                  name="radio"
+                  onClick={() => setCompanyPerson("company")}
+                />
+                <Form.Check
+                  type="radio"
+                  label="Person"
+                  name="radio"
+                  onClick={() => setCompanyPerson("person")}
+                />
+              </div>
             </div>
             <FloatingLabel
               controlId="floatingEmail"

@@ -44,62 +44,15 @@ export const projectContentApiSlice = createApi({
       }),
       invalidatesTags: ["Projects"],
     }),
-
-    getAllProjects: builder.query({
-      query: () => "projects",
-      providesTags: ["Projects"],
-    }),
-    getSingleProjects: builder.query({
-      query: (id) => `projects/${id}`,
-      providesTags: (result, error, id) => [{ type: "Projets", id }],
-    }),
-    deleteProjects: builder.mutation({
-      query: (id) => ({
-        url: `projects/${id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: (result, error, id) => [{ type: "Projects", id }],
-    }),
-    createProjectsHeroData: builder.mutation({
-      query: ({ formData, projectId }) => ({
-        url: `projects/heroData/${projectId}`,
-        method: "POST",
-        body: formData,
-      }),
-      invalidatesTags: ["Projects"],
-    }),
-    deleteProjectsHerodata: builder.mutation({
-      query: ({ id, index }) => ({
-        url: `projects/heroData/${id}?index=${index}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: (result, error, id) => [{ type: "Projects", id }],
-    }),
-    updateProjectsDescription: builder.mutation({
-      query: ({ projectId, name, description, mainProject }) => {
-        return {
-          url: `projects/description/${projectId}`,
-          method: "PATCH",
-          body: { projectId, name, description, mainProject },
-        };
-      },
-      invalidatesTags: (result, error, { projectId }) => [
-        { type: "Projects", id: projectId },
-      ],
-    }),
-    updateProjectsHeroData: builder.mutation({
-      query: ({ heroText, projectId, image, url, index }) => {
+    updateProjectsContentImage: builder.mutation({
+      query: ({ id, image, index, localIndex, type }) => {
         const formData = new FormData();
         formData.append("index", index);
-        formData.append("url", url);
-        // formData.append("urlLastPart", urlLastPart)
-        formData.append("heroText[ge]", heroText.ge);
-        formData.append("heroText[en]", heroText.en);
-        console.log(url);
+        formData.append("localIndex", localIndex);
+        formData.append("type", type);
         if (image) formData.append("images", image);
-        // if (image) formData.append(`heroes[${index}][imageFile]`, image);
         return {
-          url: `projects/heroData/${projectId}`,
+          url: `projects/content/projectContetnImage/${id}`,
           method: "PATCH",
           body: formData,
         };
@@ -109,74 +62,43 @@ export const projectContentApiSlice = createApi({
       ],
     }),
 
-    updateProjects: builder.mutation({
-      query: ({
-        projectId,
-        name,
-        description,
-        heroText,
-        heroes,
-        mainProject,
-      }) => {
-        const formData = new FormData();
-
-        // Append project data
-        if (name) {
-          formData.append("name[ge]", name.ge);
-          formData.append("name[en]", name.en);
-        }
-
-        if (description) {
-          formData.append("description[ge]", description.ge);
-          formData.append("description[en]", description.en);
-        }
-
-        if (heroText) {
-          formData.append("heroText[ge]", heroText.ge);
-          formData.append("heroText[en]", heroText.en);
-        }
-
-        // Append main project image (if provided)
-        if (mainProject && mainProject instanceof File) {
-          formData.append("mainProject", mainProject);
-        }
-
-        // Handle heroes and their images
-        heroes.forEach((hero, index) => {
-          formData.append(`heroes[${index}].heroText[ge]`, hero.heroText.ge);
-          formData.append(`heroes[${index}].heroText[en]`, hero.heroText.en);
-
-          // Upload new images or retain old images
-          if (hero.imageFile) {
-            formData.append(`images`, hero.imageFile); // New image
-          } else if (hero.oldImage) {
-            formData.append(`images`, hero.oldImage); // Keep old image if no new image
-          }
-        });
-
+    deleteSingleProjectContentImage: builder.mutation({
+      query: ({ id, index, localIndex }) => {
         return {
-          url: `projects/${projectId}`,
-          method: "PATCH",
-          body: formData,
+          url: `projects/content/projectContetnImage/${id}?index=${index}&localIndex=${localIndex}`,
+          method: "DELETE",
         };
       },
-      invalidatesTags: (result, error, { projectId }) => [
-        { type: "Projects", id: projectId },
-      ],
+      providesTags: (result, error, id) => [{ type: "Projets", id }],
+    }),
+
+    deleteSingleProjectContent: builder.mutation({
+      query: ({ id, index }) => {
+        return {
+          url: `projects/content/projectContent/${id}?index=${index}`,
+          method: "DELETE",
+        };
+      },
+      providesTags: (result, error, id) => [{ type: "Projets", id }],
+    }),
+
+    getSingleProjectContent: builder.query({
+      query: ({ id, index }) =>
+        `projects/content/projectContent/${id}?index=${index}`,
+      providesTags: (result, error, id) => [{ type: "Projets", id }],
     }),
   }),
 });
 
 export const {
-  useGetAllProjectsQuery,
-  useGetSingleProjectsQuery,
+  useGetSingleProjectContentQuery,
+  
   useCreateProjectsContentTitleMutation,
   useUpdateProjectsContentTitleMutation,
   useCreateProjectsContentVideoMutation,
   useUpdateProjectsContentVideoMutation,
-  useDeleteProjectsMutation,
-  useDeleteProjectsHerodataMutation,
-  useCreateProjectsHeroDataMutation,
-  useUpdateProjectsDescriptionMutation,
-  useUpdateProjectsHeroDataMutation,
+  useUpdateProjectsContentImageMutation,
+  useDeleteSingleProjectContentImageMutation,
+  useDeleteSingleProjectContentMutation,
+  
 } = projectContentApiSlice;

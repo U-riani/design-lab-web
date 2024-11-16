@@ -2,12 +2,14 @@ import React from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import SpaceComponent from "../../components/SpaceComponent";
+import {useGetAllPartnersQuery} from "../../data/partnersSlice"
 import { useTranslation } from "react-i18next";
 
 
 const PartnersPage = () => {
-  const partners = useSelector((state) => state.partners);
-  const { t } = useTranslation();
+  const {data: partners} = useGetAllPartnersQuery()
+  const { t, i18n } = useTranslation();
+  console.log(partners)
 
   return (
     <Container fluid className="partnersPage pb-5 my-0">
@@ -27,17 +29,17 @@ const PartnersPage = () => {
                 className={` partnersPage-col-inner-container partnersPage-col-inner-container-${i}`}
               >
                 <div className="partnercPage-img-container">
-                  <img src={part.logo} alt={part.name} />
+                  <img src={part.image[0]} alt={part.name.ge} />
                 </div>
                 <div className="partnersPage-text-container">
                   
                   <div className="partnersPage-text-inner-container ">
-                    <h3>{part.name}</h3>
-                    <p>{part.text}</p>
+                    <h3>{part.name[i18n.language]}</h3>
+                    <p>{part.text[i18n.language]}</p>
                   </div>
                   <div className="partnersPage-link ps-0">
                     <Button className="rounded-0 bg-dark border-light">
-                        <a href='{part.link}' target="_blank" rel="noopener noreferrer">visit website</a>
+                        <a href={`${part.websiteUrl}`} target="_blank" rel="noopener noreferrer">visit website</a>
                     </Button>
                   </div>
                 </div>

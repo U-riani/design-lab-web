@@ -48,6 +48,9 @@ const CarouselComponent = (prop) => {
     slidesToShow: 5,
     slidesToScroll: 1,
     initialSlide: 0,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    rtl: true,
     prevArrow: <SamplePrevArrow />,
     nextArrow: <SampleNextArrow />,
 
@@ -97,7 +100,7 @@ const CarouselComponent = (prop) => {
                 className={`partner-carousel-image partner-carousel-image-${
                   i + 1
                 }`}
-                src={el.logo}
+                src={el.image[0]}
                 alt=""
               />
             </div>

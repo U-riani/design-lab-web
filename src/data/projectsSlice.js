@@ -15,6 +15,10 @@ export const projectsApiSlice = createApi({
       query: () => "projects",
       providesTags: ["Projects"],
     }),
+    getAllProjectsImageTitle: builder.query({
+      query: () => "projects/projectsImageTitle",
+      providesTags: ["Projects"],
+    }),
     getSingleProjects: builder.query({
       query: (id) => `projects/${id}`,
       providesTags: (result, error, id) => [{ type: "Projets", id }],
@@ -95,7 +99,7 @@ export const projectsApiSlice = createApi({
     //   ],
     // }),
     createProjectsHeroData: builder.mutation({
-      query: ({formData, projectId}) => ({
+      query: ({ formData, projectId }) => ({
         url: `projects/heroData/${projectId}`,
         method: "POST",
         body: formData,
@@ -103,7 +107,7 @@ export const projectsApiSlice = createApi({
       invalidatesTags: ["Projects"],
     }),
     deleteProjectsHerodata: builder.mutation({
-      query: ({id, index}) => ({
+      query: ({ id, index }) => ({
         url: `projects/heroData/${id}?index=${index}`,
         method: "DELETE",
       }),
@@ -203,6 +207,7 @@ export const projectsApiSlice = createApi({
 
 export const {
   useGetAllProjectsQuery,
+  useGetAllProjectsImageTitleQuery,
   useGetSingleProjectsQuery,
   useCreateProjectsMutation,
   useDeleteProjectsMutation,

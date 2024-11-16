@@ -4,10 +4,11 @@ import CarouselComponent from "./CarouselComponent";
 import { useSelector } from "react-redux";
 import SpaceComponent from "./SpaceComponent";
 import { useTranslation } from "react-i18next";
+import { useGetAllPartnersQuery } from "../data/partnersSlice";
 // import { Link } from "react-router-dom";
 
 const PartnersComponent = () => {
-  const partners = useSelector((state) => state.partners);
+  const {data: partners} =useGetAllPartnersQuery()
 const {t} = useTranslation()
   // console.log(partners);
   return (

@@ -12,9 +12,10 @@ const AdminAddPartners = () => {
   const [imageFile, setImageFile] = useState(null);
   const [text, setText] = useState({ ge: "", en: "" });
   const [name, setName] = useState({ ge: "", en: "" });
+  const [websiteUrl, setWebsiteUrl] = useState("");
+
   const [statusMessage, setStatusMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
   };
@@ -53,15 +54,20 @@ const AdminAddPartners = () => {
     formData.append("name[en]", name.en);
     formData.append("text[ge]", text.ge);
     formData.append("text[en]", text.en);
+    formData.append("websiteUrl", websiteUrl);
     formData.append("images", imageFile);
-
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
     setIsLoading(true);
     try {
-      await createPartner(formData).unwrap();
+      const response = await createPartner(formData).unwrap();
       setStatusMessage({ type: "success", text: "Partner created successfully!" });
       setText({ ge: "", en: "" });
       setName({ ge: "", en: "" });
+      setWebsiteUrl('');
       setImageFile(null);
+      console.log('check resp', response)
     } catch (error) {
       console.error("Failed to create partner:", error);
       setStatusMessage({ type: "error", text: "Failed to create partner." });
@@ -121,6 +127,15 @@ const AdminAddPartners = () => {
             type="text"
             id="add-en-text"
             onChange={(e) => handleTextChange("en", e)}
+          />
+        </Col>
+        <Col xs={12}>
+          <label htmlFor="add-website">Add Website url</label>
+          <input
+            value={websiteUrl}
+            type="text"
+            id="add-website"
+            onChange={(e) => setWebsiteUrl(e.target.value)}
           />
         </Col>
         <Col xs={3}>

@@ -33,18 +33,18 @@ const AdminprojectContentVideo = ({index}) => {
     }
   };
 
-  const handleUpdateContentVideo = async () => {
-    try {
-      const response = await updateProjectContentVideo({
-        video,
-        id: projectId,
-        index
-      }).unwrap();
-      console.log("--Video updated:", response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+//   const handleUpdateContentVideo = async () => {
+//     try {
+//       const response = await updateProjectContentVideo({
+//         video,
+//         id: projectId,
+//         index
+//       }).unwrap();
+//       console.log("--Video updated:", response);
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
 
   return (
     <Row>

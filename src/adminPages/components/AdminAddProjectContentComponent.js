@@ -53,6 +53,7 @@ const AdminAddPrjectContentComponent = () => {
     setToggleShowImage(true);
     setToggleShowVideo(false);
   };
+  
   const handleShowAddVideo = () => {
     setToggleShowImage(false);
     setToggleShowVideo(!toggleShowVideo);

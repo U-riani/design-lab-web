@@ -31,10 +31,10 @@ const DesignersPage = () => {
   }, [allDesigners])
  
   return (
-    <Container fluid className="designersPage px-0 pt-3 pt-lg-5">
+    <Container fluid className="designersPage px-0">
         <SpaceComponent info={{h1: t('designers')}} className="w-100"/>
       
-      <Row className="desigrenspage-row">
+      <Row className="designers-page-row">
         {activeDesigners &&
           activeDesigners.map((item, i) => (
             <Col

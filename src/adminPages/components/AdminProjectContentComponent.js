@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { Button, Container, Row, Col } from "react-bootstrap";
+import { Button, Container, Row, Col, Alert } from "react-bootstrap";
 import AdminprojectContentVideo from "./AdminprojectContentVideo";
-import { useUpdateProjectsContentTitleMutation } from "../../data/projectContentSlice";
+import { useUpdateProjectsContentTitleMutation, useDeleteSingleProjectContentMutation } from "../../data/projectContentSlice";
 import { useParams } from "react-router-dom";
 import { useGetSingleProjectsQuery } from "../../data/projectsSlice";
 import AdminProjectsContentImage from "./AdminProjectsContentImage";
+// import { deleteProjectContent } from "../../../../backend/controllers/projectContentController";
 
 const AdminProjectContentComponent = ({ index }) => {
   const projectId = useParams().projectId;
+  const [deleteSingleProjectContent] = useDeleteSingleProjectContentMutation();
+
   const { data: singleProject } = useGetSingleProjectsQuery(projectId);
   const [updateProjectContentTitle] = useUpdateProjectsContentTitleMutation();
   const [title, setTitle] = useState({});
@@ -51,6 +54,18 @@ const AdminProjectContentComponent = ({ index }) => {
       console.log(error);
     }
   };
+
+  const handleDeleteContent =async () => {
+    try {
+      const response = await deleteSingleProjectContent({
+        id: projectId,
+        index,
+      });
+      console.log(response);
+    }catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Container fluid>
@@ -103,11 +118,24 @@ const AdminProjectContentComponent = ({ index }) => {
             </Col>
           </Col>
         ) : showImageTools ? (
-          <AdminProjectsContentImage index={index} id={projectId}/>
+          <AdminProjectsContentImage index={index} id={projectId} />
         ) : showVideoTools ? (
           <AdminprojectContentVideo index={index} />
         ) : showDeleteAlert ? (
-          <h1>Delete content</h1>
+          <Alert variant="danger" className="mt-3">
+            <Alert.Heading>Warning!</Alert.Heading>
+            <p>Are you sure you want to delete this -- Content -- ?</p>
+            <Button variant="danger" onClick={handleDeleteContent}>
+              Confirm Delete
+            </Button>
+            <Button
+              variant="secondary"
+              
+              className="mx-2"
+            >
+              Cancel
+            </Button>
+          </Alert>
         ) : null}
       </Row>
     </Container>

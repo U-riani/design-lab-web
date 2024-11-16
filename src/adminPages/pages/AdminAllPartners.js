@@ -14,8 +14,10 @@ const AdminAllPartners = () => {
   const [updateCol, setUpdateCol] = useState(null);
   const [text, setText] = useState({ ge: "", en: "" });
   const [name, setName] = useState({ ge: "", en: "" });
+  const [websiteUrl, setWebsiteUrl] = useState("");
   const [image, setImage] = useState(null);
   const [id, setId] = useState(null);
+  console.log(allPartners)
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -37,7 +39,7 @@ const AdminAllPartners = () => {
   const handleSubmitUpdate = async (e) => {
     e.preventDefault();
     try {
-      await updatePartner({ id, text, name, image }).unwrap();
+      await updatePartner({ id, text, name, image, websiteUrl }).unwrap();
       alert("Partner updated successfully!");
       // Reset form and hide update section after success
       setText({ ge: "", en: "" });
@@ -45,6 +47,7 @@ const AdminAllPartners = () => {
       setImage(null);
       setShowUpdate(false);
       setUpdateCol(null);
+      setWebsiteUrl("");
     } catch (error) {
       alert("Update error:", error.message);
     }
@@ -56,6 +59,7 @@ const AdminAllPartners = () => {
     setText(item.text);
     setId(item._id);
     setUpdateCol(updateCol === item._id ? null : item._id);
+    setWebsiteUrl(item.websiteUrl ? item.websiteUrl : "");
   };
 
   const handleDelete = async (id) => {
@@ -90,7 +94,9 @@ const AdminAllPartners = () => {
                   <p>{item.text?.ge}</p>
                   <p>{item.text?.en}</p>
                   <div className="d-flex">
-                    <Button onClick={() => handleShowUpdate(item)}>Update</Button>
+                    <Button onClick={() => handleShowUpdate(item)}>
+                      Update
+                    </Button>
                     <Button
                       variant="danger"
                       onClick={() => handleDelete(item._id)}
@@ -102,7 +108,11 @@ const AdminAllPartners = () => {
                   </div>
                   {updateCol === item._id && (
                     <form onSubmit={handleSubmitUpdate} className="mt-3">
-                      <input type="file" onChange={handleImageChange} className="mb-2" />
+                      <input
+                        type="file"
+                        onChange={handleImageChange}
+                        className="mb-2"
+                      />
                       <input
                         value={name.ge}
                         className="w-100 mb-2"
@@ -126,6 +136,13 @@ const AdminAllPartners = () => {
                         onChange={(e) => handleTextChange("en", e)}
                         className="w-100 mb-2"
                         placeholder="English text"
+                      />
+                      <input
+                        type="text"
+                        className="w-100 mb-2"
+                        placeholder="Website Url"
+                        value={websiteUrl}
+                        onChange={(e) => setWebsiteUrl(e.target.value)}
                       />
                       <Button type="submit" disabled={isUpdating}>
                         {isUpdating ? "Saving..." : "Save Update"}

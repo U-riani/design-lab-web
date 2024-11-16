@@ -2,12 +2,10 @@ import React from "react";
 import { Container, Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-const slide1 = require("../images/union/hero-banner/slide3-b.jpg");
 
-
-const HeroBannerCarousel = ({ data }) => {
-  const {t, i18n} = useTranslation()
-console.log(data)
+const SingleProjectsPageHeroBanner = ({ data }) => {
+  const { t, i18n } = useTranslation();
+  console.log(data);
   return (
     <Container className="carousel-container px-0" fluid>
       <Carousel
@@ -23,11 +21,17 @@ console.log(data)
                 className="carousel-item-inner-link-container"
               >
                 <div className="carousel-image-container">
-                  <img className="carousel-image" src={el.image[0] || el.image.url} alt="" />
+                  <img
+                    className="carousel-image"
+                    src={el.image[0] || el.image.url}
+                    alt=""
+                  />
                 </div>
                 <Carousel.Caption className="px-2">
                   <p>
-                    {el.text ? el.text[i18n.language] : el.heroText[i18n.language]}
+                    {el.text
+                      ? el.text[i18n.language]
+                      : el.heroText[i18n.language]}
                   </p>
                 </Carousel.Caption>
               </Link>
@@ -38,4 +42,4 @@ console.log(data)
   );
 };
 
-export default HeroBannerCarousel;
+export default SingleProjectsPageHeroBanner;

@@ -51,7 +51,7 @@ const NewsPage = () => {
   return (
     <Container fluid className="newsPage px-0">
         <SpaceComponent info={{h1: t('news')}} className="w-100"/>
-      <Row className="newsPage-row newsPage-row-2">
+      <Row className="newsPage-row newsPage-row-2 px-md-4 mt-3 mt-md-4 mt-lg-5">
         {newsData && newsData.map((el, i) => (
           <Col
             xs={12}

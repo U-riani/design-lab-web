@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import AdminEditProjects from "../components/AdminEditProjects";
 import AdminProjectContentComponent from "../components/AdminProjectContentComponent";
 import AdminAddPrjectContentComponent from "../components/AdminAddProjectContentComponent";
+import AdminHeroBannerCarousel from "../components/AdminHerrobanerCarousel";
 
 const AdminSingleProject = () => {
   const projectId = useParams().projectId;
@@ -79,7 +80,7 @@ const AdminSingleProject = () => {
       {singleProject && (
         <Row className="mx-0 w-100 d-flex flex-column align-content-center">
           <Row className="hero-banner px-0 w-100">
-            <HeroBannerCarousel data={heroData} />
+            <AdminHeroBannerCarousel data={singleProject.heroData} />
           </Row>
           <Row className="px-0 w-100">
             <SpaceComponent info={{ h1: singleProject.name[i18n.language] }} />
@@ -130,16 +131,22 @@ const AdminSingleProject = () => {
                   </div>
                   {/* <SingleProjectCarousel data={data2} className="w-100"/> */}
                   <div className="projects-youtube-container">
-                    {singleProject.projectContent[index].media.youtube && (
+                    {singleProject.projectContent[index].media.youtube !== '' ? (
                       <div
-                      className="projects-youtube"
+                        className="projects-youtube"
                         dangerouslySetInnerHTML={{
                           __html:
-                            singleProject.projectContent[index].media
-                              .youtube,
+                            singleProject.projectContent[index].media.youtube,
                         }}
                       />
-                    )}
+                    ) : singleProject.projectContent[index].media.images[0]
+                        .url &&
+                      singleProject.projectContent[index].media.images.length >
+                        0 ? (
+                      <SingleProjectCarousel
+                        data={singleProject.projectContent[index].media.images}
+                      />
+                    ) : null}
                   </div>
                   <AdminProjectContentComponent index={index} />
                 </Col>

@@ -43,7 +43,7 @@ const NavbarComponent = () => {
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body className="mb-0">
-            <Nav className="justify-content-end flex-grow-1 pe-3 column-gap-3 column-gap-lg-1 column-gap-xl-3 column-gap-xxl-4">
+            <Nav className="justify-content-end flex-grow-1 pe-3 column-gap-2 column-gap-lg-0 column-gap-xl-2 column-gap-xxl-4">
               <Nav.Link as={Link} to="/" onClick={handleCloseOffcanvas}>
                 {t("main")}
               </Nav.Link>
@@ -65,9 +65,9 @@ const NavbarComponent = () => {
               <Nav.Link as={Link} to="/registration" onClick={handleCloseOffcanvas}>
                 {t("registration")}
               </Nav.Link>
-              <Nav.Link as={Link} to="/login" onClick={handleCloseOffcanvas}>
+              {/* <Nav.Link as={Link} to="/login" onClick={handleCloseOffcanvas}>
                 LOGIN
-              </Nav.Link>
+              </Nav.Link> */}
               <Button
                 onClick={() => handleLangChange()}
                 className="p-1 py-1 border-0 flag-button"
