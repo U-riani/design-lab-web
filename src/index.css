@@ -1378,8 +1378,10 @@ button {
 
 /*Registration page*/
 .registration-form {
-  width: 400px;
+  width: var(--phoneMaxWidth);
 }
+
+
 
 /* admin dashbord */
 .login-container {

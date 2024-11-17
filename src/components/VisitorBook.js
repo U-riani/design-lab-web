@@ -17,6 +17,7 @@ import {
   setMinutes,
   addMinutes,
   isAfter,
+  isBefore
 } from "date-fns";
 import {
   useBookVisitMutation,
@@ -24,23 +25,21 @@ import {
 } from "../data/visitsSlice";
 
 const VisitBookForm = () => {
-  // const now  = new Date();
-
-  // console.log(now)
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [visitDate, setVisitDate] = useState(new Date());
-  const [visitTime, setVisitTime] = useState(''); // Default time
   const [availableTimes, setAvailableTimes] = useState([]);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [selectedTime, setSelectedTime] = useState(0);
 
   const [bookVisit] = useBookVisitMutation();
   const { data: bookedTimes } = useGetBookedTimesQuery(
     format(visitDate, "yyyy-MM-dd")
   );
 
-  // Generates times in the 11:00 AM to 7:00 PM range in 30-minute intervals
   const getAvailableTimes = () => {
     const times = [];
     let start = setHours(setMinutes(new Date(), 0), 11); // 11:00 AM
@@ -48,10 +47,9 @@ const VisitBookForm = () => {
 
     while (start <= end) {
       times.push(format(start, "HH:mm"));
-      start = addMinutes(start, 30); // Add 30-minute intervals
+      start = addMinutes(start, 15);
     }
 
-    // If today is selected, only include future times
     if (isToday(visitDate)) {
       const now = new Date();
       return times.filter((time) =>
@@ -64,15 +62,25 @@ const VisitBookForm = () => {
         )
       );
     }
+
     return times;
   };
 
   useEffect(() => {
-    // Check if booked times are available
     if (bookedTimes) {
       const bookedForSelectedDate = bookedTimes
         .filter((entry) => isSameDay(new Date(entry.visitDate), visitDate))
-        .map((entry) => format(new Date(entry.visitDate), "HH:mm"));
+        .flatMap((entry) => {
+          const times = [];
+          const startTime = new Date(entry.visitDate);
+          for (let i = 0; i < +entry.selectedTime; i++) {
+            const intervalTime = new Date(
+              startTime.getTime() + i * 15 * 60 * 1000
+            );
+            times.push(format(intervalTime, "HH:mm"));
+          }
+          return times;
+        });
 
       const allAvailableTimes = getAvailableTimes();
       const filteredTimes = allAvailableTimes.filter(
@@ -84,12 +92,30 @@ const VisitBookForm = () => {
     }
   }, [bookedTimes, visitDate]);
 
+  useEffect(() => {
+    if (startTime && endTime) {
+      const [startHours, startMinutes] = startTime.split(":").map(Number);
+      const [endHours, endMinutes] = endTime.split(":").map(Number);
+
+      const startDateTime = setHours(
+        setMinutes(new Date(), startMinutes),
+        startHours
+      );
+      const endDateTime = setHours(setMinutes(new Date(), endMinutes), endHours);
+
+      const differenceInMinutes =
+        (endDateTime - startDateTime) / (1000 * 60);
+      const intervals = Math.ceil(differenceInMinutes / 15);
+
+      setSelectedTime(intervals > 0 ? intervals : 0);
+    }
+  }, [startTime, endTime]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const visitDateTime = new Date(visitDate);
-
-      const [hours, minutes] = visitTime.split(":").map(Number);
+      const [hours, minutes] = startTime.split(":").map(Number);
       visitDateTime.setHours(hours, minutes);
 
       const { data } = await bookVisit({
@@ -98,6 +124,7 @@ const VisitBookForm = () => {
         phone,
         message,
         visitDate: visitDateTime.toISOString(),
+        selectedTime,
       });
 
       if (data && data.message) {
@@ -109,13 +136,60 @@ const VisitBookForm = () => {
     }
   };
 
+  const getEndTimes = () => {
+    if (!startTime) return [];
+    const filteredEndTimes = availableTimes.filter((time) => {
+      return isAfter(
+        setHours(setMinutes(new Date(), time.split(":")[1]), time.split(":")[0]),
+        setHours(
+          setMinutes(new Date(), startTime.split(":")[1]),
+          startTime.split(":")[0]
+        )
+      );
+    });
+
+    // Find the first booked time and disable times from there
+    const firstBooked = bookedTimes
+      ?.flatMap((entry) => entry.visitDate)
+      .map((time) => format(new Date(time), "HH:mm"))
+      .find((bookedTime) =>
+        isAfter(
+          setHours(
+            setMinutes(new Date(), bookedTime.split(":")[1]),
+            bookedTime.split(":")[0]
+          ),
+          setHours(
+            setMinutes(new Date(), startTime.split(":")[1]),
+            startTime.split(":")[0]
+          )
+        )
+      );
+
+    if (firstBooked) {
+      return filteredEndTimes.filter((time) =>
+        isBefore(
+          setHours(
+            setMinutes(new Date(), time.split(":")[1]),
+            time.split(":")[0]
+          ),
+          setHours(
+            setMinutes(new Date(), firstBooked.split(":")[1]),
+            firstBooked.split(":")[0]
+          )
+        )
+      );
+    }
+
+    return filteredEndTimes;
+  };
+  
+
   return (
     <Container className="visitor-book-component py-3 py-lg-5">
       <Row className="d-flex justify-content-center justify-content-lg-start">
         <Col md={6} className="form-info p-3 p-lg-5">
           <Form onSubmit={handleSubmit}>
             <FloatingLabel controlId="formName" label="Name" className="mb-3">
-              {/* <Form.Label>Name</Form.Label> */}
               <Form.Control
                 type="text"
                 placeholder="Enter your name"
@@ -159,45 +233,42 @@ const VisitBookForm = () => {
                     onChange={(date) => setVisitDate(date)}
                     dateFormat="yyyy-MM-dd"
                     placeholderText="Select a date"
-                    minDate={new Date()} // Disable past dates
+                    minDate={new Date()}
                     className="form-control"
                   />
                 </FloatingLabel>
               </Col>
               <Col>
-                {/* <Form.Group controlId="formTime">
-                  <Form.Label>Visit Time</Form.Label>
-                  <select
-                    value={visitTime && '--:--'}
-                    onChange={(e) => setVisitTime(e.target.value)}
-                    className="form-control"
-                    required
-                  >
-                    {getAvailableTimes().map((time) => (
-                      <option key={time} value={time} disabled={!availableTimes.includes(time)} className={`${!availableTimes.includes(time) ? 'booked-time' : ''}`}>
-                        {time}
-                      </option>
-                    ))}
-                  </select>
-                </Form.Group> */}
-                <FloatingLabel controlId="formTime" label="Visit Time">
+                <FloatingLabel controlId="formTime" label="Start Time">
                   <Form.Select
-                    aria-label="Floating label select example"
-                    onChange={(e) => setVisitTime(e.target.value)}
+                    onChange={(e) => setStartTime(e.target.value)}
                     className="form-control"
                     required
-                    value={visitTime}
+                    value={startTime}
                   >
                     <option>-- : --</option>
                     {getAvailableTimes().map((time) => (
                       <option
                         key={time}
-                        value={availableTimes.includes(time) ? time : null}
+                        value={time}
                         disabled={!availableTimes.includes(time)}
-                        className={`${
-                          !availableTimes.includes(time) ? "booked-time" : ""
-                        }`}
+                        className={`${availableTimes.includes(time) ? 'disabled-option' : ''}`}
                       >
+                        {time}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </FloatingLabel>
+                <FloatingLabel controlId="formTime" label="End Time">
+                  <Form.Select
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className="form-control"
+                    required
+                    value={endTime}
+                  >
+                    <option>-- : --</option>
+                    {getEndTimes().map((time) => (
+                      <option key={time} value={time}>
                         {time}
                       </option>
                     ))}
@@ -207,17 +278,19 @@ const VisitBookForm = () => {
             </Row>
 
             <Form.Group controlId="formMessage" className="mb-3">
-              {/* <Form.Label>Message</Form.Label> */}
               <Form.Control
                 as="textarea"
-                rows={1}
+                rows={2}
                 placeholder="Enter a message (optional)"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
               />
             </Form.Group>
 
-            <Button type="submit" className="submit-button rounded-0 bg-black border-0 btn btn-lg">
+            <Button
+              type="submit"
+              className="submit-button rounded-0 bg-black border-0 btn btn-lg"
+            >
               Record Visit
             </Button>
           </Form>
