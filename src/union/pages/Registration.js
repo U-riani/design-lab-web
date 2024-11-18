@@ -82,9 +82,9 @@ const Registration = () => {
   return (
     <Container fluid className="px-0 registration-page">
       <SpaceComponent info={{ h1: t("registration") }} className="w-100" />
-      <Row className="pb-4 mx-0">
+      <Row className="my-0 mx-0">
         <Col className="d-flex justify-content-center ">
-          <Form className="registration-form">
+          <Form className="registration-form my-4 my-mb-5 p-4 p-lg-5">
             <FloatingLabel
               controlId="floatingInput"
               label="Full name"
