@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const projectsApiSlice = createApi({
   reducerPath: "projectsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/",
+    baseUrl: "https://design-union-backend.vercel.app/api",
     prepareHeaders: (headers) => {
       headers.set("Accept", "application/json");
       return headers;
@@ -11,7 +11,7 @@ export const projectsApiSlice = createApi({
   }),
   tagTypes: ["Projects"],
   endpoints: (builder) => ({
-    getAllProjects: builder.query({
+    getAllProjects: builder.query({ 
       query: () => "projects",
       providesTags: ["Projects"],
     }),

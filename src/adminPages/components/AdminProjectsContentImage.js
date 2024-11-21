@@ -4,16 +4,16 @@ import {
   useUpdateProjectsContentImageMutation,
   useGetSingleProjectContentQuery,
   useDeleteSingleProjectContentImageMutation,
-  useDeleteSingleProjectContentMutation
+  useDeleteSingleProjectContentMutation,
 } from "../../data/projectContentSlice";
 import { useParams } from "react-router-dom";
 
-const AdminProjectsContentImage = ({ index, id }) => {
+const AdminProjectsContentImage = ({ index, id, handleRefetch }) => {
   const [updateProjectContentImage] = useUpdateProjectsContentImageMutation();
   const [deleteSingleProjectContentImage] =
     useDeleteSingleProjectContentImageMutation();
-    const [deleteSingleProjectContent] = useDeleteSingleProjectContentMutation();
-  const { data: singleProjectContent } = useGetSingleProjectContentQuery({
+  const [deleteSingleProjectContent] = useDeleteSingleProjectContentMutation();
+  const { data: singleProjectContent , refetch} = useGetSingleProjectContentQuery({
     id,
     index,
   });
@@ -24,6 +24,14 @@ const AdminProjectsContentImage = ({ index, id }) => {
   const [imagesFiles, setImagesFiles] = useState([{ image: null }]);
   const [imagesFilesUpdate, setImagesFilesUpdate] = useState({ image: null });
   const [deleteImageIndex, setDeleteImageIndex] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [createButtonIndexArr, setCreateButtonIndexArr] = useState([]);
+  console.log("createButtonIndexArr", createButtonIndexArr);
+
+  useEffect(() => {
+    refetch()
+  
+  }, [refetch])
 
   useEffect(() => {
     if (
@@ -34,23 +42,29 @@ const AdminProjectsContentImage = ({ index, id }) => {
     }
   }, [singleProjectContent]);
 
-  console.log(singleProjectContent);
+  console.log("imagesFiles", imagesFiles);
 
   console.log(imagesFiles);
   const handleShowAddImage = () => {
     setShowAddImage((prev) => !prev);
     setShowUpdateImage(false);
     setShowDeleteImage(false);
+    setCreateButtonIndexArr([]);
+    setImagesFiles([{ image: null }]);
   };
   const handleShowUpdateImage = () => {
     setShowAddImage(false);
     setShowUpdateImage((prev) => !prev);
     setShowDeleteImage(false);
+    setCreateButtonIndexArr([]);
+    setImagesFiles([{ image: null }]);
   };
   const handleShowDeleteImage = () => {
     setShowAddImage(false);
     setShowUpdateImage(false);
     setShowDeleteImage((prev) => !prev);
+    setCreateButtonIndexArr([]);
+    setImagesFiles([{ image: null }]);
   };
   // const handleShowDeleteImageAlert = () => {
   //   setShowAddImage(false);
@@ -106,6 +120,9 @@ const AdminProjectsContentImage = ({ index, id }) => {
   // };
 
   const handleUpdateImage = async (localIndex, type) => {
+    handleRefetch("start");
+    setLoading(true);
+
     try {
       console.log("--Update:", localIndex);
       const response = await updateProjectContentImage({
@@ -118,15 +135,29 @@ const AdminProjectsContentImage = ({ index, id }) => {
         localIndex,
         type,
       });
-      console.log("update", response);
+      if (response) {
+        refetch()
+        handleRefetch("finish");
+        setLoading(false);
+        if (type === "create") {
+          setCreateButtonIndexArr((prev) => [...prev, localIndex]);
+        }
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   const handleDeleteImage = async (localIndex) => {
+    handleRefetch("start");
+    setLoading(true);
+
     try {
-      const response = await deleteSingleProjectContentImage({ id, index, localIndex });
+      const response = await deleteSingleProjectContentImage({
+        id,
+        index,
+        localIndex,
+      });
       console.log("--delete:", response);
 
       // Update UI after delete
@@ -137,9 +168,14 @@ const AdminProjectsContentImage = ({ index, id }) => {
 
       // Close the alert
       handleCloseDeleteImageAlert();
+      if (response) {
+        refetch()
+        handleRefetch("finish");
+        setLoading(false);
+      }
     } catch (error) {
       console.error(error);
-    } 
+    }
   };
 
   return (
@@ -175,27 +211,35 @@ const AdminProjectsContentImage = ({ index, id }) => {
                     className="m-3"
                     variant="success"
                     onClick={() => handleUpdateImage(localIndex, "create")}
+                    disabled={
+                      createButtonIndexArr.includes(localIndex) ? true : false
+                    }
                   >
-                    Create
+                    {createButtonIndexArr.includes(localIndex)
+                      ? "Image Added Successfully"
+                      : loading
+                      ? "Loading ..."
+                      : "Create"}
                   </Button>
-                  <Col className="my-3 d-flex justify-content-center align-items-center">
-                    <Button onClick={handleAddMoreImages}>
-                      Add MoreImages
-                    </Button>
-                  </Col>
+                  <Col className="my-3 d-flex justify-content-center align-items-center"></Col>
                 </Col>
               ))}
+            <Button onClick={handleAddMoreImages}>Add MoreImages</Button>
           </Col>
         )}
       </Col>
       <Col xs={3}>
-        <Button variant="warning" onClick={handleShowUpdateImage}>
+        <Button
+          className="mb-5"
+          variant="warning"
+          onClick={handleShowUpdateImage}
+        >
           Update Image
         </Button>
         {showUpdateImage &&
           imagesFilesUpdate.length > 0 &&
           imagesFilesUpdate.map((el, i) => (
-            <Col key={i} className="py-2">
+            <Col key={i} className="pb-4">
               <img src={el.url} width="150px" height="100px" />
               <input
                 type="file"
@@ -205,10 +249,12 @@ const AdminProjectsContentImage = ({ index, id }) => {
               />
               <Col>
                 <Button
+                  className="mt-1"
                   onClick={() => handleUpdateImage(i, "update")}
                   variant="warning"
+                  disabled={loading ? true : false}
                 >
-                  Update image
+                  {loading ? "Loading ..." : "Update"}
                 </Button>
               </Col>
             </Col>
@@ -227,8 +273,7 @@ const AdminProjectsContentImage = ({ index, id }) => {
           imagesFilesUpdate.map((el, i) => (
             <Col key={i} className="py-2">
               <img src={el.url} width="150px" height="100px" />
-            
-              
+
               <Col>
                 <Button
                   onClick={() => handleShowDeleteImageAlert(i)}
@@ -239,20 +284,27 @@ const AdminProjectsContentImage = ({ index, id }) => {
                 {deleteImageIndex === i && (
                   <Alert variant="danger" className="mt-3">
                     <Alert.Heading>Warning!</Alert.Heading>
-                    <p>Are you sure you want to delete this image?</p>
-                    <Button
-                      variant="danger"
-                      onClick={() => handleDeleteImage(i)}
-                    >
-                      Confirm Delete
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={handleCloseDeleteImageAlert}
-                      className="mx-2"
-                    >
-                      Cancel
-                    </Button>
+                    {loading ? (
+                      <h3>Loading...</h3>
+                    ) : (
+                      <div>
+                        <p>Are you sure you want to delete this image?</p>
+
+                        <Button
+                          variant="danger"
+                          onClick={() => handleDeleteImage(i)}
+                        >
+                          Confirm Delete
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          onClick={handleCloseDeleteImageAlert}
+                          className="mx-2"
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    )}
                   </Alert>
                 )}
               </Col>

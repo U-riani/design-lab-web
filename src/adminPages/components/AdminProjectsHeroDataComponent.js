@@ -1,19 +1,24 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Col } from "react-bootstrap";
 import {
   useCreateProjectsHeroDataMutation,
   useUpdateProjectsHeroDataMutation,
-  useDeleteProjectsHerodataMutation
+  useDeleteProjectsHerodataMutation,
 } from "../../data/projectsSlice";
 import { useParams } from "react-router-dom";
 
-const AdminProjectsHeroDataComponent = ({ data }) => {
+const AdminProjectsHeroDataComponent = ({ data, handleRefetch }) => {
   const projectId = useParams().projectId;
-  const [heroData, setHeroData] = useState(data.heroData || []);
+  const [heroData, setHeroData] = useState(
+    data.heroData?.length > 0
+      ? data.heroData
+      : [{ heroText: { en: "", ge: "" }, image: { url: "" } }]
+  );
   const [updateProjectsHeroData] = useUpdateProjectsHeroDataMutation(projectId);
   const [createProjectsHeroData] = useCreateProjectsHeroDataMutation();
-  const [deleteProjectsHerodata] = useDeleteProjectsHerodataMutation()
+  const [deleteProjectsHerodata] = useDeleteProjectsHerodataMutation();
   const { upData } = useUpdateProjectsHeroDataMutation(projectId);
+  const [loading, setLoading] = useState(false);
   console.log("upData", upData);
 
   // Function to handle text changes for hero text (for existing data)
@@ -35,6 +40,8 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
     setHeroData(updatedHeroData);
   };
 
+  console.log('data', data)
+
   // Function to handle image change for a hero (for existing data)
   const handleImageChange = (index, file) => {
     const updatedHeroData = heroData.map((hero, i) => {
@@ -52,7 +59,9 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
 
     setHeroData(updatedHeroData);
   };
-  console.log(heroData[0].image);
+
+  console.log(heroData)
+  // console.log(heroData[0].image);
 
   // Function to handle adding a new hero (for new data)
   const handleAddHero = () => {
@@ -67,23 +76,33 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
 
   // Function to handle creating a hero (for new data when the "Create Hero" button is clicked)
   const handleCreateHero = async (index) => {
+    setLoading(true)
+    handleRefetch('start')
     const newHero = heroData[index];
-  try {
-    const formData = new FormData();
-    formData.append("index", index);
-    formData.append("url", newHero.image.url);
-    formData.append("heroText[ge]", newHero.heroText.ge);
-    formData.append("heroText[en]", newHero.heroText.en);
-    formData.append("images", newHero.image);
+    try {
+      const formData = new FormData();
+      formData.append("index", index);
+      formData.append("url", newHero.image.url);
+      formData.append("heroText[ge]", newHero.heroText.ge);
+      formData.append("heroText[en]", newHero.heroText.en);
+      formData.append("images", newHero.image);
 
-    const response = await createProjectsHeroData({ formData, projectId }).unwrap();
-    console.log("--Create HeroData res:", response)
-  } catch (error) {
-    console.log(error);
-  }
+      const response = await createProjectsHeroData({
+        formData,
+        projectId,
+      }).unwrap();
+      if(response) {
+        setLoading(false)
+        handleRefetch('finish')
+      }
+      console.log("--Create HeroData res:", response);
+    } catch (error) {
+      console.log(error);
+    }
     console.log("Creating Hero: ", newHero, index);
     // You can add additional logic here (e.g., send data to a backend API or perform validations)
   };
+  console.log(data);
 
   // Function to handle updating a hero (for existing data)
   // const handleUpdateHero = async (index) => {
@@ -107,18 +126,10 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
   //   // You can add more logic here to save the updated data to a backend or database
   // };
   const handleUpdateHero = async (index) => {
-    console.log(heroData);
     const heroToUpdate = heroData[index];
-    console.log("Updating Hero:", heroToUpdate.heroText, index);
-    // const urlLastPart = heroToUpdate.image.url?.split('/').slice(-1)[0];
-    console.log(heroToUpdate.image.url);
+    setLoading(true);
+    handleRefetch("start");
     try {
-      // Sending update request with hero text, project ID, and index
-      // const formData = new FormData();
-      //   formData.append("index", index)
-      //   formData.append("heroText[ge]", heroText.ge);
-      //   formData.append("heroText[en]", heroText.en);
-      //   if (image) formData.append("heroes[0][imageFile]", image);
       const response = await updateProjectsHeroData({
         heroText: heroToUpdate.heroText,
         projectId,
@@ -128,7 +139,10 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
       }).unwrap();
 
       // Successful response
-      console.log("Update successful:", response);
+      if (response) {
+        handleRefetch("finish");
+        setLoading(false);
+      }
     } catch (error) {
       // Handle error in case the request fails
       console.error("Update failed:", error);
@@ -138,11 +152,19 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
   // Function to handle deleting a hero (for existing data)
   const handleDeleteHero = async (index) => {
     const heroToDelete = heroData[index];
+    setLoading(true);
+    handleRefetch("start");
     try {
-      const response = await deleteProjectsHerodata({index, id: projectId}).unwrap();
-      console.log("Deleting Hero: ", response);
-    }catch(error) {
-      console.log(error)
+      const response = await deleteProjectsHerodata({
+        index,
+        id: projectId,
+      }).unwrap();
+      if (response) {
+        handleRefetch("finish");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
     }
 
     // Remove the hero from the heroData state
@@ -157,7 +179,7 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
         <div key={hero._id || index}>
           {/* Use _id for key if available */}
           {/* Hero Text (Georgian) */}
-          <div>
+          <div className="py-3 bg-light">
             <label>Hero Text (Georgian)</label>
             <input
               type="text"
@@ -168,7 +190,7 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
             />
           </div>
           {/* Hero Text (English) */}
-          <div>
+          <div className="py-3 bg-light">
             <label>Hero Text (English)</label>
             <input
               type="text"
@@ -179,41 +201,66 @@ const AdminProjectsHeroDataComponent = ({ data }) => {
             />
           </div>
           {/* Hero Image */}
-          <div>
+          <div className="py-3 bg-light">
             <label>Hero Image</label>
             <input
               type="file"
               onChange={(e) => handleImageChange(index, e.target.files[0])}
             />
             {/* Display the uploaded image if available */}
-            {hero.image.url && (
-              <img src={hero.image.url} alt="Hero" width="100" height="auto" />
+            {hero.image && (
+              <img
+                className="pt-2"
+                src={hero.image.url}
+                alt="Hero"
+                width="100"
+                height="auto"
+              />
             )}
             {/* Display the old image filename */}
-            {hero.image.fileName && !hero.image.url && (
-              <p>Current image: {hero.image.fileName}</p>
-            )}
+
+            {console.log(hero.image)}
           </div>
           {/* Buttons for Updating or Deleting Hero */}
           {hero._id ? (
             <div>
-              <Button variant="info" onClick={() => handleUpdateHero(index)}>
-                Update Hero
+              <Button
+                disabled={loading ? true : false}
+                variant="success"
+                onClick={() => handleUpdateHero(index)}
+              >
+                {loading ? "Laoding ..." : "Update Hero"}
               </Button>
-              <Button variant="danger" onClick={() => handleDeleteHero(index)}>
-                Delete Hero
+              {/* <Button className="mx-3" onClick={handleAddHero}>
+                Add More Hero
+              </Button> */}
+              <Button
+                className="ms-4"
+                disabled={loading ? true : false}
+                variant="danger"
+                onClick={() => handleDeleteHero(index)}
+              >
+                {loading ? "loading ..." : "Delete Hero"}
               </Button>
             </div>
           ) : (
-            <Button variant="success" onClick={() => handleCreateHero(index)}>
-              Create Hero
-            </Button>
+            <div>
+              <Button variant="success" onClick={() => handleCreateHero(index)}>
+                {loading ? "loading ..." : "Create Hero"}
+              </Button>
+              {/* <Button className="mx-3" onClick={handleAddHero}>
+                Add More Hero
+              </Button> */}
+            </div>
           )}
         </div>
       ))}
-
+      <Col sm={4}>
+        <Button className="mx-3 mt-3" onClick={handleAddHero}>
+          Add More Hero
+        </Button>
+      </Col>
       {/* Add More Heroes Button (only for new heroes) */}
-      <Button onClick={handleAddHero}>Add Hero</Button>
     </form>
   );
 };

@@ -7,6 +7,7 @@ import NewsComponent3 from "../../components/NewsComponent3";
 // import PartnersComponent from '../../components/PartnersComponent'
 // import SpaceComponent from "../../components/SpaceComponent";
 import {LastNewsProvider} from '../.././context/LastNewsContext'
+import AboutUsComponent from "../../components/AboutUsComponent";
 // import { useTranslation } from "react-i18next";
 
 const UnionMainPage = () => {
@@ -15,6 +16,7 @@ const UnionMainPage = () => {
     <Container fluid className="px-0 mb-0">
       {/* <HeroBanner /> */}
       {/* <SpaceComponent info={{h1: t('projects')}} /> */}
+      <AboutUsComponent />
       <ProjectsComponent />
       {/* <SpaceComponent info={{ h1: t('news') }} /> */}
       {/* <NewsComponent /> */}

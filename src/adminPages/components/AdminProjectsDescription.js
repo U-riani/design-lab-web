@@ -6,16 +6,19 @@ import {
   useUpdateProjectsMutation,
 } from "../../data/projectsSlice";
 
-const AdminProjectDescription = ({ data }) => {
+const AdminProjectDescription = ({ data, handleRefetch }) => {
   const projectId = useParams().projectId;
   // console.log(projectId);
   const [name, setName] = useState(data.name);
   const [description, setDescription] = useState(data.description);
   const [mainProject, setMainProject] = useState(data.mainProject);
   const [updateProjectsDescription] =
-  useUpdateProjectsDescriptionMutation(projectId);
+    useUpdateProjectsDescriptionMutation(projectId);
+    const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
+    setLoading(true)
+    handleRefetch('start')
     e.preventDefault();
     // Here you could call the update function to save the data
     const updatedData = { projectId, name, description, mainProject };
@@ -23,7 +26,7 @@ const AdminProjectDescription = ({ data }) => {
 
     try {
       const formData = new FormData();
-      await updateProjectsDescription({
+      const response = await updateProjectsDescription({
         name,
         description,
         mainProject,
@@ -38,6 +41,11 @@ const AdminProjectDescription = ({ data }) => {
 
       if (mainProject !== undefined)
         formData.append("mainProject", mainProject);
+      if(response) {
+        handleRefetch('finish')
+        setLoading(false)
+
+      }
     } catch (error) {
       console.error(error);
     }
@@ -62,18 +70,20 @@ const AdminProjectDescription = ({ data }) => {
           onChange={(e) => setName({ ...name, en: e.target.value })}
         />
       </div>
-      <div>
+      <div className="d-flex flex-column py-3 bg-light">
         <label>Description (Georgian)</label>
         <textarea
+          rows={5}
           value={description.ge}
           onChange={(e) =>
             setDescription({ ...description, ge: e.target.value })
           }
         />
       </div>
-      <div>
+      <div className="d-flex flex-column py-3 bg-light">
         <label>Description (English)</label>
         <textarea
+          rows={5}
           value={description.en}
           onChange={(e) =>
             setDescription({ ...description, en: e.target.value })
@@ -88,7 +98,9 @@ const AdminProjectDescription = ({ data }) => {
           onChange={(e) => setMainProject(e.target.checked)}
         />
       </div>
-      <Button type="submit">Save Update</Button>
+      <Button disabled={loading ? true : false} variant="success" type="submit">
+        {loading ? 'loading ...' :"Save Update"}
+      </Button>
     </form>
   );
 };

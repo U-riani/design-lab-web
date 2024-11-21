@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Row, Col, Alert } from "react-bootstrap";
 import AdminprojectContentVideo from "./AdminprojectContentVideo";
-import { useUpdateProjectsContentTitleMutation, useDeleteSingleProjectContentMutation } from "../../data/projectContentSlice";
+import {
+  useUpdateProjectsContentTitleMutation,
+  useDeleteSingleProjectContentMutation,
+} from "../../data/projectContentSlice";
 import { useParams } from "react-router-dom";
 import { useGetSingleProjectsQuery } from "../../data/projectsSlice";
 import AdminProjectsContentImage from "./AdminProjectsContentImage";
 // import { deleteProjectContent } from "../../../../backend/controllers/projectContentController";
 
-const AdminProjectContentComponent = ({ index }) => {
+const AdminProjectContentComponent = ({ index, handleRefetch }) => {
   const projectId = useParams().projectId;
   const [deleteSingleProjectContent] = useDeleteSingleProjectContentMutation();
 
@@ -19,6 +22,7 @@ const AdminProjectContentComponent = ({ index }) => {
   const [showVideoTools, setShowVideoTools] = useState(false);
   const [showImageTools, setShowImageTools] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     console.log("---", singleProject.projectContent[index].title);
@@ -31,41 +35,63 @@ const AdminProjectContentComponent = ({ index }) => {
 
   const handleShowTitle = () => {
     setShowTitle((prev) => !prev);
+    setShowVideoTools(false);
+    setShowImageTools(false);
+    setShowDeleteAlert(false);
   };
   const handleShowVideo = () => {
     setShowVideoTools((prev) => !prev);
+    setShowTitle(false);
+    setShowImageTools(false);
+    setShowDeleteAlert(false);
   };
   const handleShowImageTools = () => {
     setShowImageTools((prev) => !prev);
+    setShowTitle(false);
+    setShowVideoTools(false);
+    setShowDeleteAlert(false);
   };
   const handleShowDeleteAlert = () => {
     setShowDeleteAlert((prev) => !prev);
+    setShowTitle(false);
+    setShowVideoTools(false);
+    setShowImageTools(false);
   };
 
   const handleUpdateTitle = async () => {
+    handleRefetch("start");
+    setLoading(true);
     try {
       const response = await updateProjectContentTitle({
         id: projectId,
         index,
         title,
       });
-      console.log(response);
+      if (response) {
+        handleRefetch("finish");
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleDeleteContent =async () => {
+  const handleDeleteContent = async () => {
+    handleRefetch("start");
+    setLoading(true);
     try {
       const response = await deleteSingleProjectContent({
         id: projectId,
         index,
       });
-      console.log(response);
-    }catch (error) {
+      if (response) {
+        handleRefetch("finish");
+        setLoading(false);
+      }
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <Container fluid>
@@ -113,26 +139,22 @@ const AdminProjectContentComponent = ({ index }) => {
             </Col>
             <Col>
               <Button variant="success" onClick={handleUpdateTitle}>
-                Update
+                {loading?'Loading ...':'Update'}
               </Button>
             </Col>
           </Col>
         ) : showImageTools ? (
-          <AdminProjectsContentImage index={index} id={projectId} />
+          <AdminProjectsContentImage handleRefetch={handleRefetch} index={index} id={projectId} />
         ) : showVideoTools ? (
-          <AdminprojectContentVideo index={index} />
+          <AdminprojectContentVideo handleRefetch={handleRefetch} index={index} />
         ) : showDeleteAlert ? (
           <Alert variant="danger" className="mt-3">
             <Alert.Heading>Warning!</Alert.Heading>
             <p>Are you sure you want to delete this -- Content -- ?</p>
             <Button variant="danger" onClick={handleDeleteContent}>
-              Confirm Delete
+              {loading?'Deleting ...':'Confirm Delete'}
             </Button>
-            <Button
-              variant="secondary"
-              
-              className="mx-2"
-            >
+            <Button variant="secondary" className="mx-2">
               Cancel
             </Button>
           </Alert>

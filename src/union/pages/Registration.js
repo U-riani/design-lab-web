@@ -82,42 +82,46 @@ const Registration = () => {
   return (
     <Container fluid className="px-0 registration-page">
       <SpaceComponent info={{ h1: t("registration") }} className="w-100" />
-      <Row className="my-0 mx-0">
+      <Row className="my-0 mx-0 py-lg-5">
         <Col className="d-flex justify-content-center ">
-          <Form className="registration-form my-4 my-mb-5 p-4 p-lg-5">
-            <FloatingLabel
-              controlId="floatingInput"
-              label="Full name"
-              className="mb-3"
-            >
-              <Form.Control
-                value={name.ge}
-                onChange={(e) => setName({ ge: e.target.value })}
-                type="text"
-                placeholder="Full name"
-              />
-            </FloatingLabel>
-            <InputGroup className="mb-3 d-flex flex-row">
-              <Button
-                onClick={() => setCompanyPerson("person")}
-                className={`w-50 ${
-                  companyPerson === "person" && "bg-secondary text-light"
-                }`}
-                variant="outline-secondary"
+          <Form className="registration-form p-4 p-lg-5">
+            <Col sm={12} lg={6} className="pe-lg-3">
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Full name"
+                className="mb-3"
               >
-                PERSON
-              </Button>
-              <Button
-                onClick={() => setCompanyPerson("company")}
-                className={`w-50 ${
-                  companyPerson === "company" && "bg-secondary text-light"
-                }`}
-                variant="outline-secondary"
-              >
-                COMPANY
-              </Button>
-            </InputGroup>
-            <div className="mb-3">
+                <Form.Control
+                  value={name.ge}
+                  onChange={(e) => setName({ ge: e.target.value })}
+                  type="text"
+                  placeholder="Full name"
+                />
+              </FloatingLabel>
+            </Col>
+            <Col sm={12} lg={6} className="ps-lg-3">
+              <InputGroup className="mb-3 d-flex flex-row">
+                <Button
+                  onClick={() => setCompanyPerson("person")}
+                  className={`w-50 py-3 ${
+                    companyPerson === "person" && "bg-secondary text-light"
+                  }`}
+                  variant="outline-secondary"
+                >
+                  PERSON
+                </Button>
+                <Button
+                  onClick={() => setCompanyPerson("company")}
+                  className={`w-50 ${
+                    companyPerson === "company" && "bg-secondary text-light"
+                  }`}
+                  variant="outline-secondary"
+                >
+                  COMPANY
+                </Button>
+              </InputGroup>
+            </Col>
+            {/* <div className="mb-3">
               <p>COMPANY / PERSON</p>
               <div className="d-flex gap-5">
                 <Form.Check
@@ -134,114 +138,130 @@ const Registration = () => {
                   onClick={() => setCompanyPerson("person")}
                 />
               </div>
-            </div>
-            <FloatingLabel
-              controlId="floatingEmail"
-              label="Email address"
-              className="mb-3"
-            >
-              <Form.Control
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                placeholder="Email address"
-              />
-            </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingPhone"
-              label="Phone number"
-              className="mb-3"
-            >
-              <Form.Control
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                type="tel"
-                placeholder="Phone number"
-              />
-            </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingProfilePhoto"
-              label="Upload profile photo"
-              className="mb-3"
-            >
-              <Form.Control
-                onChange={handleProfilePhotoChange}
-                type="file"
-                accept="image/*"
-              />
-              {profilePhoto && (
-                <img
-                  src={URL.createObjectURL(profilePhoto)}
-                  alt="Profile Preview"
-                  style={{ width: "100px", marginTop: "10px" }}
+            </div> */}
+            <Col sm={12} lg={6} className="pe-lg-3">
+              <FloatingLabel
+                controlId="floatingEmail"
+                label="Email address"
+                className="mb-3"
+              >
+                <Form.Control
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  placeholder="Email address"
                 />
-              )}
-            </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingProjectPhoto"
-              label="Upload project's photo"
-              className="mb-3"
-            >
-              <Form.Control
-                onChange={handleProjectPhotoChange}
-                type="file"
-                accept="image/*"
-              />
-              {projectPhoto && (
-                <img
-                  src={URL.createObjectURL(projectPhoto)}
-                  alt="Project Preview"
-                  style={{ width: "100px", marginTop: "10px" }}
+              </FloatingLabel>
+            </Col>
+            <Col sm={12} lg={6} className="ps-lg-3">
+              <FloatingLabel
+                controlId="floatingPhone"
+                label="Phone number"
+                className="mb-3"
+              >
+                <Form.Control
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  type="tel"
+                  placeholder="Phone number"
                 />
-              )}
-            </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingBehance"
-              label="Behance link"
-              className="mb-3"
-            >
-              <Form.Control
-                value={behance}
-                onChange={(e) => setBehance(e.target.value)}
-                type="url"
-                placeholder="Behance link"
-              />
-            </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingInstagram"
-              label="Instagram link"
-              className="mb-3"
-            >
-              <Form.Control
-                value={instagram}
-                onChange={(e) => setInstagram(e.target.value)}
-                type="url"
-                placeholder="Instagram link"
-              />
-            </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingFacebook"
-              label="Facebook link"
-              className="mb-3"
-            >
-              <Form.Control
-                value={facebook}
-                onChange={(e) => setFacebook(e.target.value)}
-                type="url"
-                placeholder="Facebook link"
-              />
-            </FloatingLabel>
-            <Button
-              className="bg-black border-0 py-3 fw-bold"
-              onClick={handleSubmit}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <Spinner animation="border" size="sm" />
-              ) : (
-                t("submit")
-              )}
-            </Button>
+              </FloatingLabel>
+            </Col>
+            <Col sm={12} lg={6} className="pe-lg-3">
+              <FloatingLabel
+                controlId="floatingProfilePhoto"
+                label="Upload profile photo"
+                className="mb-3"
+              >
+                <Form.Control
+                  onChange={handleProfilePhotoChange}
+                  type="file"
+                  accept="image/*"
+                />
+                {profilePhoto && (
+                  <img
+                    src={URL.createObjectURL(profilePhoto)}
+                    alt="Profile Preview"
+                    style={{ width: "100px", marginTop: "10px" }}
+                  />
+                )}
+              </FloatingLabel>
+            </Col>
+            <Col sm={12} lg={6} className="ps-lg-3">
+              <FloatingLabel
+                controlId="floatingProjectPhoto"
+                label="Upload project's photo"
+                className="mb-3"
+              >
+                <Form.Control
+                  onChange={handleProjectPhotoChange}
+                  type="file"
+                  accept="image/*"
+                />
+                {projectPhoto && (
+                  <img
+                    src={URL.createObjectURL(projectPhoto)}
+                    alt="Project Preview"
+                    style={{ width: "100px", marginTop: "10px" }}
+                  />
+                )}
+              </FloatingLabel>
+            </Col>
+            <Col sm={12} lg={4}>
+              <FloatingLabel
+                controlId="floatingBehance"
+                label="Behance link"
+                className="mb-3"
+              >
+                <Form.Control
+                  value={behance}
+                  onChange={(e) => setBehance(e.target.value)}
+                  type="url"
+                  placeholder="Behance link"
+                />
+              </FloatingLabel>
+            </Col>{" "}
+            <Col sm={12} lg={4} className="px-lg-3">
+              <FloatingLabel
+                controlId="floatingInstagram"
+                label="Instagram link"
+                className="mb-3"
+              >
+                <Form.Control
+                  value={instagram}
+                  onChange={(e) => setInstagram(e.target.value)}
+                  type="url"
+                  placeholder="Instagram link"
+                />
+              </FloatingLabel>
+            </Col>
+            <Col sm={12} lg={4} >
+              <FloatingLabel
+                controlId="floatingFacebook"
+                label="Facebook link"
+                className="mb-3"
+              >
+                <Form.Control
+                  value={facebook}
+                  onChange={(e) => setFacebook(e.target.value)}
+                  type="url"
+                  placeholder="Facebook link"
+                />
+              </FloatingLabel>
+            </Col>
+            <Col sm={12} lg={4} className="px-lg-3">
+              <Button
+                className="bg-black border-0 py-3 fw-bold registration-button w-100"
+                onClick={handleSubmit}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Spinner animation="border" size="sm" />
+                ) : (
+                  t("submit")
+                )}
+              </Button>
+            </Col>
             {message.text && (
               <Alert variant={message.variant} className="mt-3">
                 {message.text}

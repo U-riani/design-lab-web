@@ -23,10 +23,10 @@ const NavbarComponent = () => {
   const handleShowOffcanvas = () => setShowOffcanvas(true);
 
   return (
-    <Navbar sticky="top" expand="lg" className="bg-body-tertiary my-0 py-2">
+    <Navbar sticky="top" expand="lg" className="bg-body-tertiary my-0 py-2 py-lg-0">
       <Container fluid className="my-0">
-        <Navbar.Brand className="ms-0 ms-lg-3" as={Link} to="/">
-          <img className="navbar-logo" src={unionLogo} alt="Union Logo" />
+        <Navbar.Brand className="ms-0 ms-lg-3 py-0" as={Link} to="/">
+          <img className="navbar-logo py-0" src={unionLogo} alt="Union Logo" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} onClick={handleShowOffcanvas} />
         <Navbar.Offcanvas
@@ -43,12 +43,15 @@ const NavbarComponent = () => {
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body className="mb-0">
-            <Nav className="justify-content-end flex-grow-1 pe-3 column-gap-2 column-gap-lg-0 column-gap-xl-2 column-gap-xxl-4">
+            <Nav className="justify-content-end flex-grow-1 pe-3 column-gap-1 column-gap-lg-0 column-gap-xl-1 column-gap-xxl-2">
               <Nav.Link as={Link} to="/" onClick={handleCloseOffcanvas}>
                 {t("main")}
               </Nav.Link>
               <Nav.Link as={Link} to="/news" onClick={handleCloseOffcanvas}>
                 {t("news")}
+              </Nav.Link>
+              <Nav.Link as={Link} to="/aboutUs" onClick={handleCloseOffcanvas}>
+                {t("aboutUs")}
               </Nav.Link>
               <Nav.Link as={Link} to="/designers" onClick={handleCloseOffcanvas}>
                 {t("designers")}
@@ -65,9 +68,9 @@ const NavbarComponent = () => {
               <Nav.Link as={Link} to="/registration" onClick={handleCloseOffcanvas}>
                 {t("registration")}
               </Nav.Link>
-              {/* <Nav.Link as={Link} to="/login" onClick={handleCloseOffcanvas}>
+              <Nav.Link as={Link} to="/login" onClick={handleCloseOffcanvas}>
                 LOGIN
-              </Nav.Link> */}
+              </Nav.Link>
               <Button
                 onClick={() => handleLangChange()}
                 className="p-1 py-1 border-0 flag-button"

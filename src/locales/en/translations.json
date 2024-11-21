@@ -1,6 +1,7 @@
 {
   "main": "MAIN",
   "news":  "NEWS",
+  "aboutUs":  "ABOUT US",
   "designers": "DESIGNERS",
   "projects": "PROJECTS",
   "partners": "PARTNERS",
@@ -10,6 +11,8 @@
   
   "welcome": "English.",
 
+  "aboutUs1": "Designers' Union of Georgia was founded in 2013. It serves as a professional organization with the primary goal of supporting professionals working in the fields of architecture and interior design, protecting their rights and promoting the development of the industry.",
+  "aboutUs2": "Through the Union the platform has been created to gather professionals in Georgia whose work is related to any type of interior creation. With the help of this platform, both emerging and experienced colleagues in this field will be able to position themselves better in the local and global markets. Since 2013 the Designers Union of Georgia has implemented numerous significant projects aimed to promote architects/designers and support their activities.",
   "NewsTitle": "News Title",
   "textPlaceholder": "Start writing here...",
   "save": "Save",

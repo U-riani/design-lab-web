@@ -19,6 +19,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "bpg-le-studio-04-caps": "^1.0.0",
     "bpg-nino-mtavruli": "^1.0.0",
     "date-fns": "^4.1.0",
     "he": "^1.2.0",

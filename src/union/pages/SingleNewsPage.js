@@ -31,11 +31,12 @@ const GetSingleNews = () => {
   }
 
   return (
-    <Container className="singleNewsComponent ">
+    <Container className="singleNewsComponent my-0 py-3 py-md-5 d-flex align-items-center justify-content-center">
+      <Row className="single-news-component-inner-container mb-0">
       {news?.length === 0 ? (
         <p>No news articles available.</p>
       ) : (
-        <div className="news-article px-3 mb-4">
+        <div className="news-article px-3 ">
           {/* <Row>
             <h1 className="text-center mb-0 pt-3">{ news.title[i18n.language] || news.title}</h1>
           </Row> */}
@@ -53,6 +54,7 @@ const GetSingleNews = () => {
 
         </div>
       )}
+      </Row>
     </Container>
   );
 };

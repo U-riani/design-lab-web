@@ -14,7 +14,7 @@ const ProjectsComponent = () => {
   return (
     <Container fluid className="projects-component px-0 mb-4">
       <SpaceComponent info={{ h1: t("projects") }} />
-      <Row className="projects-component-inner-containr px-0 mb-0">
+      <Row className="projects-component-inner-containr py-3 py-md-5 px-0 mb-0">
         <Row className="projectsComponent-row-2 px-0">
           <div className="projectsComponent-projects-container px-0">
             <div className="projectsComponent-project projectsComponent-project-1">
@@ -67,7 +67,7 @@ const ProjectsComponent = () => {
             </div>
           </div>
         </Row>
-        <Row className="mb-0 py-3 py-lg-4 px-0 projects-component-button-container">
+        <Row className="mb-0 pt-3 pt-lg-4 px-0 projects-component-button-container">
           <Col className="d-flex justify-content-end mb-0 px-0">
             <button className="see-more">
               <Link className="d-inline see-more-link ms-auto" to="/projects">

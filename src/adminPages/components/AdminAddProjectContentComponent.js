@@ -3,13 +3,14 @@ import { Button, Container, Row, Col } from "react-bootstrap";
 import { useCreateProjectsContentTitleMutation, useCreateProjectsContentVideoMutation } from "../../data/projectContentSlice";
 import { useParams } from "react-router-dom";
 
-const AdminAddPrjectContentComponent = () => {
+const AdminAddPrjectContentComponent = ({handleRefetch}) => {
   const projectId = useParams().projectId;
   const [toggleShow, setToggleShow] = useState(false);
   const [toggleShowImage, setToggleShowImage] = useState(false);
   const [toggleShowVideo, setToggleShowVideo] = useState(false);
   const [imagesFiles, setImagesFIles] = useState([""]);
   const [video, setVideo] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [title, setTitle] = useState({ ge: "", en: "" });
 
@@ -60,12 +61,17 @@ const AdminAddPrjectContentComponent = () => {
   };
 
   const handleCreateContentTitle = async () => {
+    setLoading(true)
+    handleRefetch('start')
     try {
       const response = await createProjectsContentTitle({
         title,
         id: projectId,
       }).unwrap();
-      console.log("--Title:", response);
+      if(response) {
+        handleRefetch('finish');
+        setLoading(false)
+      }
     } catch (error) {
       console.log(error);
     }
@@ -85,15 +91,19 @@ const AdminAddPrjectContentComponent = () => {
 
   return (
     <Container fluid>
-      <Row>
+      {/* <Row>
         <Col>
           <Button onClick={() => setToggleShow(!toggleShow)}>
             Add Content
           </Button>
         </Col>
-      </Row>
-      {toggleShow && (
+      </Row> */}
+      {/* {toggleShow && ( */}
         <Row>
+
+          <Col sm={12} className="py-3">
+          <h3>დაამატე ქონთენთის სათაური</h3>
+          </Col>
           <Col sm={12} className="py-3">
             <label htmlFor="title-ge">ქართული სათაური</label>
             <input
@@ -114,7 +124,7 @@ const AdminAddPrjectContentComponent = () => {
           </Col>
           <Col sm={12} className="py-3">
             <Button variant="success" onClick={handleCreateContentTitle}>
-              Save Title
+              {loading?'Loading ...':'Save Title'}
             </Button>
           </Col>
           {/* <Col sm={12}>
@@ -162,7 +172,7 @@ const AdminAddPrjectContentComponent = () => {
             )}
           </Col> */}
         </Row>
-      )}
+      {/* )} */}
     </Container>
   );
 };

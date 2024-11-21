@@ -21,6 +21,7 @@ import ProtectedRoute from "./adminPages/protectedRoute/ProtectedRoute"; // Impo
 import { AuthProvider } from "./adminPages/context/AuthContext";
 
 import "bpg-nino-mtavruli/css/bpg-nino-mtavruli.min.css";
+import "bpg-le-studio-04-caps/css/bpg-le-studio-04-caps.min.css";
 import AddHero from "./adminPages/pages/AddHero";
 import AdminAllHeros from "./adminPages/pages/AdminAllHeros";
 import AdminAddPartners from "./adminPages/pages/AdminAddPartners";
@@ -35,6 +36,7 @@ import AdminAllProjects from "./adminPages/pages/AdminAllProjects";
 import SingleProject from "./union/pages/SingleProject";
 import AdminAddProjects from "./adminPages/pages/AdminAddProjects";
 import AdminSingleProject from "./adminPages/pages/AdminSingleProject";
+import AboutUs from "./union/pages/AboutUs";
 
 const App = () => (
   <AuthProvider>
@@ -105,6 +107,7 @@ const App = () => (
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/projects/:projectId" element={<SingleProject />} />
             <Route path="/partners" element={<PartnersPage />} />
+            <Route path="/aboutUs" element={<AboutUs />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/get-news" element={<GetNewsComponent />} />

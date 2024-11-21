@@ -19,7 +19,7 @@ const NewsComponent3 = () => {
     <Container fluid className="news-component pb-5 mb-0 px-0">
       <SpaceComponent info={{ h1: t("news") }} />
 
-      <Row className="newsComponent-inner-container px-0 pb-0 pb-lg-5">
+      <Row className="newsComponent-inner-container px-0 pt-3 pt-md-5">
         <Col xs={3} sm={3} className="newsComponent-left-col pe-0 ps-0 mb-0">
           <div className="newsComponent-carouse-text-container">
             {last5News &&

@@ -21,9 +21,9 @@ const ProjectsPage = () => {
   console.log("--name/image:", allProjects);
 
   return (
-    <Container fluid className="projects-page px-0 mb-4 pb-4 pb-lg-5">
+    <Container fluid className="projects-page px-0 mb-0">
       <SpaceComponent info={{ h1: t("projects") }} />
-      <Row className="projects-page-inner-containr mx-0 px-0 mb-0">
+      <Row className="projects-page-inner-containr mx-0 px-0 mb-0 pt-3 pt-md-5">
         {allProjects &&
           allProjects.map((el, i) => (
             <Col
@@ -31,10 +31,10 @@ const ProjectsPage = () => {
               as={Link}
               to={`/projects/${el.id}`}
               sm={12}
-              className={`projects-page-project-col mx-0 py-3`}
+              className={`projects-page-project-col mx-0 pb-5`}
             >
               <div className="projects-page-img-container">
-                <img src={el.image} alt="" />
+                <img src={el.image.url} alt="" />
               </div>
               <div className="projects-page-title-container p-3">
                 <h3 className="pt-1">{el.name[i18n.language]}</h3>

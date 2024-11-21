@@ -123,7 +123,7 @@ console.log(heroes)
             onChange={(e) => setName({ ...name, en: e.target.value })}
           />
         </Col>
-        <Col xs={12} className="my-2">
+        <Col xs={12} className="my-4 d-flex flex-column ">
           <label htmlFor="add-ge-description">
             Project Description (Georgian)
           </label>
@@ -135,7 +135,7 @@ console.log(heroes)
               setDescription({ ...description, ge: e.target.value })
             }
           />
-          <label htmlFor="add-en-description">
+          <label htmlFor="add-en-description" className="pt-2">
             Project Description (English)
           </label>
           <textarea
@@ -186,6 +186,13 @@ console.log(heroes)
         </Col>
 
         <Col xs={3}>
+        {statusMessage && (
+          <Alert
+            variant={statusMessage.type === "error" ? "danger" : "success"}
+          >
+            {statusMessage.text}
+          </Alert>
+        )}
           <Button className="mt-3" onClick={handleSubmit} disabled={isLoading}>
             {isLoading ? <Spinner animation="border" size="sm" /> : "Submit"}
           </Button>
