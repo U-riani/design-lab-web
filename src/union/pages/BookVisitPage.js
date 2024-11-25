@@ -17,14 +17,19 @@ import {
   setMinutes,
   addMinutes,
   isAfter,
-  isBefore
+  isBefore,
 } from "date-fns";
 import {
   useBookVisitMutation,
   useGetBookedTimesQuery,
-} from "../data/visitsSlice";
+} from "../../data/visitsSlice";
+import SpaceComponent from "../../components/SpaceComponent";
+import { useTranslation } from "react-i18next";
 
-const VisitBookForm = () => {
+
+const VisitBookPage = () => {
+  const { t } = useTranslation();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -34,6 +39,8 @@ const VisitBookForm = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [selectedTime, setSelectedTime] = useState(0);
+
+  console.log(visitDate);
 
   const [bookVisit] = useBookVisitMutation();
   const { data: bookedTimes } = useGetBookedTimesQuery(
@@ -47,7 +54,7 @@ const VisitBookForm = () => {
 
     while (start <= end) {
       times.push(format(start, "HH:mm"));
-      start = addMinutes(start, 15);
+      start = addMinutes(start, 30);
     }
 
     if (isToday(visitDate)) {
@@ -73,9 +80,9 @@ const VisitBookForm = () => {
         .flatMap((entry) => {
           const times = [];
           const startTime = new Date(entry.visitDate);
-          for (let i = 0; i < +entry.selectedTime; i++) {
+          for (let i = 0; i < +entry.selectedTime + 1; i++) {
             const intervalTime = new Date(
-              startTime.getTime() + i * 15 * 60 * 1000
+              startTime.getTime() + i * 30 * 60 * 1000
             );
             times.push(format(intervalTime, "HH:mm"));
           }
@@ -101,11 +108,13 @@ const VisitBookForm = () => {
         setMinutes(new Date(), startMinutes),
         startHours
       );
-      const endDateTime = setHours(setMinutes(new Date(), endMinutes), endHours);
+      const endDateTime = setHours(
+        setMinutes(new Date(), endMinutes),
+        endHours
+      );
 
-      const differenceInMinutes =
-        (endDateTime - startDateTime) / (1000 * 60);
-      const intervals = Math.ceil(differenceInMinutes / 15);
+      const differenceInMinutes = (endDateTime - startDateTime) / (1000 * 60);
+      const intervals = Math.ceil(differenceInMinutes / 30);
 
       setSelectedTime(intervals > 0 ? intervals : 0);
     }
@@ -136,57 +145,131 @@ const VisitBookForm = () => {
     }
   };
 
+  // const getEndTimes = () => {
+  //   if (!startTime) return [];
+  //   const filteredEndTimes = availableTimes.filter((time) => {
+  //     return isAfter(
+  //       setHours(setMinutes(new Date(), time.split(":")[1]), time.split(":")[0]),
+  //       setHours(
+  //         setMinutes(new Date(), startTime.split(":")[1]),
+  //         startTime.split(":")[0]
+  //       )
+  //     );
+  //   });
+
+  //   // Find the first booked time and disable times from there
+  //   const firstBooked = bookedTimes
+  //     ?.flatMap((entry) => entry.visitDate)
+  //     .map((time) => format(new Date(time), "HH:mm"))
+  //     .find((bookedTime) =>
+  //       isAfter(
+  //         setHours(
+  //           setMinutes(new Date(), bookedTime.split(":")[1]),
+  //           bookedTime.split(":")[0]
+  //         ),
+  //         setHours(
+  //           setMinutes(new Date(), startTime.split(":")[1]),
+  //           startTime.split(":")[0]
+  //         )
+  //       )
+  //     );
+
+  //   if (firstBooked) {
+  //     return filteredEndTimes.filter((time) =>
+  //       isBefore(
+  //         setHours(
+  //           setMinutes(new Date(), time.split(":")[1]),
+  //           time.split(":")[0]
+  //         ),
+  //         setHours(
+  //           setMinutes(new Date(), firstBooked.split(":")[1]),
+  //           firstBooked.split(":")[0]
+  //         )
+  //       )
+  //     );
+  //   }
+
+  //   return filteredEndTimes;
+  // };
+  // const convertTimeInNumber = (time) => {
+  //   return time
+  //     .split(":")
+  //     .reduce(
+  //       (total, item, index) => total + Number(item) * (index === 0 ? 60 : 1),
+  //       0
+  //     );
+  // };
+  // const startTimeInMinutes = convertTimeInNumber(startTime);
+  // const filteredEndTimes = availableTimes.filter((time) => {
+  //   return startTimeInMinutes < convertTimeInNumber(time);
+  // });
+
+  // filteredEndTimes.shift();
+  // console.log(filteredEndTimes);
   const getEndTimes = () => {
     if (!startTime) return [];
-    const filteredEndTimes = availableTimes.filter((time) => {
-      return isAfter(
-        setHours(setMinutes(new Date(), time.split(":")[1]), time.split(":")[0]),
-        setHours(
-          setMinutes(new Date(), startTime.split(":")[1]),
-          startTime.split(":")[0]
-        )
-      );
-    });
-
-    // Find the first booked time and disable times from there
-    const firstBooked = bookedTimes
-      ?.flatMap((entry) => entry.visitDate)
-      .map((time) => format(new Date(time), "HH:mm"))
-      .find((bookedTime) =>
-        isAfter(
-          setHours(
-            setMinutes(new Date(), bookedTime.split(":")[1]),
-            bookedTime.split(":")[0]
-          ),
-          setHours(
-            setMinutes(new Date(), startTime.split(":")[1]),
-            startTime.split(":")[0]
-          )
-        )
-      );
-
-    if (firstBooked) {
-      return filteredEndTimes.filter((time) =>
-        isBefore(
+    const filteredEndTimes = availableTimes
+      .filter((time) => {
+        return isAfter(
           setHours(
             setMinutes(new Date(), time.split(":")[1]),
             time.split(":")[0]
           ),
           setHours(
-            setMinutes(new Date(), firstBooked.split(":")[1]),
-            firstBooked.split(":")[0]
+            setMinutes(new Date(), startTime.split(":")[1]),
+            startTime.split(":")[0]
+          )
+        );
+      })
+      .slice(0, 4);
+
+    filteredEndTimes.shift();
+
+    // Find the first booked time and disable times from there
+    const selectedDate = new Date(visitDate);
+    const firstBooked = bookedTimes
+  ?.filter((entry) => 
+    isSameDay(new Date(entry.visitDate), selectedDate) // Filter by selected date
+  )
+  .map((entry) => format(new Date(entry.visitDate), "HH:mm")) // Extract and format visit times
+  .find((bookedTime) => {
+    const [bookedHour, bookedMinute] = bookedTime.split(":").map(Number); // Extract hour and minute
+    const [startHour, startMinute] = startTime.split(":").map(Number);   // Extract hour and minute from startTime
+
+    const bookedDate = setHours(setMinutes(new Date(), bookedMinute), bookedHour);
+    const startDate = setHours(setMinutes(new Date(), startMinute), startHour);
+
+    return isAfter(bookedDate, startDate); // Compare the times
+  });
+
+    console.log(firstBooked);
+    
+    if (firstBooked) {
+      return filteredEndTimes
+        .filter((time) =>
+          isBefore(
+            setHours(
+              setMinutes(new Date(), time.split(":")[1]),
+              time.split(":")[0]
+            ),
+            setHours(
+              setMinutes(new Date(), firstBooked.split(":")[1]),
+              firstBooked.split(":")[0]
+            )
           )
         )
-      );
+        .slice(0, 4);
     }
 
     return filteredEndTimes;
   };
-  
+
+  // console.log(getEndTimes());
 
   return (
-    <Container className="visitor-book-component py-4 py-lg-5">
-      <Row className="d-flex justify-content-center justify-content-lg-start">
+    <Container fluid className="book-visit-page px-0 mx-0 d-flex flex-column align-items-center">
+      <SpaceComponent info={{ h1: t("bookVisit") }} className="w-100" />
+      <Row className="d-flex justify-content-center py-4 py-lg-5 book-visit-row">
         <Col md={6} className="form-info p-3 p-lg-5">
           <Form onSubmit={handleSubmit}>
             <FloatingLabel controlId="formName" label="Name" className="mb-3">
@@ -252,7 +335,9 @@ const VisitBookForm = () => {
                         key={time}
                         value={time}
                         disabled={!availableTimes.includes(time)}
-                        className={`${availableTimes.includes(time) ? 'disabled-option' : ''}`}
+                        className={`${
+                          availableTimes.includes(time) ? "disabled-option" : ""
+                        }`}
                       >
                         {time}
                       </option>
@@ -294,25 +379,10 @@ const VisitBookForm = () => {
               Record Visit
             </Button>
           </Form>
-          {/* <div className="contact-info-container p-4  mt-lg-0">
-            <div className="contact-info-tel mb-3">
-              <h5>Tel</h5>
-              <p>+995 599 64 06 41</p>
-            </div>
-            <div className="contact-info-email mb-3">
-              <h5>Email</h5>
-              <p>info@design-lab-ge</p>
-            </div>
-            <div className="contact-info-address">
-              <h5>address</h5>
-              <p className="mb-0">Tbilisi, Georgia</p>
-              <p className="mb-0">Ana Politkovskaia St 3/28</p>
-            </div>
-          </div> */}
         </Col>
       </Row>
     </Container>
   );
 };
 
-export default VisitBookForm;
+export default VisitBookPage;

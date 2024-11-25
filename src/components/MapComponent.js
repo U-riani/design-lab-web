@@ -27,7 +27,7 @@ const MapComponent = () => {
       />
       <Marker position={position} icon={customIcon}>
         <Popup className='map-popup'>
-          design-union <br /> office
+          design-Lab <br /> office
         </Popup>
       </Marker>
     </MapContainer>

@@ -13,10 +13,17 @@ export const projectsApiSlice = createApi({
   endpoints: (builder) => ({
     getAllProjects: builder.query({ 
       query: () => "projects",
+      transformResponse: (response) => response.reverse(),
+      providesTags: ["Projects"],
+    }),
+    getLastThreeProjects: builder.query({ 
+      query: () => "projects/lastThreeProjects",
+      // transformResponse: (response) => response.reverse(),
       providesTags: ["Projects"],
     }),
     getAllProjectsImageTitle: builder.query({
       query: () => "projects/projectsImageTitle",
+      transformResponse: (response) => response.reverse(),
       providesTags: ["Projects"],
     }),
     getSingleProjects: builder.query({
@@ -207,6 +214,7 @@ export const projectsApiSlice = createApi({
 
 export const {
   useGetAllProjectsQuery,
+  useGetLastThreeProjectsQuery,
   useGetAllProjectsImageTitleQuery,
   useGetSingleProjectsQuery,
   useCreateProjectsMutation,

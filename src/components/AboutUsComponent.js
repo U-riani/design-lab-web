@@ -18,7 +18,6 @@ const AboutUsComponent = () => {
           lg={6}
           className="aboutUs-component-col-1 d-flex  flex-column justify-content-start align-items-start"
         >
-          <h3>DESIGN UNION</h3>
           <p className="mb-0">{t("aboutUs1")}</p>
           <div className="newsComponent-see-more-button-col mt-auto overflow-hidden d-flex align-self-end me-auto py-4 pb-lg-0">
             <button className="see-more">

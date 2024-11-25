@@ -29,7 +29,7 @@ const SingleProject = () => {
       <Row className="px-0 w-100 pb-3 pb-md-5">
         <SpaceComponent info={{ h1: singleProject?.name[i18n.language] }} />
       </Row>
-      <Row className="single-project-page-projects-container d-flex flex-column align-center">
+      <Row className="single-project-page-projects-container d-flex flex-column align-center pt-3 pt-lg-4">
         <Col sm={12} className="pb-1 single-project-page-description-container py-3 py-md-4 px-4 mb-4 mb-lg-5">
           <h3 className="pb-2 mb-0 ">{t("description")}</h3>
           <p className="mb-0">{singleProject?.description[i18n.language]}</p>

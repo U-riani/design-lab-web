@@ -17,18 +17,20 @@ console.log(data)
       >
         {data &&
           data.map((el, i) => (
-            <Carousel.Item key={i} className="bg-dark">
+            <Carousel.Item key={i} className="bg-dark py-0 my-0">
               <Link
-                to="/somewhere"
-                className="carousel-item-inner-link-container"
+                to="/registration"
+                className="carousel-item-inner-link-container py-0"
               >
                 <div className="carousel-image-container">
                   <img className="carousel-image" src={el.image[0] || el.image.url} alt="" />
                 </div>
-                <Carousel.Caption className="px-2">
-                  <p>
+                <Carousel.Caption className="px-2 py-2 py-md-3 pb-lg-4 d-flex flex-column justify-content-between align-items-center">
+                  {/* <p>
                     {el.text ? el.text[i18n.language] : el.heroText[i18n.language]}
-                  </p>
+                  </p> */}
+                  <p className="mb-0 h-100 d-flex align-items-center">{t("becomeMember")}</p>
+                  <button className="heroBanner-registration-button px-3 px-lg-5">Click</button>
                 </Carousel.Caption>
               </Link>
             </Carousel.Item>

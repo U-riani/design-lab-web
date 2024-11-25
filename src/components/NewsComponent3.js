@@ -25,7 +25,8 @@ const NewsComponent3 = () => {
             {last5News &&
               last5News.map((el, i) => (
                 <h4
-                  className={`ps-2 newsComponent-carouse-text ${
+                lang={i18n.language === 'en' ? 'en' : 'ka'}
+                  className={`ps-2 py-1 py-md-2 py-lg-4 px-lg-3 newsComponent-carouse-text ${
                     el.activeNews === 0
                       ? "newsComponent-carouse-active-text"
                       : ""

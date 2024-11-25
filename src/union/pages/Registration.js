@@ -13,6 +13,7 @@ import {
 import { useTranslation } from "react-i18next";
 import SpaceComponent from "../../components/SpaceComponent";
 import { useCreateDesignerMutation } from "../../data/designersSlice2";
+import DesignerCardComponent from "../../components/DesignerCardComponent";
 
 const Registration = () => {
   const [createDesigner] = useCreateDesignerMutation();
@@ -82,8 +83,8 @@ const Registration = () => {
   return (
     <Container fluid className="px-0 registration-page">
       <SpaceComponent info={{ h1: t("registration") }} className="w-100" />
-      <Row className="my-0 mx-0 py-lg-5">
-        <Col className="d-flex justify-content-center ">
+      <Row className="my-0 mx-0 ">
+        <Col className="d-flex justify-content-center py-4 py-lg-5">
           <Form className="registration-form p-4 p-lg-5">
             <Col sm={12} lg={6} className="pe-lg-3">
               <FloatingLabel
@@ -178,13 +179,13 @@ const Registration = () => {
                   type="file"
                   accept="image/*"
                 />
-                {profilePhoto && (
+                {/* {profilePhoto && (
                   <img
                     src={URL.createObjectURL(profilePhoto)}
                     alt="Profile Preview"
                     style={{ width: "100px", marginTop: "10px" }}
                   />
-                )}
+                )} */}
               </FloatingLabel>
             </Col>
             <Col sm={12} lg={6} className="ps-lg-3">
@@ -198,13 +199,13 @@ const Registration = () => {
                   type="file"
                   accept="image/*"
                 />
-                {projectPhoto && (
+                {/* {projectPhoto && (
                   <img
                     src={URL.createObjectURL(projectPhoto)}
                     alt="Project Preview"
                     style={{ width: "100px", marginTop: "10px" }}
                   />
-                )}
+                )} */}
               </FloatingLabel>
             </Col>
             <Col sm={12} lg={4}>
@@ -235,7 +236,7 @@ const Registration = () => {
                 />
               </FloatingLabel>
             </Col>
-            <Col sm={12} lg={4} >
+            <Col sm={12} lg={4}>
               <FloatingLabel
                 controlId="floatingFacebook"
                 label="Facebook link"
@@ -248,6 +249,16 @@ const Registration = () => {
                   placeholder="Facebook link"
                 />
               </FloatingLabel>
+            </Col>
+            <Col sm={12} className="d-flex justify-content-center registration-page-designer-card">
+              <DesignerCardComponent
+                name={name.ge}
+                profilePhoto={profilePhoto}
+                projectPhoto={projectPhoto}
+                behance={behance}
+                instagram={instagram}
+                facebook={facebook}
+              />
             </Col>
             <Col sm={12} lg={4} className="px-lg-3">
               <Button
@@ -268,6 +279,7 @@ const Registration = () => {
               </Alert>
             )}
           </Form>
+          
         </Col>
       </Row>
     </Container>

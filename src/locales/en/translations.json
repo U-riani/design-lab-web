@@ -8,7 +8,7 @@
   "contact": "CONTACT",
   "menu": "MENU",
   "registration": "REGISTRATION",
-  
+  "bookVisit": "BOOK VISIT",
   "welcome": "English.",
 
   "aboutUs1": "Designers' Union of Georgia was founded in 2013. It serves as a professional organization with the primary goal of supporting professionals working in the fields of architecture and interior design, protecting their rights and promoting the development of the industry.",
@@ -18,6 +18,15 @@
   "save": "Save",
   "clear": "Clear",
   "submit": "SUBMIT",
-  "description": "DESCRIPTION"
+  "description": "DESCRIPTION",
+  "tel": "Tel",
+  "email": "Email",
+  "address": "Address",
+  "followUs": "Follow Us",
+  "tbilisiGeorgia": "Tbilisi, Georgia",
+  "AnaPolitkovskaia": "Ana Politkovskaia St 3/28",
+  "becomeMember": "Become a member of the Designers Union"
+ 
+
 
 }

@@ -23,7 +23,7 @@ const ProjectsPage = () => {
   return (
     <Container fluid className="projects-page px-0 mb-0">
       <SpaceComponent info={{ h1: t("projects") }} />
-      <Row className="projects-page-inner-containr mx-0 px-0 mb-0 pt-3 pt-md-5">
+      <Row className="projects-page-inner-containr mx-0 px-0 mb-0 pt-5 pt-md-5">
         {allProjects &&
           allProjects.map((el, i) => (
             <Col

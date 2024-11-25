@@ -7,11 +7,10 @@ import SingleNewsCarousel from "../../components/SingleNewsCarousel";
 
 const GetSingleNews = () => {
   const { newsId } = useParams();
-  const {i18n} = useTranslation();
-
+  const { i18n } = useTranslation();
 
   const { data: news, error, isLoading } = useGetSingleNewsQuery(newsId);
-  // console.log(news);
+  console.log(news);
 
   if (isLoading) {
     return (
@@ -31,29 +30,33 @@ const GetSingleNews = () => {
   }
 
   return (
-    <Container className="singleNewsComponent my-0 py-3 py-md-5 d-flex align-items-center justify-content-center">
-      <Row className="single-news-component-inner-container mb-0">
-      {news?.length === 0 ? (
-        <p>No news articles available.</p>
-      ) : (
-        <div className="news-article px-3 ">
-          {/* <Row>
+    <Container className="singleNewsComponent my-0 py-4 py-md-5 d-flex align-items-center justify-content-center">
+      <Row className="single-news-component-inner-container mb-0 ">
+        {news?.length === 0 ? (
+          <p>No news articles available.</p>
+        ) : (
+          <div className="news-article px-3 pb-3">
+            {/* <Row>
             <h1 className="text-center mb-0 pt-3">{ news.title[i18n.language] || news.title}</h1>
           </Row> */}
 
-          {/* <img src={news.image} alt={news.title} className="img-fluid" /> */}
-          <Row className="single-news-image-row pt-3 px-0 px-lg-3 mb-1 mb-lg-4">
-            <SingleNewsCarousel data={news.images}/>
-            {/* {news.image && <img src={news.image} alt="news" />} */}
+            {/* <img src={news.image} alt={news.title} className="img-fluid" /> */}
+            <Row className="single-news-image-row pt-3 px-0 px-lg-3 mb-1 mb-lg-4">
+              <SingleNewsCarousel data={news.images} />
+              {/* {news.image && <img src={news.image} alt="news" />} */}
             </Row>
-          <Row
-            className="article-body pt-5"
-            dangerouslySetInnerHTML={{ __html: news.text[i18n.language] || news.text }}
-          />
-          {/* <div className="article-body" dangerouslySetInnerHTML={{ __html: userLanguage === 'en' ? news.textEn : news.textGe }} /> */}
-
-        </div>
-      )}
+            <Row className="pt-4">
+              <h3 className="text-center">{news.title[i18n.language]}</h3>
+            </Row>
+            <Row
+              className="article-body pt-5"
+              dangerouslySetInnerHTML={{
+                __html: news.text[i18n.language] || news.text,
+              }}
+            />
+            {/* <div className="article-body" dangerouslySetInnerHTML={{ __html: userLanguage === 'en' ? news.textEn : news.textGe }} /> */}
+          </div>
+        )}
       </Row>
     </Container>
   );

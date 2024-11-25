@@ -34,16 +34,17 @@ const DesignersPage = () => {
     <Container fluid className="designersPage px-0">
         <SpaceComponent info={{h1: t('designers')}} className="w-100"/>
       
-      <Row className="designers-page-row">
+      <Row className="designers-page-row py-3 py-lg-5">
         {activeDesigners &&
           activeDesigners.map((item, i) => (
             <Col
               key={i}
-              xs={12}
-              sm={6}
-              lg={4}
-              xl={4}
-              className="designersPage-card-col py-3"
+              xs={6}
+              sm={5}
+              md={4}
+              lg={3}
+              xl={3}
+              className="designersPage-card-col py-3 d-flex justify-content-center align-items-start"
             >
               <Card className="designersPage-card">
                 <div className="designersPage-cards-images-top">
@@ -55,7 +56,7 @@ const DesignersPage = () => {
                   </div>
                 </div>
                 <Card.Body className="designersPage-card-body text-white">
-                  <Card.Title>{item.name[i18n.language]}</Card.Title>
+                  <Card.Title className="text-center">{item.name[i18n.language]}</Card.Title>
                   <Card.Text>
                   {item.text[i18n.language]}
                   </Card.Text>

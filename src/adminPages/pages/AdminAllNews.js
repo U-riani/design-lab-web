@@ -77,8 +77,8 @@ console.log(allNews)
                     } pe-3 mb-0`}
                   >
                     <div>
-                      <h5>{el.title[i18n.language] || el.title || "News Title"}</h5>
-                      <div>{extractTextRegex(el.text[i18n.language] || el.text)}</div>
+                      <h5>{el.title[i18n.language] || el.title.ge || "News Title"}</h5>
+                      <div>{extractTextRegex(el.text[i18n.language] || 'news not found')}</div>
                       {/* {console.log(...extractText(el.text))} */}
                       {/* {el.text.map((el) => ())} */}
                       {/* <p className="mb-0">{extractText(el.text)}</p> */}

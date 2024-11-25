@@ -37,11 +37,14 @@ import SingleProject from "./union/pages/SingleProject";
 import AdminAddProjects from "./adminPages/pages/AdminAddProjects";
 import AdminSingleProject from "./adminPages/pages/AdminSingleProject";
 import AboutUs from "./union/pages/AboutUs";
+import VisitBookPage from "./union/pages/BookVisitPage";
+import ScrollToTop from "./hooks/ScrollToTop";
 
 const App = () => (
   <AuthProvider>
     <LocalStorageProvider>
     <Router>
+    <ScrollToTop />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/admin/" element={<AdminLayout />}>
@@ -100,6 +103,7 @@ const App = () => (
         </Route>
         {/* Add more routes as needed */}
           <Route path="/" element={<UnionLayout />}>
+        
             <Route index element={<UnionMainPage />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/news/:newsId" element={<SingleNewsPage />} />
@@ -109,6 +113,7 @@ const App = () => (
             <Route path="/partners" element={<PartnersPage />} />
             <Route path="/aboutUs" element={<AboutUs />} />
             <Route path="/registration" element={<Registration />} />
+            <Route path="/bookVisit" element={<VisitBookPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/get-news" element={<GetNewsComponent />} />
             <Route path="/get-news/:newsId" element={<GetSingleNews />} />
