@@ -4,15 +4,13 @@ import {
   useUpdateProjectsContentImageMutation,
   useGetSingleProjectContentQuery,
   useDeleteSingleProjectContentImageMutation,
-  useDeleteSingleProjectContentMutation,
+  
 } from "../../data/projectContentSlice";
-import { useParams } from "react-router-dom";
 
 const AdminProjectsContentImage = ({ index, id, handleRefetch }) => {
   const [updateProjectContentImage] = useUpdateProjectsContentImageMutation();
   const [deleteSingleProjectContentImage] =
     useDeleteSingleProjectContentImageMutation();
-  const [deleteSingleProjectContent] = useDeleteSingleProjectContentMutation();
   const { data: singleProjectContent , refetch} = useGetSingleProjectContentQuery({
     id,
     index,

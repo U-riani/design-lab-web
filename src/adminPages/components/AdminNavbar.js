@@ -76,6 +76,15 @@ const AdminNavbar = () => {
               </NavDropdown.Item>
               {/* ...other dropdown items */}
             </NavDropdown>
+            <NavDropdown title="Abouts Us" id="basic-nav-dropdown">
+              {/* <NavDropdown.Item as={Link} to="add-about-us">
+                ADD AboutUs
+              </NavDropdown.Item> */}
+              <NavDropdown.Item as={Link} to="edit-about-us">
+                EDIT PROJECTS
+              </NavDropdown.Item>
+              {/* ...other dropdown items */}
+            </NavDropdown>
           </Nav>
           <Button
                 onClick={() => handleLangChange()}

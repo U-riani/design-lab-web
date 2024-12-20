@@ -1,7 +1,9 @@
-import React, { useState, useRef } from "react";
-import JoditEditor from "jodit-react";
+import React, { useState, useRef, Suspense } from "react";
 import { useCreateNewsMutation } from "../../data/newsSlice2";
 import { useTranslation } from "react-i18next";
+
+// Lazy load the JoditEditor
+const JoditEditor = React.lazy(() => import("jodit-react"));
 
 const JoditEditorComponent = () => {
   const [title, setTitle] = useState({ en: "", ge: "" });
@@ -17,45 +19,39 @@ const JoditEditorComponent = () => {
       ...prev,
       [lang]: e.target.value,
     }));
-    
   };
 
   const handleSubmit = async () => {
-    const editorContentEn = editorRefEn.current
-      ? editorRefEn.current.value
-      : "";
-    const editorContentGe = editorRefGe.current
-      ? editorRefGe.current.value
-      : "";
-
+    const editorContentEn = editorRefEn.current?.getEditorValue() || "";
+    const editorContentGe = editorRefGe.current?.getEditorValue() || "";
+  
     if (!editorContentEn || !editorContentGe) {
       alert("Please provide content in both English and Georgian.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("title[en]", title.en);
     formData.append("title[ge]", title.ge);
     formData.append("text[en]", editorContentEn);
     formData.append("text[ge]", editorContentGe);
-
-    // Append each selected image file using the same key
+  
     imageFiles.forEach((file) => {
-      formData.append("images", file); // Use "images[]" to indicate multiple files
+      formData.append("images", file); // Append images for upload
     });
-
+  
     try {
       await createNews(formData).unwrap();
       alert("News saved successfully!");
       handleClearContent();
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
       alert(
         "Failed to save content: " + (error.data?.message || error.message)
-      ); // Improved error message
+      );
     }
   };
-
+  
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImageFiles((prev) => {
@@ -140,7 +136,10 @@ const JoditEditorComponent = () => {
 
       <div className="editor-section">
         <label>{t("Content (Georgian)")}</label>
-        <JoditEditor ref={editorRefGe} config={config} />
+        {/* Suspense for lazy loading the JoditEditor */}
+        <Suspense fallback={<div>Loading editor...</div>}>
+          <JoditEditor ref={editorRefGe} config={config} />
+        </Suspense>
       </div>
 
       <label htmlFor="titleEn">{t("Title (English)")}</label>
@@ -155,7 +154,10 @@ const JoditEditorComponent = () => {
 
       <div className="editor-section">
         <label>{t("Content (English)")}</label>
-        <JoditEditor ref={editorRefEn} config={config} />
+        {/* Suspense for lazy loading the JoditEditor */}
+        <Suspense fallback={<div>Loading editor...</div>}>
+          <JoditEditor ref={editorRefEn} config={config} />
+        </Suspense>
       </div>
 
       <div className="mt-3">

@@ -1,11 +1,11 @@
 import React from "react";
 import { Container, Carousel } from "react-bootstrap";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const SingleProjectsPageHeroBanner = ({ data }) => {
-  const { t, i18n } = useTranslation();
-  console.log(data);
+  const { i18n } = useTranslation();
+  // console.log("SingleProjectsPageHeroBanner", data);
   return (
     <Container className="carousel-container px-0" fluid>
       <Carousel
@@ -16,25 +16,17 @@ const SingleProjectsPageHeroBanner = ({ data }) => {
         {data &&
           data.map((el, i) => (
             <Carousel.Item key={i} className="bg-dark">
-              <Link
+              <div
                 to="/somewhere"
                 className="carousel-item-inner-link-container"
               >
                 <div className="carousel-image-container">
-                  <img
-                    className="carousel-image"
-                    src={el.image[0] || el.image.url}
-                    alt=""
-                  />
+                  <img className="carousel-image" src={el.image.url} alt=" " />
                 </div>
                 <Carousel.Caption className="px-2">
-                  <p>
-                    {el.text
-                      ? el.text[i18n.language]
-                      : el.heroText[i18n.language]}
-                  </p>
+                  <p className="mb-0">{el.heroText[i18n.language]}</p>
                 </Carousel.Caption>
-              </Link>
+              </div>
             </Carousel.Item>
           ))}
       </Carousel>

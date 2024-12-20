@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Button, Container, Row, Col } from "react-bootstrap";
-import { useCreateProjectsContentVideoMutation, useUpdateProjectsContentVideoMutation } from "../../data/projectContentSlice";
+import { Button, Row, Col } from "react-bootstrap";
+import { useCreateProjectsContentVideoMutation } from "../../data/projectContentSlice";
 import { useParams } from "react-router-dom";
 
 const AdminprojectContentVideo = ({index, handleRefetch}) => {
@@ -9,7 +9,7 @@ const AdminprojectContentVideo = ({index, handleRefetch}) => {
 
   const [video, setVideo] = useState("");
   const [createProjectContentVideo] = useCreateProjectsContentVideoMutation();
-  const [updateProjectContentVideo] = useUpdateProjectsContentVideoMutation();
+  // const [updateProjectContentVideo] = useUpdateProjectsContentVideoMutation();
   const [loading, setLoading] = useState(false);
 
   const handleVideoChange = (value) => {

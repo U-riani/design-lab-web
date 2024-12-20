@@ -39,8 +39,8 @@ function SampleNextArrow(props) {
   );
 }
 
-const CarouselComponent = (prop) => {
-  const partners = prop.partners;
+const CarouselComponent = (props) => {
+  const partners = props.partners;
   const settings = {
     dots: false,
     infinite: true,
@@ -90,6 +90,7 @@ const CarouselComponent = (prop) => {
       },
     ],
   };
+  console.log('carouselCOmponent:', partners)
   return (
     <div className="slider-container">
       <Slider {...settings}>

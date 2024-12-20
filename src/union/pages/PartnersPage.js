@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
 import SpaceComponent from "../../components/SpaceComponent";
 import {useGetAllPartnersQuery} from "../../data/partnersSlice"
 import { useTranslation } from "react-i18next";
@@ -12,9 +11,9 @@ const PartnersPage = () => {
   console.log(partners)
 
   return (
-    <Container fluid className="partnersPage pb-5 my-0">
+    <Container fluid className="partnersPagemy-0">
       <SpaceComponent info={{h1: t('partners')}}/>
-      <Row className="partners-page-row">
+      <Row className="partners-page-row py-3 py-md-5">
         {partners &&
           partners.map((part, i) => (
             <Col
@@ -23,7 +22,7 @@ const PartnersPage = () => {
               lg={4}
               xxl={3}
               key={i}
-              className={`partnersPage-col partnersPage-col-${i} py-3 px-3`}
+              className={`overflow-hidden partnersPage-col partnersPage-col-${i} py-3 px-3`}
             >
               <div
                 className={` partnersPage-col-inner-container partnersPage-col-inner-container-${i}`}
@@ -34,7 +33,7 @@ const PartnersPage = () => {
                 <div className="partnersPage-text-container">
                   
                   <div className="partnersPage-text-inner-container ">
-                    <h3>{part.name[i18n.language]}</h3>
+                    <h3 className="">{part.name[i18n.language]}</h3>
                     <p>{part.text[i18n.language]}</p>
                   </div>
                   <div className="partnersPage-link ps-0">

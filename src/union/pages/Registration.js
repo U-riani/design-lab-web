@@ -10,12 +10,17 @@ import {
   Alert,
   InputGroup,
 } from "react-bootstrap";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import {
+//   faCloudArrowUp
+// } from "@fortawesome/free-brands-svg-icons";
 import { useTranslation } from "react-i18next";
 import SpaceComponent from "../../components/SpaceComponent";
 import { useCreateDesignerMutation } from "../../data/designersSlice2";
 import DesignerCardComponent from "../../components/DesignerCardComponent";
 
 const Registration = () => {
+  const maxSize = 10 * 1024 * 1024;
   const [createDesigner] = useCreateDesignerMutation();
   const { t } = useTranslation();
   const [name, setName] = useState({ ge: "" });
@@ -50,6 +55,8 @@ const Registration = () => {
     setCompanyPerson("person");
   };
 
+  console.log(profilePhoto);
+
   const handleSubmit = async () => {
     setIsLoading(true);
     setMessage({ text: "", variant: "" });
@@ -66,9 +73,20 @@ const Registration = () => {
     if (projectPhoto) formData.append("images", projectPhoto);
 
     try {
-      await createDesigner(formData).unwrap();
-      setMessage({ text: "Successfully registered", variant: "success" });
-      clearForm();
+      if (
+        name.ge !== "" &&
+        companyPerson !== "" &&
+        email !== "" 
+      ) {
+        await createDesigner(formData).unwrap();
+        setMessage({ text: "Successfully registered", variant: "success" });
+        clearForm();
+      } else {
+        setMessage({
+          text: "გთხოვთ შევსოთ ყველა ველი",
+          variant: "info",
+        });
+      }
     } catch (error) {
       setMessage({
         text: "Technical issue, please try again",
@@ -89,14 +107,14 @@ const Registration = () => {
             <Col sm={12} lg={6} className="pe-lg-3">
               <FloatingLabel
                 controlId="floatingInput"
-                label="Full name"
+                label={t("fullName")}
                 className="mb-3"
               >
                 <Form.Control
                   value={name.ge}
                   onChange={(e) => setName({ ge: e.target.value })}
                   type="text"
-                  placeholder="Full name"
+                  placeholder={t("fullName")}
                 />
               </FloatingLabel>
             </Col>
@@ -109,7 +127,7 @@ const Registration = () => {
                   }`}
                   variant="outline-secondary"
                 >
-                  PERSON
+                  {t("person")}
                 </Button>
                 <Button
                   onClick={() => setCompanyPerson("company")}
@@ -118,7 +136,7 @@ const Registration = () => {
                   }`}
                   variant="outline-secondary"
                 >
-                  COMPANY
+                  {t("company")}
                 </Button>
               </InputGroup>
             </Col>
@@ -143,36 +161,46 @@ const Registration = () => {
             <Col sm={12} lg={6} className="pe-lg-3">
               <FloatingLabel
                 controlId="floatingEmail"
-                label="Email address"
+                label={t("email")}
                 className="mb-3"
               >
                 <Form.Control
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
-                  placeholder="Email address"
+                  placeholder={t("email")}
                 />
               </FloatingLabel>
             </Col>
             <Col sm={12} lg={6} className="ps-lg-3">
               <FloatingLabel
                 controlId="floatingPhone"
-                label="Phone number"
+                label={t("phoneNumber")}
                 className="mb-3"
               >
                 <Form.Control
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   type="tel"
-                  placeholder="Phone number"
+                  placeholder={t("phoneNumber")}
                 />
               </FloatingLabel>
             </Col>
             <Col sm={12} lg={6} className="pe-lg-3">
               <FloatingLabel
                 controlId="floatingProfilePhoto"
-                label="Upload profile photo"
-                className="mb-3"
+                label={
+                  profilePhoto !== null && profilePhoto.size < maxSize
+                    ? t("uploadedProfilePhoto")
+                    : profilePhoto !== null && profilePhoto.size > maxSize
+                    ? t("errorPhotoSize")
+                    : t("uploadProfilePhoto")
+                }
+                className={`mb-3 upload-label ${
+                  profilePhoto !== null && profilePhoto.size < maxSize
+                    ? "green-border"
+                    : ""
+                }`}
               >
                 <Form.Control
                   onChange={handleProfilePhotoChange}
@@ -191,8 +219,18 @@ const Registration = () => {
             <Col sm={12} lg={6} className="ps-lg-3">
               <FloatingLabel
                 controlId="floatingProjectPhoto"
-                label="Upload project's photo"
-                className="mb-3"
+                label={
+                  projectPhoto !== null && projectPhoto.size < maxSize
+                    ? t("uploadedProjectsPhoto")
+                    : projectPhoto !== null && projectPhoto.size > maxSize
+                    ? t("errorPhotoSize")
+                    : t("uploadProjectsPhoto")
+                }
+                className={`mb-3 upload-label ${
+                  projectPhoto !== null && projectPhoto.size < maxSize
+                    ? "green-border"
+                    : ""
+                }`}
               >
                 <Form.Control
                   onChange={handleProjectPhotoChange}
@@ -211,7 +249,7 @@ const Registration = () => {
             <Col sm={12} lg={4}>
               <FloatingLabel
                 controlId="floatingBehance"
-                label="Behance link"
+                label={companyPerson == 'company' ? "Company website" : 'Behance link'}
                 className="mb-3"
               >
                 <Form.Control
@@ -250,7 +288,10 @@ const Registration = () => {
                 />
               </FloatingLabel>
             </Col>
-            <Col sm={12} className="d-flex justify-content-center registration-page-designer-card">
+            <Col
+              sm={12}
+              className="d-flex justify-content-center registration-page-designer-card"
+            >
               <DesignerCardComponent
                 name={name.ge}
                 profilePhoto={profilePhoto}
@@ -273,13 +314,14 @@ const Registration = () => {
                 )}
               </Button>
             </Col>
-            {message.text && (
-              <Alert variant={message.variant} className="mt-3">
-                {message.text}
-              </Alert>
-            )}
+            <Col sm={12}>
+              {message.text && (
+                <Alert variant={message.variant} className="mt-3">
+                  {message.text}
+                </Alert>
+              )}
+            </Col>
           </Form>
-          
         </Col>
       </Row>
     </Container>

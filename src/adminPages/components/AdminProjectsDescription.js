@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import {
   useUpdateProjectsDescriptionMutation,
-  useUpdateProjectsMutation,
+ 
 } from "../../data/projectsSlice";
 
 const AdminProjectDescription = ({ data, handleRefetch }) => {
@@ -21,7 +21,7 @@ const AdminProjectDescription = ({ data, handleRefetch }) => {
     handleRefetch('start')
     e.preventDefault();
     // Here you could call the update function to save the data
-    const updatedData = { projectId, name, description, mainProject };
+    // const updatedData = { projectId, name, description, mainProject };
     // console.log(updatedData);
 
     try {

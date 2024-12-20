@@ -45,9 +45,9 @@ const AdminAllDesigners = () => {
   const [id, setId] = useState(null);
 
   // console.log(allDesigners);
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-  };
+  // const handleImageChange = (e) => {
+  //   setImage(e.target.files[0]);
+  // };
 
   const handleProfilePhotoChange = (e) => {
     setProfilePhoto(e.target.files[0]);
@@ -63,6 +63,7 @@ const AdminAllDesigners = () => {
       [lang]: e.target.value,
     }));
   };
+
   const handleTextChange = (lang, e) => {
     setText((prev) => ({
       ...prev,
@@ -70,10 +71,14 @@ const AdminAllDesigners = () => {
     }));
   };
 
+  const handleCompanynameChange = (e) => {
+    setCompanyPerson(e.target.value); // This will automatically set activeStatus to true/false
+  };
+
   const handleStatusChange = (e) => {
     setActiveStatus(e.target.checked); // This will automatically set activeStatus to true/false
   };
-
+  console.log(companyPerson);
   const handleSubmitUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -82,6 +87,7 @@ const AdminAllDesigners = () => {
         id,
         text,
         name,
+        companyPerson,
         images,
         facebook,
         instagram,
@@ -103,6 +109,7 @@ const AdminAllDesigners = () => {
       alert("Designer Update error:", error.message);
     }
   };
+  console.log(companyPerson)
 
   const handleShowUpdate = (item) => {
     setShowUpdate(!showUpdate);
@@ -214,10 +221,16 @@ const AdminAllDesigners = () => {
                     onClick={() => handleDelete(item._id)}
                     disabled={isDeleting}
                     className="ms-2"
-                    >
+                  >
                     {isDeleting ? "Deleting..." : "Delete"}
                   </Button>
-                    {item.activeStatus === true ? <Button className=" bg-success">active</Button> : <Button disabled className="bg-warning">not active</Button>}
+                  {item.activeStatus === true ? (
+                    <Button className=" bg-success">active</Button>
+                  ) : (
+                    <Button disabled className="bg-warning">
+                      not active
+                    </Button>
+                  )}
                 </div>
                 {updateCol === item._id && (
                   <form onSubmit={handleSubmitUpdate} className="mt-3">
@@ -240,12 +253,34 @@ const AdminAllDesigners = () => {
                       onChange={handleProjectPhotoChange}
                       className="mb-2"
                     />
-                    <input
-                      value={companyPerson}
-                      className="w-100 mb-2"
-                      placeholder="კომპანია / ფიზ. პირი"
-                      onChange={(e) => setCompanyPerson(e.target.value)}
-                    />
+                    <Row>
+                      <Col sm={6}>
+                        <label htmlFor="person">Person</label>
+                        <input
+                          id="person"
+                          type="radio"
+                          name="companyPerson"
+                          value={"person"}
+                          checked={companyPerson === "person"}
+                          className="w-100 mb-2"
+                          placeholder="კომპანია / ფიზ. პირი"
+                          onChange={(e) => setCompanyPerson(e.target.value)}
+                        />
+                      </Col>
+                      <Col sm={6}>
+                        <label htmlFor="company">Company</label>
+                        <input
+                          id="company"
+                          type="radio"
+                          name="companyPerson"
+                          value={"company"}
+                          checked={companyPerson === "company"}
+                          className="w-100 mb-2"
+                          placeholder="კომპანია / ფიზ. პირი"
+                          onChange={(e) => setCompanyPerson(e.target.value)}
+                        />
+                      </Col>
+                    </Row>
                     <input
                       value={name.ge}
                       className="w-100 mb-2"

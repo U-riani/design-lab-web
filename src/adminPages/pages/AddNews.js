@@ -1,15 +1,20 @@
-import React from 'react'
-import { Container } from 'react-bootstrap'
-import JoditEditorComponent2 from '../components/JoditEditor2.js'
-// import JoditEditorComponent from '../components/JoditEditor'
+import React, { Suspense, lazy } from "react";
+import { Container, Spinner } from "react-bootstrap";
+
+// Lazy load JoditEditorComponent2
+const JoditEditorComponent2 = lazy(() => import("../components/JoditEditor2.js"));
 
 const AddNews = () => {
   return (
-    <Container className='d-flex flex-column justify-content-center align-content-center flex-wrap'>
-        <h1>Add News</h1>
-        <JoditEditorComponent2 />
-    </Container>
-  )
-}
+    <Container className="d-flex flex-column justify-content-center align-items-center flex-wrap">
+      <h1 className="mb-4">Add News</h1>
 
-export default AddNews
+      {/* Suspense with a fallback UI (spinner while loading) */}
+      <Suspense fallback={<Spinner animation="border" role="status" />}>
+        <JoditEditorComponent2 />
+      </Suspense>
+    </Container>
+  );
+};
+
+export default AddNews;

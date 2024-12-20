@@ -10,6 +10,9 @@
   "registration": "REGISTRATION",
   "bookVisit": "BOOK VISIT",
   "welcome": "English.",
+  "designersUnion": "UNION OF DESIGNERS",
+  "designLab": "DESIGN - LAB",
+  "designLabDescription": "„Design Lab“ is the first professional space for architects and designers, established by initiative of the Designers' Union of Georgia",
 
   "aboutUs1": "Designers' Union of Georgia was founded in 2013. It serves as a professional organization with the primary goal of supporting professionals working in the fields of architecture and interior design, protecting their rights and promoting the development of the industry.",
   "aboutUs2": "Through the Union the platform has been created to gather professionals in Georgia whose work is related to any type of interior creation. With the help of this platform, both emerging and experienced colleagues in this field will be able to position themselves better in the local and global markets. Since 2013 the Designers Union of Georgia has implemented numerous significant projects aimed to promote architects/designers and support their activities.",
@@ -25,8 +28,18 @@
   "followUs": "Follow Us",
   "tbilisiGeorgia": "Tbilisi, Georgia",
   "AnaPolitkovskaia": "Ana Politkovskaia St 3/28",
-  "becomeMember": "Become a member of the Designers Union"
- 
-
-
+  "becomeMember": "Become a member of the Designers Union",
+  "more": "MORE",
+  "fullName": "Full Name",
+  "person": "Person",
+  "company": "Company",
+  "phoneNumber": "Phone Number",
+  "uploadProfilePhoto": "Upload Profile Photo",
+  "uploadProjectsPhoto": "Upload Project's Photo",
+  "errorPhotoSize": "max size 10MB",
+  "uploadedProfilePhoto": "Profile Photo Uploaded",
+  "uploadedProjectsPhoto": "Profile Photo Uploaded",
+  "behanceLink": "Behance Link",
+  "instagramLink": "Instagram Link",
+  "facebookLink": "Facebook Link"
 }

@@ -6,10 +6,7 @@ import SpaceComponent from "../../components/SpaceComponent";
 import { useGetAllProjectsQuery } from "../../data/projectsSlice";
 
 const AdminAllProjects = () => {
-  const image1 = require("../../images/union/projects-main-images/slide1-b.jpg");
-  const image2 = require("../../images/union/projects-main-images/slide2-b.jpg");
-  const image3 = require("../../images/union/projects-main-images/slide3-b.jpg");
-  const projectname = "projectName";
+
   const { data: allProjects } = useGetAllProjectsQuery();
   console.log(allProjects);
   const { t, i18n } = useTranslation();

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button, Alert, Spinner } from "react-bootstrap";
-import HeroBanner from "../../components/HeroBanner";
+// import HeroBanner from "../../components/HeroBanner";
 import { useGetAllHerosQuery, useCreateHeroMutation } from "../../data/heroSlice";
 
 const AddHero = () => {
@@ -55,9 +55,9 @@ const AddHero = () => {
 
   return (
     <Container className="mb-5">
-      <Row>
+      {/* <Row>
         <HeroBanner />
-      </Row>
+      </Row> */}
       <Row>
         {statusMessage && (
           <Alert variant={statusMessage.type === "error" ? "danger" : "success"}>

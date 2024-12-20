@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { LastNewsContext } from "../context/LastNewsContext";
 
-const StackCardsSlider3 = ({ newsData }) => {
+const StackCardsSlider4 = ({ newsData }) => {
   const { last5News, moveSlideToNext, moveSlideToPrev } =
     useContext(LastNewsContext);
 
@@ -80,7 +80,7 @@ const StackCardsSlider3 = ({ newsData }) => {
     const timer = setTimeout(() => {
       moveSlideToNext();
       // console.log("++");
-    }, 2000);
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, [last5News, moveSlideToNext]);
@@ -138,4 +138,4 @@ const StackCardsSlider3 = ({ newsData }) => {
   );
 };
 
-export default StackCardsSlider3;
+export default StackCardsSlider4;

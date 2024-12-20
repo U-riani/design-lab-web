@@ -42,7 +42,6 @@ export const partnersApiSlice = createApi({
         formData.append("text[ge]", text.ge);
         formData.append("text[en]", text.en);
         formData.append("websiteUrl", websiteUrl);
-        if (image) formData.append("images", image);
         return {
           url: `partners/${id}`,
           method: "PATCH",

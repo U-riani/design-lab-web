@@ -3,6 +3,7 @@ import { Container, Carousel } from "react-bootstrap";
 
 const SingleNewsCarousel = ({ data }) => {
   // const imagesData = [data, data];
+  // console.log('SingleNewsCarousel', data)
   return (
     <Container className="mb-0 single-news-page-carousel-container" fluid>
       <Carousel

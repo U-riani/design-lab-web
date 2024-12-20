@@ -22,7 +22,7 @@ export const projectsApiSlice = createApi({
       providesTags: ["Projects"],
     }),
     getAllProjectsImageTitle: builder.query({
-      query: () => "projects/projectsImageTitle",
+      query: () => "projects/projectsImageTitleText",
       transformResponse: (response) => response.reverse(),
       providesTags: ["Projects"],
     }),

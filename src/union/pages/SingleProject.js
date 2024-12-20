@@ -1,8 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import HeroBannerCarousel from "../../components/HeroBannerCarousel";
 import SpaceComponent from "../../components/SpaceComponent";
-import SingleProjectCarousel from "../../components/SingleProjectCarousel";
 import { useTranslation } from "react-i18next";
 import { useGetSingleProjectsQuery } from "../../data/projectsSlice";
 import { useParams } from "react-router-dom";
@@ -13,13 +11,12 @@ const SingleProject = () => {
   const projectId = useParams().projectId;
   const {
     data: singleProject,
-    error,
-    isLoading,
+   
   } = useGetSingleProjectsQuery(projectId);
   
   const { t, i18n } = useTranslation();
 
-  console.log(singleProject);
+  console.log("singleProject", singleProject);
 
   return (
     <Container fluid className="single-project-page px-0 w-100">

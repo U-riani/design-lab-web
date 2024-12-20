@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  Col,
-  Container,
-  Row,
-} from "react-bootstrap";
+import { Button, ButtonGroup, Card, Col } from "react-bootstrap";
 import {
   faBehance,
   faInstagram,
   faFacebookF,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTranslation } from "react-i18next";
 
 const DesignerCardComponent = ({
   projectPhoto,
@@ -22,11 +16,13 @@ const DesignerCardComponent = ({
   facebook,
   instagram,
 }) => {
-  console.log(profilePhoto);
+  // console.log(profilePhoto);
+  const { t } = useTranslation();
+
   const [item, setItem] = useState({
     projectPhoto: projectPhoto || "",
     profilePhoto: profilePhoto || "",
-    name: name || "name",
+    name: name || t("fullName"),
     behance: "",
     facebook: "",
     instagram: "",
@@ -45,7 +41,13 @@ const DesignerCardComponent = ({
   }, [projectPhoto, profilePhoto, name, behance, facebook, instagram]);
 
   return (
-    <Col xs={12} sm={6} lg={4} xl={4} className="designersPage-card-col py-3 d-flex justify-content-center align-items-center">
+    <Col
+      xs={12}
+      sm={6}
+      lg={4}
+      xl={4}
+      className="designersPage-card-col py-3 d-flex justify-content-center align-items-center"
+    >
       <Card className="designersPage-card">
         <div className="designersPage-cards-images-top">
           <div className="designersPage-background-image-container bg-dark">
@@ -82,7 +84,9 @@ const DesignerCardComponent = ({
               className="btn-link"
               variant="secondary"
             >
-              <FontAwesomeIcon icon={faBehance} />
+              <div>
+                <FontAwesomeIcon icon={faBehance} />
+              </div>
             </Button>
             <Button
               href={`${item.facebook}`}
@@ -91,7 +95,9 @@ const DesignerCardComponent = ({
               className="btn-link"
               variant="secondary"
             >
-              <FontAwesomeIcon icon={faFacebookF} />
+              <div>
+                <FontAwesomeIcon icon={faFacebookF} />
+              </div>
             </Button>
             <Button
               href={`${item.instagram}`}
@@ -100,7 +106,9 @@ const DesignerCardComponent = ({
               className="btn-link"
               variant="secondary"
             >
-              <FontAwesomeIcon icon={faInstagram} />
+              <div>
+                <FontAwesomeIcon icon={faInstagram} />
+              </div>
             </Button>
           </ButtonGroup>
         </Card.Body>

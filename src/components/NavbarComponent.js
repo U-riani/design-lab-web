@@ -2,20 +2,19 @@ import React, { useEffect, useState } from "react";
 import {
   Nav,
   Navbar,
-  NavDropdown,
+  
   Offcanvas,
   Container,
   Button,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import unionLogo from "../images/union/union-logo/union-logo.png";
 import { useTranslation } from "react-i18next";
-import useScreenWidth from "../hooks/useScreenWidth";
+// import useScreenWidth from "../hooks/useScreenWidth";
 
 const NavbarComponent = () => {
   const flagGe = require("../images/flags/georgia.png");
   const flagUk = require("../images/flags/uk.png");
-  const screenWidth = useScreenWidth()
+  // const screenWidth = useScreenWidth();
   const { t, i18n } = useTranslation();
 
   const [toggleLang, setTogglelang] = useState(
@@ -50,10 +49,11 @@ const NavbarComponent = () => {
       <Container fluid className="my-0">
         <Navbar.Brand className="ms-0 ms-lg-3 py-0" as={Link} to="/">
           <img
-            className="navbar-logo py-2 py-md-3"
-            src="union-logo2.png"
+            className="navbar-logo py-0 my-1 my-lg-2 my-xl-3"
+            src="/union-logo2.1.png"
             alt="Union Logo"
           />
+          <h1 className="mb-0">{t("designersUnion")}</h1>
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls={`offcanvasNavbar-expand-lg`}
@@ -96,7 +96,8 @@ const NavbarComponent = () => {
               <Nav.Link as={Link} to="/partners" onClick={handleCloseOffcanvas}>
                 {t("partners")}
               </Nav.Link>
-              <NavDropdown title={t("registration")} id="basic-nav-dropdown" className="d-flex flex-column  justify-content-center  ">
+              
+              {/* <NavDropdown title={t("registration")} id="basic-nav-dropdown" className="d-flex flex-column  justify-content-center  ">
                 <NavDropdown.Item
                   onClick={handleCloseOffcanvas}
                   as={Link}
@@ -112,20 +113,20 @@ const NavbarComponent = () => {
                 >
                   {t("bookVisit")}
                 </NavDropdown.Item>
-              </NavDropdown>
-              {/* <Nav.Link
+              </NavDropdown> */}
+              <Nav.Link
                 as={Link}
                 to="/registration"
                 onClick={handleCloseOffcanvas}
               >
                 {t("registration")}
-              </Nav.Link> */}
+              </Nav.Link>
               <Nav.Link as={Link} to="/contact" onClick={handleCloseOffcanvas}>
                 {t("contact")}
               </Nav.Link>
-              <Nav.Link as={Link} to="/login" onClick={handleCloseOffcanvas}>
+              {/* <Nav.Link as={Link} to="/login" onClick={handleCloseOffcanvas}>
                 LOGIN
-              </Nav.Link>
+              </Nav.Link> */}
               <Button
                 onClick={() => handleLangChange()}
                 className="p-1 py-1 border-0 flag-button"

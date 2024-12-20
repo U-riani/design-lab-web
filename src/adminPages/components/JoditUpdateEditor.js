@@ -1,7 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
-import JoditEditor from "jodit-react";
+import React, { useState, useRef, useEffect, Suspense } from "react";
 import { useGetSingleNewsQuery, useUpdateNewsMutation } from "../../data/newsSlice2";
 import { useParams } from "react-router-dom";
+
+// Lazy load the JoditEditor component
+const JoditEditor = React.lazy(() => import("jodit-react"));
 
 const JoditUpdateEditor = () => {
   const { newsId } = useParams();
@@ -42,8 +44,7 @@ const JoditUpdateEditor = () => {
         id: news._id,
         title: { ge: titleGe, en: titleEn },
         text: { ge: editorContentGe, en: editorContentEn },
-        images: newImages
-        // Send newly uploaded images
+        images: newImages,
       }).unwrap();
       alert("News updated successfully!");
       handleClearContent();
@@ -74,10 +75,18 @@ const JoditUpdateEditor = () => {
     minHeight: 400,
   };
 
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
   return (
     <div className="joditComponent-container">
       <h2>Edit News Article</h2>
-      
+
       <label htmlFor="titleGe">Title (Georgian)</label>
       <input
         id="titleGe"
@@ -111,12 +120,15 @@ const JoditUpdateEditor = () => {
       </div>
 
       <label>Content (Georgian)</label>
-      <JoditEditor
-        ref={editorRefGe}
-        value={editorContentGe}
-        config={config}
-        onBlur={(newContent) => setEditorContentGe(newContent)}
-      />
+      {/* Suspense is used to wrap the lazy-loaded component */}
+      <Suspense fallback={<div>Loading Editor...</div>}>
+        <JoditEditor
+          ref={editorRefGe}
+          value={editorContentGe}
+          config={config}
+          onBlur={(newContent) => setEditorContentGe(newContent)}
+        />
+      </Suspense>
 
       <label htmlFor="titleEn">Title (English)</label>
       <input
@@ -129,12 +141,15 @@ const JoditUpdateEditor = () => {
       />
 
       <label>Content (English)</label>
-      <JoditEditor
-        ref={editorRefEn}
-        value={editorContentEn}
-        config={config}
-        onBlur={(newContent) => setEditorContentEn(newContent)}
-      />
+      {/* Suspense is used to wrap the lazy-loaded component */}
+      <Suspense fallback={<div>Loading Editor...</div>}>
+        <JoditEditor
+          ref={editorRefEn}
+          value={editorContentEn}
+          config={config}
+          onBlur={(newContent) => setEditorContentEn(newContent)}
+        />
+      </Suspense>
 
       <div className="mt-3">
         <button onClick={handleSubmit} className="btn btn-primary">

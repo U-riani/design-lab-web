@@ -9,7 +9,6 @@ import "./i18n";
 
 
 
-import 'react-quill/dist/quill.snow.css'; // Quill's Snow theme (you can also use 'bubble' theme)
 
 
 import { Provider } from "react-redux";

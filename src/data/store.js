@@ -6,6 +6,7 @@ import designersReducer from "./designersSlice";
 import { apiVisitsSlice } from "./visitsSlice";
 
 import { apiNewsSlice } from "./newsSlice2";
+import { apiAboutUsSlice } from "./aboutUsSlice.js";
 import { heroApiSlice } from "./heroSlice";
 import { partnersApiSlice } from "./partnersSlice";
 import { designersApiSlice } from "./designersSlice2";
@@ -18,6 +19,7 @@ const store = configureStore({
     partners: partnersReducer,
     designers: designersReducer,
     [apiNewsSlice.reducerPath]: apiNewsSlice.reducer,
+    [apiAboutUsSlice.reducerPath]: apiAboutUsSlice.reducer,
     [apiVisitsSlice.reducerPath]: apiVisitsSlice.reducer,
     [partnersApiSlice.reducerPath]: partnersApiSlice.reducer,
     [heroApiSlice.reducerPath]: heroApiSlice.reducer,
@@ -29,6 +31,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       apiNewsSlice.middleware,
+      apiAboutUsSlice.middleware,
       apiVisitsSlice.middleware,
       heroApiSlice.middleware,
       partnersApiSlice.middleware,

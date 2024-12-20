@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 const UpdateNews = () => {
   const { data: allNews, isLoading, error, refetch } = useGetAllNewsQuery();
-  const {t, i18n} = useTranslation()
+  const { i18n} = useTranslation()
   // const extractText = (html) => {
   //   console.log(html);
   //   const parser = new DOMParser();
@@ -76,9 +76,9 @@ console.log(allNews)
                       i + 1
                     } pe-3 mb-0`}
                   >
-                    <div>
-                      <h5>{el.title[i18n.language] || el.title.ge || "News Title"}</h5>
-                      <div>{extractTextRegex(el.text[i18n.language] || 'news not found')}</div>
+                    <div className="overflow-hidden">
+                      <h5>{el.title[i18n.language]}</h5>
+                      <div>{extractTextRegex(el.text[i18n.language])}</div>
                       {/* {console.log(...extractText(el.text))} */}
                       {/* {el.text.map((el) => ())} */}
                       {/* <p className="mb-0">{extractText(el.text)}</p> */}

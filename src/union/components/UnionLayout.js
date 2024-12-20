@@ -18,7 +18,7 @@ const UnionLayout = () => {
     <>
         <NavbarComponent />
         {projectsId ? null : <HeroBanner />}
-        <Container className='App px-0 mb-0' fluid>
+        <Container className='App px-0 mb-0 mt-2' fluid>
             <Outlet/>
         </Container>
         <ScrollUp />

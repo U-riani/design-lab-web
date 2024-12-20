@@ -16,7 +16,7 @@ export const LastNewsProvider = ({ children }) => {
           id: i,
           title: el.title,
           imageSrc: el.images,
-          
+          text: el.text,
           activeNews: i, // Initially set the first slide as active
         }))
       );

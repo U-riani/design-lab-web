@@ -1,24 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, Suspense, lazy } from "react";
 import { Spinner, Alert, Container, Row, Button } from "react-bootstrap";
-import {  useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   useGetSingleNewsQuery,
   useDeleteNewsMutation,
 } from "../../data/newsSlice2";
-// import JoditEditorComponent from "../components/JoditEditor";
-import JoditUpdateEditor from '../components/JoditUpdateEditor.js'
 import { useTranslation } from "react-i18next";
 import SingleNewsCarousel from "../../components/SingleNewsCarousel.js";
+
+// Lazy load JoditUpdateEditor component
+const JoditUpdateEditor = lazy(() => import("../components/JoditUpdateEditor"));
 
 const AdminSingleNews = () => {
   const { newsId } = useParams();
   const { data: news, isLoading, error } = useGetSingleNewsQuery(newsId);
-  const {t, i18n} = useTranslation()
+  const { i18n } = useTranslation();
   const [deleteNews] = useDeleteNewsMutation();
   const navigate = useNavigate();
   const [showEditor, setShowEditor] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  console.log(news)
+  console.log(news);
 
   const handleDelete = async (id) => {
     try {
@@ -56,25 +57,29 @@ const AdminSingleNews = () => {
     );
   }
 
-
-
   return (
     <Container className="singleNewsComponent">
       {!news ? (
         <p>No news articles available.</p>
       ) : (
-        <div className="news-article mb-4 px-3">
+        <div className="news-article  mb-4 px-3">
           <Row className="single-news-image-row pt-3 px-0 px-lg-3 mb-1 mb-lg-4">
-            <SingleNewsCarousel data={news.images}/>
-            {/* {news.image && <img src={news.image} alt="news" />} */}
-            </Row>
+            <SingleNewsCarousel data={news.images} />
+          </Row>
           <Row
-            className="article-body pt-5"
-            dangerouslySetInnerHTML={{ __html: news.text[i18n.language] || news.text }}
+            className="article-body admin-singlenews-article-body pb-5 pt-5"
+            dangerouslySetInnerHTML={{
+              __html: news.text[i18n.language] || news.text,
+            }}
           />
           {showEditor && (
             <Row className="d-flex justify-content-center">
-              <JoditUpdateEditor prop={news} />
+              {/* Suspense with a fallback UI for the lazy-loaded editor */}
+              <Suspense
+                fallback={<Spinner animation="border" variant="primary" />}
+              >
+                <JoditUpdateEditor prop={news} />
+              </Suspense>
             </Row>
           )}
           <Row>
@@ -96,9 +101,16 @@ const AdminSingleNews = () => {
           {showAlert && (
             <Alert variant="warning" className="mt-3">
               <Alert.Heading>Are you sure?</Alert.Heading>
-              <p>This action cannot be undone. Please confirm if you want to proceed.</p>
+              <p>
+                This action cannot be undone. Please confirm if you want to
+                proceed.
+              </p>
               <div className="d-flex justify-content-end">
-                <Button variant="secondary" onClick={cancelDelete} className="me-2">
+                <Button
+                  variant="secondary"
+                  onClick={cancelDelete}
+                  className="me-2"
+                >
                   Cancel
                 </Button>
                 <Button variant="danger" onClick={confirmDelete}>

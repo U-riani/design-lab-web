@@ -93,9 +93,10 @@ const NewsPage = () => {
                     <Button
                       as={Link}
                       to={`${el._id}`}
-                      className="newsPage-see-more-button rounded-0 bg-dark border-0 newsPage-button "
+                      className="newsPage-see-more-button rounded-0 bg-dark border-0 newsPage-button pt-2"
                     >
-                      more
+                      <span>{t("more")}</span>
+                      <em></em>
                     </Button>
                   </Col>
 
@@ -105,7 +106,7 @@ const NewsPage = () => {
                     md={6}
                     className={`newsPage-image-container newsPage-image-container-${
                       i + 1
-                    } mb-0`}
+                    } mb-0 `}
                   >
                     <img src={el.images[0]} alt="news" />
                   </Col>
