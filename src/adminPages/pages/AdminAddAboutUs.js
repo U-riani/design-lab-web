@@ -86,7 +86,7 @@ const AdminAddAboutUs = () => {
         </Suspense>
       </div>
       <div>
-        <button onClick={handleSubmit}>add</button>
+        <button onClick={handleSubmit}>Save</button>
       </div>
     </div>
   );

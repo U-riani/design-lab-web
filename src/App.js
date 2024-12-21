@@ -37,6 +37,8 @@ import VisitBookPage from "./union/pages/BookVisitPage";
 import ScrollToTop from "./hooks/ScrollToTop";
 import AdminAddAboutUs from "./adminPages/pages/AdminAddAboutUs";
 import AdminEditAboutUs from "./adminPages/pages/AdminEditAboutUs";
+import AdminAddAboutUsMainPage from "./adminPages/pages/AdminAddAboutUsMainPage";
+import AdminEditAboutUsMainPage from "./adminPages/pages/AdminUpdateAboutUsMainPage";
 
 const App = () => (
   <AuthProvider>
@@ -105,6 +107,14 @@ const App = () => (
             <Route
               path="edit-about-us"
               element={<ProtectedRoute element={<AdminEditAboutUs />} />}
+            />
+            <Route
+              path="add-about-us-main-page"
+              element={<ProtectedRoute element={<AdminAddAboutUsMainPage />} />}
+            />
+            <Route
+              path="edit-about-us-main-page"
+              element={<ProtectedRoute element={<AdminEditAboutUsMainPage />} />}
             />
           </Route>
           {/* Add more routes as needed */}

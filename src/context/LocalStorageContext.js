@@ -34,6 +34,7 @@ export const LocalStorageProvider = ({ children }) => {
     allProjects: loadFromLocalStorage('allProjects'),
     allPprojectsPage: loadFromLocalStorage('allProjectsPage'),
     aboutUs: loadFromLocalStorage('aboutUs'),
+    aboutUsMainPage: loadFromLocalStorage('aboutUsMainPage'),
   });
 
   // Function to update localStorage data

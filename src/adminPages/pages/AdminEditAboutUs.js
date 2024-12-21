@@ -4,12 +4,12 @@ import {
   useGetAboutUsQuery,
   useUpdateAboutUsMutation,
 } from "../../data/aboutUsSlice";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row, Toast } from "react-bootstrap";
 
 const JoditEditor = React.lazy(() => import("jodit-react"));
 
 const AdminEditAboutUs = () => {
-  const { data, isLoading, error } = useGetAboutUsQuery();
+  const { data, isLoading, error, refetch } = useGetAboutUsQuery();
   const [updateAboutUs] = useUpdateAboutUsMutation();
 
   const editorRefEn = useRef(null);
@@ -18,11 +18,16 @@ const AdminEditAboutUs = () => {
   const [editorContentEn, setEditorContentEn] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [oldImageSrc, setOldImageSrc] = useState("");
+  const [startLoading, setStartLoading] = useState(false)
   const [id, setId] = useState(null);
 
   const fileInputRef = useRef(null);
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   useEffect(() => {
     if (data) {
@@ -39,6 +44,7 @@ const AdminEditAboutUs = () => {
   };
 
   const handleSubmit = async () => {
+    setStartLoading(true)
     try {
       //   const formData = new FormData();
       const enText = editorRefEn?.current.value;
@@ -55,9 +61,14 @@ const AdminEditAboutUs = () => {
         geText,
         imageFile,
       }).unwrap();
-    //   console.log(response);
+      if(response._id) {
+        alert('Success !')
+        refetch()
+        setStartLoading(false)
+      }
     } catch (error) {
-      console.log(error);
+      alert(error)
+      setStartLoading(false)
     }
   };
 
@@ -130,9 +141,10 @@ const AdminEditAboutUs = () => {
           />
         </Suspense>
       </div>
-      <div>
-        <button onClick={handleSubmit}>add</button>
-      </div>
+      <Col sm={3}>
+        {startLoading &&<p>Loading ...</p>}
+        <button disabled={startLoading} onClick={handleSubmit} className="w-100 ms-4 my-3 bg-success">Save</button>
+      </Col>
     </Container>
   );
 };

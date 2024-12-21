@@ -12,17 +12,16 @@ const AdminNavbar = () => {
   const navigate = useNavigate(); // Get the navigate function
   const { i18n } = useTranslation();
 
-  const [toggleLang, setTogglelang] = useState(localStorage.getItem('language') || i18n.language);
+  const [toggleLang, setTogglelang] = useState(
+    localStorage.getItem("language") || i18n.language
+  );
   // const []
 
   const handleLangChange = (lang) => {
     setTogglelang(i18n.language === "ge" ? "en" : "ge");
     i18n.changeLanguage(toggleLang === "ge" ? "en" : "ge");
-    localStorage.setItem('language',  toggleLang === "ge" ? "en" : "ge");
-
+    localStorage.setItem("language", toggleLang === "ge" ? "en" : "ge");
   };
-
-
 
   const handleLogout = () => {
     logout(navigate); // Pass navigate to logout
@@ -81,17 +80,23 @@ const AdminNavbar = () => {
                 ADD AboutUs
               </NavDropdown.Item> */}
               <NavDropdown.Item as={Link} to="edit-about-us">
-                EDIT PROJECTS
+                EDIT AboutUs
+              </NavDropdown.Item>
+              {/* <NavDropdown.Item as={Link} to="add-about-us-main-page">
+                add MainPage
+              </NavDropdown.Item> */}
+              <NavDropdown.Item as={Link} to="edit-about-us-main-page">
+                EDIT AboutUsMainPage
               </NavDropdown.Item>
               {/* ...other dropdown items */}
             </NavDropdown>
           </Nav>
           <Button
-                onClick={() => handleLangChange()}
-                className="p-1 py-1 border-0 flag-button"
-              >
-                <img src={toggleLang === 'en' ? flagUk : flagGe} alt="flag "/>
-              </Button>
+            onClick={() => handleLangChange()}
+            className="p-1 py-1 border-0 flag-button"
+          >
+            <img src={toggleLang === "en" ? flagUk : flagGe} alt="flag " />
+          </Button>
         </Navbar.Collapse>
         <Button onClick={handleLogout} variant="outline-danger">
           Logout
