@@ -55,7 +55,7 @@ const Registration = () => {
     setCompanyPerson("person");
   };
 
-  console.log(profilePhoto);
+  // console.log(profilePhoto);
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -67,6 +67,7 @@ const Registration = () => {
     formData.append("instagram", instagram);
     formData.append("behance", behance);
     formData.append("companyPerson", companyPerson);
+    formData.append("phone", phone);
 
     // Append the images array
     if (profilePhoto) formData.append("images", profilePhoto);
@@ -92,7 +93,7 @@ const Registration = () => {
         text: "Technical issue, please try again",
         variant: "danger",
       });
-      console.log(error);
+      // console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -249,7 +250,7 @@ const Registration = () => {
             <Col sm={12} lg={4}>
               <FloatingLabel
                 controlId="floatingBehance"
-                label={companyPerson == 'company' ? "Company website" : 'Behance link'}
+                label={companyPerson === 'company' ? "Company website" : 'Behance link'}
                 className="mb-3"
               >
                 <Form.Control
@@ -290,7 +291,7 @@ const Registration = () => {
             </Col>
             <Col
               sm={12}
-              className="d-flex justify-content-center registration-page-designer-card"
+              className="d-flex justify-content-center registration-page-designer-card mb-3"
             >
               <DesignerCardComponent
                 name={name.ge}

@@ -30,9 +30,9 @@ const ProjectsPage = () => {
   }, [allProjects]);
 
   const { t, i18n } = useTranslation();
-  console.log("--projects:", projects);
+  // console.log("--projects:", projects);
   // console.log("--name/image:", allProjects);
-  console.log("+++projects page ", localProjectsPageData);
+  // console.log("+++projects page ", localProjectsPageData);
 
   return (
     <Container fluid className="projects-page px-0 mb-0">

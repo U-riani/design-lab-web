@@ -21,7 +21,7 @@ const NewsComponent3 = () => {
     return he.decode(textOnly);
   };
 
-  console.log(last5News)
+  // console.log(last5News)
 
   return (
     <Container fluid className="news-component pb-5 mb-0 px-0">

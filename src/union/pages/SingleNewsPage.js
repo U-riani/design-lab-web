@@ -10,7 +10,7 @@ const GetSingleNews = () => {
   const { i18n } = useTranslation();
 
   const { data: news, error, isLoading } = useGetSingleNewsQuery(newsId);
-  console.log(news);
+  // console.log(news);
 
   if (isLoading) {
     return (

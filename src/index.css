@@ -89,7 +89,7 @@ button,
 }
 
 .navbar-nav a {
-  font-weight: 500 !important;
+  /* font-weight: 500 !important; */
   font-size: 1rem !important;
 }
 
@@ -212,6 +212,18 @@ button,
   filter: blur(20px);
   opacity: 1;
   animation: heroBannerButtonAnimation 5s linear infinite;
+}
+
+.heroBanner-registration-button a {
+  display: block;
+  text-decoration: none;
+  color: white;
+  width: 100%;
+  height: 100%;
+}
+
+.heroBanner-registration-button a:active, .heroBanner-registration-button a:visited  {
+  color: white;
 }
 
 .carousel-inner .active .carousel-caption {

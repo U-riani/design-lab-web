@@ -1,7 +1,7 @@
 import Carousel from "react-bootstrap/Carousel";
 
 function SingleProjectCarousel({ data }) {
-  console.log('SingleProjectCarousel',data)
+  // console.log('SingleProjectCarousel',data)
   return (
     <Carousel className="w-100">
       {data &&

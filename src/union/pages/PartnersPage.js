@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 const PartnersPage = () => {
   const {data: partners} = useGetAllPartnersQuery()
   const { t, i18n } = useTranslation();
-  console.log(partners)
+  // console.log(partners)
 
   return (
     <Container fluid className="partnersPagemy-0">

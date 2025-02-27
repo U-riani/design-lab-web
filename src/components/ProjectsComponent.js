@@ -27,8 +27,8 @@ const ProjectsComponent = () => {
     }
   }, [data])
 
-  console.log('ProjectsComponent', data);
-  console.log('ProjectsComponent localData', localProjectsData);
+  // console.log('ProjectsComponent', data);
+  // console.log('ProjectsComponent localData', localProjectsData);
 
   const { t, i18n } = useTranslation();
 

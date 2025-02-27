@@ -90,7 +90,7 @@ const CarouselComponent = (props) => {
       },
     ],
   };
-  console.log('carouselCOmponent:', partners)
+  // console.log('carouselCOmponent:', partners)
   return (
     <div className="slider-container">
       <Slider {...settings}>

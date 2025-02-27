@@ -140,7 +140,7 @@ export const projectsApiSlice = createApi({
         // formData.append("urlLastPart", urlLastPart)
         formData.append("heroText[ge]", heroText.ge);
         formData.append("heroText[en]", heroText.en);
-        console.log(url);
+        // console.log(url);
         if (image) formData.append("images", image);
         // if (image) formData.append(`heroes[${index}][imageFile]`, image);
         return {

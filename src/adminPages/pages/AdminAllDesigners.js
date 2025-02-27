@@ -35,6 +35,7 @@ const AdminAllDesigners = () => {
   const [text, setText] = useState({ ge: "", en: "" });
   const [name, setName] = useState({ ge: "", en: "" });
   const [image, setImage] = useState(null);
+  const [phone, setPhone] = useState('')
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [projectPhoto, setProjectPhoto] = useState(null);
   const [facebook, setFacebook] = useState("");
@@ -71,10 +72,13 @@ const AdminAllDesigners = () => {
     }));
   };
 
-  const handleCompanynameChange = (e) => {
-    setCompanyPerson(e.target.value); // This will automatically set activeStatus to true/false
-  };
+  // const handleCompanynameChange = (e) => {
+  //   setCompanyPerson(e.target.value); // This will automatically set activeStatus to true/false
+  // };
 
+  const handlePhoneChange = (e) => {
+    setPhone(e.target.value); // This will automatically set activeStatus to true/false
+  };
   const handleStatusChange = (e) => {
     setActiveStatus(e.target.checked); // This will automatically set activeStatus to true/false
   };
@@ -83,6 +87,7 @@ const AdminAllDesigners = () => {
     e.preventDefault();
     try {
       const images = [profilePhoto, projectPhoto];
+      console.log('images', images)
       await updateDesigner({
         id,
         text,
@@ -93,12 +98,14 @@ const AdminAllDesigners = () => {
         instagram,
         behance,
         activeStatus, // Add activeStatus here
+        phone
       }).unwrap();
       alert("Designer updated successfully!");
       // Reset form and hide update section after success
       setText({ ge: "", en: "" });
       setName({ ge: "", en: "" });
       setImage(null);
+      setPhone("");
       setFacebook("");
       setInstagram("");
       setBehance("");
@@ -109,7 +116,7 @@ const AdminAllDesigners = () => {
       alert("Designer Update error:", error.message);
     }
   };
-  console.log(companyPerson)
+  // console.log(companyPerson)
 
   const handleShowUpdate = (item) => {
     setShowUpdate(!showUpdate);
@@ -119,6 +126,7 @@ const AdminAllDesigners = () => {
     setInstagram(item.instagram);
     setBehance(item.behance);
     setId(item._id);
+    setPhone(item.phone);
     setUpdateCol(updateCol === item._id ? null : item._id);
     setActiveStatus(item.activeStatus === true || false);
     console.log(item);
@@ -246,7 +254,7 @@ const AdminAllDesigners = () => {
                       onChange={handleProfilePhotoChange}
                       className="mb-2"
                     />
-                    <label htmlFor="projImag">profile image</label>
+                    <label htmlFor="projImag">project image</label>
                     <input
                       id="projImg"
                       type="file"
@@ -292,6 +300,12 @@ const AdminAllDesigners = () => {
                       onChange={(e) => handleNameChange("en", e)}
                       className="w-100 mb-2"
                       placeholder="English name"
+                    />
+                    <input
+                      value={phone}
+                      onChange={(e) => handlePhoneChange(e)}
+                      className="w-100 mb-2"
+                      placeholder="Phone"
                     />
                     <textarea
                       value={text.ge}

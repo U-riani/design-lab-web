@@ -40,7 +40,7 @@ const VisitBookPage = () => {
   const [endTime, setEndTime] = useState("");
   const [selectedTime, setSelectedTime] = useState(0);
 
-  console.log(visitDate);
+  // console.log(visitDate);
 
   const [bookVisit] = useBookVisitMutation();
   const { data: bookedTimes } = useGetBookedTimesQuery(
@@ -242,7 +242,7 @@ const VisitBookPage = () => {
     return isAfter(bookedDate, startDate); // Compare the times
   });
 
-    console.log(firstBooked);
+    // console.log(firstBooked);
     
     if (firstBooked) {
       return filteredEndTimes

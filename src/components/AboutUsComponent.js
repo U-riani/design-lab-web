@@ -12,7 +12,7 @@ const AboutUsComponent = () => {
   const { localStorageData, updateLocalStorageData } = useLocalStorage();
   const localAboutUsData = localStorageData.aboutUsMainPage;
 
-  console.log(localAboutUsData);
+  // console.log(localAboutUsData);
 
   // Helper function to compare news data arrays
   const isDataDifferent = (localData, serverData) => {

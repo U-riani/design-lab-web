@@ -12,8 +12,18 @@ const AdminprojectContentVideo = ({index, handleRefetch}) => {
   // const [updateProjectContentVideo] = useUpdateProjectsContentVideoMutation();
   const [loading, setLoading] = useState(false);
 
+    const getVideoId = (url) => {
+    const regExp =
+      /(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:watch\?v=|embed\/|v\/)?([\w-]{11})|(?:youtu\.be\/)([\w-]{11})/;
+    const match = url.match(regExp);
+    return match && (match[1] || match[2]);
+  };
+
+  // const videoId = getVideoId(youtubeUrl);
+
   const handleVideoChange = (value) => {
-    setVideo(value);
+    setVideo(getVideoId(value));
+    console.log(video)
   };
 
   //   const handleShowAddVideo = () => {
@@ -26,7 +36,7 @@ const AdminprojectContentVideo = ({index, handleRefetch}) => {
     handleRefetch('start')
     try {
       const response = await createProjectContentVideo({
-        video,
+        videoId: video,
         id: projectId,
         index
       }).unwrap();

@@ -9,7 +9,7 @@ import HeroBanner from '../../components/HeroBanner';
 
 const UnionLayout = () => {
   const projectsId = useParams().projectId;
-  console.log(projectsId);
+  // console.log(projectsId);
 
 
 

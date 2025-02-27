@@ -7,7 +7,7 @@ import {
   Container,
   Button,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // import useScreenWidth from "../hooks/useScreenWidth";
 
@@ -16,6 +16,7 @@ const NavbarComponent = () => {
   const flagUk = require("../images/flags/uk.png");
   // const screenWidth = useScreenWidth();
   const { t, i18n } = useTranslation();
+  const pathname = useLocation().pathname
 
   const [toggleLang, setTogglelang] = useState(
     localStorage.getItem("language") || i18n.language
@@ -68,32 +69,33 @@ const NavbarComponent = () => {
           onHide={handleCloseOffcanvas}
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title id={`offcanvasNavbarLabel-expand-lg`}>
+            <Offcanvas.Title id={`offcanvasNavbarLabel-expand-lg `}>
               {t("menu")}
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body className="mb-0">
             <Nav className="justify-content-end flex-grow-1  pe-0 pe-lg-3 column-gap-1 column-gap-lg-0 column-gap-xl-1 column-gap-xxl-2">
-              <Nav.Link as={Link} to="/" onClick={handleCloseOffcanvas}>
+              <Nav.Link as={Link} to="/" onClick={handleCloseOffcanvas} className={`${pathname === '/' && 'text-dark fw-bold'}`}>
                 {t("main")}
               </Nav.Link>
-              <Nav.Link as={Link} to="/aboutUs" onClick={handleCloseOffcanvas}>
+              <Nav.Link as={Link} to="/aboutUs" onClick={handleCloseOffcanvas} className={`${pathname === '/aboutUs' && 'text-dark fw-bold'}`}>
                 {t("aboutUs")}
               </Nav.Link>
-              <Nav.Link as={Link} to="/news" onClick={handleCloseOffcanvas}>
+              <Nav.Link as={Link} to="/news" onClick={handleCloseOffcanvas} className={`${pathname.includes('/news') && 'text-dark fw-bold'}`}>
                 {t("news")}
               </Nav.Link>
               <Nav.Link
                 as={Link}
                 to="/designers"
                 onClick={handleCloseOffcanvas}
+                className={`${pathname === '/designers' && 'text-dark fw-bold'}`}
               >
                 {t("designers")}
               </Nav.Link>
-              <Nav.Link as={Link} to="/projects" onClick={handleCloseOffcanvas}>
+              <Nav.Link as={Link} to="/projects" onClick={handleCloseOffcanvas} className={`${pathname.includes('/projects') && 'text-dark fw-bold'}`}>
                 {t("projects")}
               </Nav.Link>
-              <Nav.Link as={Link} to="/partners" onClick={handleCloseOffcanvas}>
+              <Nav.Link as={Link} to="/partners" onClick={handleCloseOffcanvas} className={`${pathname === '/partners' && 'text-dark fw-bold'}`}>
                 {t("partners")}
               </Nav.Link>
               
@@ -118,10 +120,11 @@ const NavbarComponent = () => {
                 as={Link}
                 to="/registration"
                 onClick={handleCloseOffcanvas}
+                className={`${pathname === '/registration' && 'text-dark fw-bold'}`}
               >
                 {t("registration")}
               </Nav.Link>
-              <Nav.Link as={Link} to="/contact" onClick={handleCloseOffcanvas}>
+              <Nav.Link as={Link} to="/contact" onClick={handleCloseOffcanvas} className={`${pathname === '/contact' && 'text-dark fw-bold'}`}>
                 {t("contact")}
               </Nav.Link>
               {/* <Nav.Link as={Link} to="/login" onClick={handleCloseOffcanvas}>

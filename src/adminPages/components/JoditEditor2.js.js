@@ -20,10 +20,10 @@ const JoditEditorComponent = () => {
       [lang]: e.target.value,
     }));
   };
-
+ 
   const handleSubmit = async () => {
-    const editorContentEn = editorRefEn.current?.getEditorValue() || "";
-    const editorContentGe = editorRefGe.current?.getEditorValue() || "";
+    const editorContentEn = editorRefEn.current?.value || "";
+    const editorContentGe = editorRefGe.current?.value || "";
   
     if (!editorContentEn || !editorContentGe) {
       alert("Please provide content in both English and Georgian.");

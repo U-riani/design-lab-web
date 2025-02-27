@@ -25,7 +25,7 @@ const PartnersComponent = () => {
 
   const { t } = useTranslation();
 
-  console.log("partners:", data);
+  // console.log("partners:", data);
   return (
     <Container fluid className="partnersComponent-container px-0 py-0 mb-0">
       <Row className="partnersComponent-inner-container px-0 mb-0">

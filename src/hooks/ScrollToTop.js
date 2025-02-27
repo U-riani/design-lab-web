@@ -5,7 +5,7 @@ import useScreenWidth from "./useScreenWidth";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   const screenWidth = useScreenWidth()
-  console.log(pathname);
+  // console.log(pathname);
 
   useEffect(() => {
     if (pathname === "/" || pathname.includes("/projects/")) {

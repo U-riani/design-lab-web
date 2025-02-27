@@ -22,7 +22,7 @@ import { useLocalStorage } from "../../context/LocalStorageContext";
 const DesignersPage = () => {
   const { localStorageData, updateLocalStorageData } = useLocalStorage();
   const localDesignersData = localStorageData.allDesigners;
-  console.log("storage", localStorageData.allDesigners);
+  // console.log("storage", localStorageData.allDesigners);
 
   const { t, i18n } = useTranslation();
   const { data: allDesigners } = useGetAllDesignersQuery();
@@ -53,7 +53,7 @@ const DesignersPage = () => {
 
   const handleOpenImage = (e) => {
     setOpenImage(e.target.src);
-    console.log(openImage);
+    // console.log(openImage);
     document.querySelector(".designers-page-row").classList.add("blur");
     document.querySelector(".space-component").classList.add("blur");
   };
@@ -97,12 +97,12 @@ const DesignersPage = () => {
               <Card className="designersPage-card">
                 <div className="designersPage-cards-images-top">
                   <div className="designersPage-background-image-container">
-                    <Card.Img src={item.images[1]} onClick={handleOpenImage} />
+                    <Card.Img src={item.images[1] || '/notAvaliableImage.jpg'} onClick={handleOpenImage} />
                   </div>
                   <div className="designersPage-designer-image-container">
                     <Card.Img
                       className="object-fit-cover"
-                      src={item.images[0]}
+                      src={item.images[0] || '/notAvaliableImage.jpg'}
                       onClick={handleOpenImage}
                     />
                   </div>

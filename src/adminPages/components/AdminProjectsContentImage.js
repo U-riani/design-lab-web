@@ -156,7 +156,7 @@ const AdminProjectsContentImage = ({ index, id, handleRefetch }) => {
         index,
         localIndex,
       });
-      console.log("--delete:", response);
+      console.log("--delete:", id, index, localIndex);
 
       // Update UI after delete
       const updatedImages = imagesFilesUpdate.filter(

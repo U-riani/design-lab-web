@@ -24,7 +24,7 @@ const HeroBanner = () => {
     }
   }, [allHeros,localHeroData]);
 
-  console.log("hero banner data", allHeros);
+  // console.log("hero banner data", allHeros);
   return (
     <Container fluid className="hero-banner px-0 ">
       {localHeroData && <HeroBannerCarousel data={localHeroData} />}
