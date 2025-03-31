@@ -51,10 +51,10 @@ const NavbarComponent = () => {
         <Navbar.Brand className="ms-0 ms-lg-3 py-0" as={Link} to="/">
           <img
             className="navbar-logo py-0 my-1 my-lg-2 my-xl-3"
-            src="/union-logo2.1.png"
+            src={`${i18n.language == "ge" ? "/union-logo2.3.png" : "/union-logo2.2.png" }`}
             alt="Union Logo"
           />
-          <h1 className="mb-0">{t("designersUnion")}</h1>
+          {/* <h1 className="mb-0">{t("designersUnion")}</h1> */}
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls={`offcanvasNavbar-expand-lg`}
