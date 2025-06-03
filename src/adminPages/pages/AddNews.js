@@ -11,7 +11,7 @@ const AddNews = () => {
 
       {/* Suspense with a fallback UI (spinner while loading) */}
       <Suspense fallback={<Spinner animation="border" role="status" />}>
-        <JoditEditorComponent2 />
+        <JoditEditorComponent2 parentComponent={"news"}/>
       </Suspense>
     </Container>
   );

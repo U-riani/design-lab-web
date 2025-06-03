@@ -1,11 +1,12 @@
 import React, { useState, useRef, Suspense } from "react";
 import { useCreateNewsMutation } from "../../data/newsSlice2";
 import { useTranslation } from "react-i18next";
+import { useCreateBlogsMutation } from "../../data/blogSlice";
 
 // Lazy load the JoditEditor
 const JoditEditor = React.lazy(() => import("jodit-react"));
 
-const JoditEditorComponent = () => {
+const JoditEditorComponent = ({parentComponent}) => {
   const [title, setTitle] = useState({ en: "", ge: "" });
   const [imageFiles, setImageFiles] = useState([]);
   const editorRefEn = useRef(null);
@@ -13,6 +14,7 @@ const JoditEditorComponent = () => {
   const fileInputRef = useRef(null);
   const { t } = useTranslation();
   const [createNews] = useCreateNewsMutation();
+  const [createBlog] = useCreateBlogsMutation();
 
   const handleTitleChange = (lang, e) => {
     setTitle((prev) => ({
@@ -41,8 +43,9 @@ const JoditEditorComponent = () => {
     });
   
     try {
-      await createNews(formData).unwrap();
-      alert("News saved successfully!");
+
+      const response = parentComponent === 'news' ? await createNews(formData).unwrap() : await createBlog(formData).unwrap();
+      alert(`${parentComponent} saved successfully!`);
       handleClearContent();
     } catch (error) {
       console.error("Error:", error);
@@ -162,7 +165,7 @@ const JoditEditorComponent = () => {
 
       <div className="mt-3">
         <button onClick={handleSubmit} className="btn btn-primary">
-          Save News Article
+          {parentComponent === 'news' ? "Save News Article" : "Save Blog"}
         </button>
         <button onClick={handleClearContent} className="btn btn-secondary ms-2">
           Clear Content

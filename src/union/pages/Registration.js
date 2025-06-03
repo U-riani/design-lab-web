@@ -90,7 +90,7 @@ const Registration = () => {
       }
     } catch (error) {
       setMessage({
-        text: "Technical issue, please try again",
+        text: t("imageSizeError"),
         variant: "danger",
       });
       // console.log(error);

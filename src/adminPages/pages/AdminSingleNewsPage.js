@@ -78,7 +78,7 @@ const AdminSingleNews = () => {
               <Suspense
                 fallback={<Spinner animation="border" variant="primary" />}
               >
-                <JoditUpdateEditor prop={news} />
+                <JoditUpdateEditor parentComponent={"news"} data={news} />
               </Suspense>
             </Row>
           )}

@@ -41,5 +41,8 @@
   "uploadedProjectsPhoto": "პროექტის ფოტო აიტვირთა",
   "behanceLink": "Behance Link",
   "instagramLink": "Instagram Link",
-  "facebookLink": "Facebook Link"
+  "facebookLink": "Facebook Link",
+  "imageSizeError": "გთხოვთ შეცვალოთ ფოტო. ორივე ფოტოს ზომა ჯამში არ უნდა აღემატებოდეს 4 მეგაბაიტს",
+  "blog": "ბლოგი"
+
 }

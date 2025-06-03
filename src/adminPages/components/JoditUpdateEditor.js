@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect, Suspense } from "react";
-import { useGetSingleNewsQuery, useUpdateNewsMutation } from "../../data/newsSlice2";
+import { useUpdateNewsMutation } from "../../data/newsSlice2";
 import { useParams } from "react-router-dom";
+import { useUpdateBlogsMutation } from "../../data/blogSlice";
 
 // Lazy load the JoditEditor component
 const JoditEditor = React.lazy(() => import("jodit-react"));
 
-const JoditUpdateEditor = () => {
-  const { newsId } = useParams();
-  const { data: news, isLoading, error } = useGetSingleNewsQuery(newsId);
+const JoditUpdateEditor = ({ data, parentComponent }) => {
   const [titleGe, setTitleGe] = useState("");
   const [titleEn, setTitleEn] = useState("");
   const [existingImages, setExistingImages] = useState([]); // Store existing images
@@ -19,16 +18,17 @@ const JoditUpdateEditor = () => {
   const fileInputRef = useRef(null);
 
   const [updateNews] = useUpdateNewsMutation();
+  const [updateBlog] = useUpdateBlogsMutation();
 
   useEffect(() => {
-    if (news) {
-      setTitleGe(news.title.ge);
-      setTitleEn(news.title.en);
-      setEditorContentGe(news.text.ge);
-      setEditorContentEn(news.text.en);
-      setExistingImages(news.images || []);
+    if (data) {
+      setTitleGe(data.title.ge);
+      setTitleEn(data.title.en);
+      setEditorContentGe(data.text.ge);
+      setEditorContentEn(data.text.en);
+      setExistingImages(data.images || []);
     }
-  }, [news]);
+  }, [data]);
 
   const handleTitleEnChange = (e) => setTitleEn(e.target.value);
   const handleTitleGeChange = (e) => setTitleGe(e.target.value);
@@ -40,17 +40,26 @@ const JoditUpdateEditor = () => {
 
   const handleSubmit = async () => {
     try {
-      await updateNews({
-        id: news._id,
-        title: { ge: titleGe, en: titleEn },
-        text: { ge: editorContentGe, en: editorContentEn },
-        images: newImages,
-      }).unwrap();
-      alert("News updated successfully!");
+      if (parentComponent === "blog") {
+        const response = await updateBlog({
+          id: data._id,
+          title: { ge: titleGe, en: titleEn },
+          text: { ge: editorContentGe, en: editorContentEn },
+          images: newImages,
+        }).unwrap();
+      } else if(parentComponent === "news") {
+        const response = await updateNews({
+          id: data._id,
+          title: { ge: titleGe, en: titleEn },
+          text: { ge: editorContentGe, en: editorContentEn },
+          images: newImages,
+        }).unwrap();
+      }
+      alert(`${parentComponent} updated successfully!`);
       handleClearContent();
     } catch (error) {
       console.log("Error:", error.message);
-      alert("Failed to update content: " + error.message);
+      alert("Failed to update content: - " + error.message);
     }
   };
 
@@ -71,17 +80,29 @@ const JoditUpdateEditor = () => {
       method: "POST",
       process: (resp) => ({ files: [resp.url] }),
     },
-    buttons: ["bold", "italic", "underline", "link", "ul", "ol", "image", "align", "undo", "redo", "hr"],
+    buttons: [
+      "bold",
+      "italic",
+      "underline",
+      "link",
+      "ul",
+      "ol",
+      "image",
+      "align",
+      "undo",
+      "redo",
+      "hr",
+    ],
     minHeight: 400,
   };
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
 
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
+  // if (error) {
+  //   return <p>Error: {error.message}</p>;
+  // }
 
   return (
     <div className="joditComponent-container">
@@ -111,11 +132,21 @@ const JoditUpdateEditor = () => {
       <div className="gela">
         <h5>Existing Images:</h5>
         {existingImages.map((img, index) => (
-          <img key={index} src={img} alt="Existing" style={{ width: "200px", margin: "10px" }} />
+          <img
+            key={index}
+            src={img}
+            alt="Existing"
+            style={{ width: "200px", margin: "10px" }}
+          />
         ))}
         <h5>New Images:</h5>
         {newImages.map((file, index) => (
-          <img key={index} src={URL.createObjectURL(file)} alt="New" style={{ width: "200px", margin: "10px" }} />
+          <img
+            key={index}
+            src={URL.createObjectURL(file)}
+            alt="New"
+            style={{ width: "200px", margin: "10px" }}
+          />
         ))}
       </div>
 
@@ -153,7 +184,7 @@ const JoditUpdateEditor = () => {
 
       <div className="mt-3">
         <button onClick={handleSubmit} className="btn btn-primary">
-          Update News Article
+          {parentComponent === 'blog' ? 'Update Blog' : 'Update News Article'}
         </button>
         <button onClick={handleClearContent} className="btn btn-secondary ms-2">
           Clear Content

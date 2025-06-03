@@ -57,6 +57,14 @@ const AdminNavbar = () => {
                 ALL PARTNERS
               </NavDropdown.Item>
             </NavDropdown>
+            <NavDropdown title="Blog" id="basic-nav-dropdown">
+              <NavDropdown.Item as={Link} to="add-blog">
+                ADD Blog
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="all-blogs">
+                ALL Blogs
+              </NavDropdown.Item>
+            </NavDropdown>
             <NavDropdown title="DESIGNERS" id="basic-nav-dropdown">
               <NavDropdown.Item as={Link} to="add-designer">
                 ADD DESIGNER

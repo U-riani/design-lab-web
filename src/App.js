@@ -10,6 +10,7 @@ import ProjectsPage from "./union/pages/ProjectsPage";
 import PartnersPage from "./union/pages/PartnersPage";
 import ContactPage from "./union/pages/ContactPage";
 import SingleNewsPage from "./union/pages/SingleNewsPage";
+import BlogsPage from "./union/pages/BlogsPage";
 
 import AddNews from "./adminPages/pages/AddNews";
 import AdminLayout from "./adminPages/adminlayout/AdminLayout";
@@ -39,6 +40,10 @@ import AdminAddAboutUs from "./adminPages/pages/AdminAddAboutUs";
 import AdminEditAboutUs from "./adminPages/pages/AdminEditAboutUs";
 import AdminAddAboutUsMainPage from "./adminPages/pages/AdminAddAboutUsMainPage";
 import AdminEditAboutUsMainPage from "./adminPages/pages/AdminUpdateAboutUsMainPage";
+import AdminAddBlogs from "./adminPages/pages/AdminAddBlogs";
+import SingleBlogPage from "./union/pages/SingleBlogPage";
+import AdminAllBlogs from "./adminPages/pages/AdminAllBlogs";
+import AdminEditBlog from "./adminPages/pages/AdminEditBlog";
 
 const App = () => (
   <AuthProvider>
@@ -63,6 +68,18 @@ const App = () => (
             <Route
               path="all-news/:newsId"
               element={<ProtectedRoute element={<AdminSingleNews />} />}
+            />
+            <Route
+              path="add-blog"
+              element={<ProtectedRoute element={<AdminAddBlogs />} />}
+            />
+            <Route
+              path="all-blogs"
+              element={<ProtectedRoute element={<AdminAllBlogs />} />}
+            />
+            <Route
+              path="all-blogs/:blogId"
+              element={<ProtectedRoute element={<AdminEditBlog />} />}
             />
             <Route
               path="add-hero"
@@ -124,6 +141,8 @@ const App = () => (
             <Route path="news/:newsId" element={<SingleNewsPage />} />
             <Route path="designers" element={<DesignersPage />} />
             <Route path="projects" element={<ProjectsPage />} />
+            <Route path="blog" element={<BlogsPage />} />
+            <Route path="blog/:blogId" element={<SingleBlogPage />} />
             <Route path="projects/:projectId" element={<SingleProject />} />
             <Route path="partners" element={<PartnersPage />} />
             <Route path="aboutUs" element={<AboutUs />} />

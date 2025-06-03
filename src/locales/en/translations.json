@@ -41,5 +41,7 @@
   "uploadedProjectsPhoto": "Profile Photo Uploaded",
   "behanceLink": "Behance Link",
   "instagramLink": "Instagram Link",
-  "facebookLink": "Facebook Link"
+  "facebookLink": "Facebook Link",
+  "imageSizeError": "Too big image, max size for profile and cover photo is 4MB",
+  "blog": "BLOG"
 }
