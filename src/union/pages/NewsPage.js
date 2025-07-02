@@ -1,30 +1,61 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import he from "he";
 import { Alert, Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useGetAllNewsQuery } from "../../data/newsSlice2";
+import { useGetAllNewsQuery, useGetSomeNewsQuery } from "../../data/newsSlice2";
 import { useTranslation } from "react-i18next";
 import { useLocalStorage } from "../../context/LocalStorageContext";
 import SpaceComponent from "../../components/SpaceComponent";
+import Paginations from "../../components/Paginations";
+import { useSearchParams } from "react-router-dom";
 
 const NewsPage = () => {
-  const { data: serverNewsData, isLoading, error } = useGetAllNewsQuery();
+  const SpaceComonentRef = useRef(null);
   const { t, i18n } = useTranslation();
   const { localStorageData, updateLocalStorageData } = useLocalStorage();
   const newsData = localStorageData.allNews;
+  const itemsPerPage = 3;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
-  // Helper function to compare news data arrays
-  const isDataDifferent = (localData, serverData) => {
-    if (!localData || localData.length !== serverData.length) return true;
-    return JSON.stringify(localData) !== JSON.stringify(serverData);
-  };
+  const [totalItems, setTotalItems] = useState(100);
+  const [visibleDesigners, setVisibleDesigners] = useState([]);
+  const {
+    data: serverNewsData,
+    isLoading,
+    error,
+  } = useGetSomeNewsQuery({ page: currentPage, limit: itemsPerPage });
 
-  // Load data from server and update localStorage if data has changed
   useEffect(() => {
-    if (serverNewsData && isDataDifferent(newsData, serverNewsData)) {
-      updateLocalStorageData("allNews", serverNewsData);
+    if (serverNewsData?.data) {
+      setTotalItems(serverNewsData.totalCount);
+
+      if (currentPage === 1) {
+        const cached = localStorageData.serverNewsData;
+        const isDifferent =
+          !cached ||
+          JSON.stringify(cached.data) !== JSON.stringify(serverNewsData.data);
+
+        if (isDifferent) {
+          updateLocalStorageData("allNews", serverNewsData);
+        }
+
+        setVisibleDesigners(cached?.data || serverNewsData.data);
+      } else {
+        setVisibleDesigners(serverNewsData.data);
+      }
     }
-  }, [serverNewsData]);
+  }, [serverNewsData, currentPage]);
+
+  useEffect(() => {
+    if (SpaceComonentRef.current) {
+      const y =
+        SpaceComonentRef.current.getBoundingClientRect().top +
+        window.pageYOffset -
+        74;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  }, [currentPage]);
 
   const extractTextRegex = (html) => {
     const textOnly = html.replace(/<[^>]*>/g, " ");
@@ -50,14 +81,18 @@ const NewsPage = () => {
 
   return (
     <Container fluid className="newsPage px-0">
-      <SpaceComponent info={{ h1: t("news") }} className="w-100" />
-      <Row className="newsPage-row newsPage-row-2 px-md-4 mt-3 mt-md-4 mt-lg-5">
-        {newsData &&
-          newsData.map((el, i) => (
+      <SpaceComponent
+        ref={SpaceComonentRef}
+        info={{ h1: t("news") }}
+        className="w-100"
+      />
+      <Row className="newsPage-row newsPage-row-2 px-md-4 my-3 my-md-4 my-lg-5">
+        {visibleDesigners &&
+          visibleDesigners.map((el, i) => (
             <Col
               xs={12}
               key={i}
-              className={`py-3 px-md-4 pb-md-4 mb-3 mb-md-4 mb-lg-5 newsPage-col newsPage-col-${
+              className={`py-3 px-md-4 pb-md-4 mb-3  newsPage-col newsPage-col-${
                 i + 1
               }`}
             >
@@ -114,6 +149,14 @@ const NewsPage = () => {
               </div>
             </Col>
           ))}
+        <Col sm={12} className="pt-0">
+          <Paginations
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={(page) => setSearchParams({ page })}
+          />
+        </Col>
       </Row>
     </Container>
   );

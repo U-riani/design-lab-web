@@ -84,9 +84,6 @@ const BlogsPage = () => {
             const containerHeight = container.getBoundingClientRect().height;
             const titleHeight = title.getBoundingClientRect().height;
             const availableHeight = containerHeight - titleHeight - 8;
-            console.log(
-              `container(${containerHeight}) - title(${titleHeight}) = availableHeight(${availableHeight})`
-            );
 
             return Math.floor(availableHeight / lineHeight);
           }
@@ -100,6 +97,7 @@ const BlogsPage = () => {
       return () => clearTimeout(timeoutId);
     }
   }, [blogsData, i18n.language]);
+
 
   if (!blogsData && isLoading) {
     return (
@@ -122,9 +120,10 @@ const BlogsPage = () => {
     <Container fluid className="newsPage px-0">
       <SpaceComponent info={{ h1: t("blog") }} className="w-100" />
       <Row className="newsPage-row newsPage-row-2 px-md-4 mt-3 mt-md-4 mt-lg-5">
+        {blogsData && blogsData.length < 1 && <h4 className="py-4">{t("BlogComingSoon")}</h4>}
         {blogsData &&
           blogsData.map((el, i) => (
-            <Col xs={12} sm={6} lg={4} className="mb-4" key={i}>
+            <Col xs={12} sm={6} lg={4} className={`mb-4 blog-${i + 1}`} key={i}>
               <Link
                 to={`${el._id}`}
                 className="card blogs-card rounded-0 border-0"

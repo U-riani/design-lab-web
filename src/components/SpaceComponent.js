@@ -1,7 +1,7 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Container, Row } from "react-bootstrap";
 
-const SpaceComponent = ({ info }) => {
+const SpaceComponent = forwardRef(({ info }, ref) => {
   const arrow = document.querySelector(".space-component-arrow-left");
   const parent = document.querySelector(".space-component-inner-container");
 
@@ -13,7 +13,7 @@ const SpaceComponent = ({ info }) => {
   }
 
   return (
-    <Container fluid id="space-component" className="space-component p-0  mb-0">
+    <Container ref={ref} fluid id="space-component" className="space-component p-0  mb-0">
       <div className="space-componentarrow-right"></div>
       <Row className="space-component-inner-container ms-0  pb-1 mb-0">
         <div className="space-component-arrow-left-container">
@@ -46,6 +46,6 @@ const SpaceComponent = ({ info }) => {
       </Row>
     </Container>
   );
-};
+});
 
 export default SpaceComponent;

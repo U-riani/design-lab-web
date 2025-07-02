@@ -6,13 +6,17 @@ import {
   FloatingLabel,
   Form,
   Button,
+  Alert,
+  Spinner,
 } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useCreateDesignerMutation } from "../../data/designersSlice2";
 
 const AdminAddDesigner = () => {
+  const maxSize = 10 * 1024 * 1024; // 10MB
   const [createDesigner] = useCreateDesignerMutation();
   const { t } = useTranslation();
+
   const [name, setName] = useState({ ge: "", en: "" });
   const [text, setText] = useState({ ge: "", en: "" });
   const [email, setEmail] = useState("");
@@ -24,32 +28,54 @@ const AdminAddDesigner = () => {
   const [instagram, setInstagram] = useState("");
   const [companyPerson, setCompanyPerson] = useState("person");
 
-  const handleProfilePhotoChange = (e) => {
-    if (e.target.files) setProfilePhoto(e.target.files[0]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ text: "", variant: "" });
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  const clearForm = () => {
+    setName({ ge: "", en: "" });
+    setText({ ge: "", en: "" });
+    setEmail("");
+    setPhone("");
+    setProfilePhoto(null);
+    setProjectPhoto(null);
+    setBehance("");
+    setFacebook("");
+    setInstagram("");
+    setCompanyPerson("person");
+    setFieldErrors({});
   };
 
-  const handleProjectPhotoChange = (e) => {
-    if (e.target.files) setProjectPhoto(e.target.files[0]);
-  };
+  const validateForm = () => {
+    const errors = {};
 
-  const handleCompanyPersonChange = (e) => {
-    setCompanyPerson(e.target.value);
-  };
+    if (!name.ge.trim()) errors.name = t("nameRequired");
+    if (!email.trim()) errors.email = t("emailRequired");
+    else if (!/\S+@\S+\.\S+/.test(email)) errors.email = t("invalidEmail");
 
-  const handleNameChange = (lang, e) => {
-    setName((prev) => ({
-      ...prev,
-      [lang]: e.target.value,
-    }));
-  };
-  const handleTextChange = (lang, e) => {
-    setText((prev) => ({
-      ...prev,
-      [lang]: e.target.value,
-    }));
+    if (!phone.trim()) errors.phone = t("phoneRequired");
+    else if (!/^\+?\d{7,15}$/.test(phone)) errors.phone = t("invalidPhone");
+
+    if (profilePhoto && profilePhoto.size > maxSize)
+      errors.profilePhoto = t("maxSizeErroProfilePhoto");
+
+    if (projectPhoto && projectPhoto.size > maxSize)
+      errors.projectPhoto = t("maxSizeErroProjectPhoto");
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
+    setMessage({ text: "", variant: "" });
+
+    const isValid = validateForm();
+    if (!isValid) {
+      setIsLoading(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name[ge]", name.ge);
     formData.append("name[en]", name.en);
@@ -62,189 +88,232 @@ const AdminAddDesigner = () => {
     formData.append("behance", behance);
     formData.append("companyPerson", companyPerson);
     formData.append("activeStatus", "true");
+    formData.append("role", "admin");
 
-    if (profilePhoto) formData.append("images", profilePhoto);
-    if (projectPhoto) formData.append("images", projectPhoto);
+    if (profilePhoto) formData.append("profileImage", profilePhoto);
+    if (projectPhoto) formData.append("projectImage", projectPhoto);
 
     try {
       await createDesigner(formData).unwrap();
+      setMessage({ text: t("successfullyRegistered"), variant: "success" });
+      clearForm();
     } catch (error) {
-      console.log(error);
+      const backendMessage =
+        error?.data?.message || error?.error || error?.message || t("somethingWentWrong");
+      setMessage({ text: backendMessage, variant: "danger" });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleProfilePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > maxSize) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        profilePhoto: t("maxSizeErroProfilePhoto"),
+      }));
+      setProfilePhoto(null);
+    } else {
+      setFieldErrors((prev) => {
+        const { profilePhoto, ...rest } = prev;
+        return rest;
+      });
+      setProfilePhoto(file);
+    }
+  };
+
+  const handleProjectPhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > maxSize) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        projectPhoto: t("maxSizeErroProjectPhoto"),
+      }));
+      setProjectPhoto(null);
+    } else {
+      setFieldErrors((prev) => {
+        const { projectPhoto, ...rest } = prev;
+        return rest;
+      });
+      setProjectPhoto(file);
     }
   };
 
   return (
-    <Container fluid className="px-0">
+    <Container>
       <Row>
         <Col className="d-flex justify-content-center">
-          <Form className="registration-form">
-            <FloatingLabel
-              controlId="floatingInput"
-              label="სრული სახელი"
-              className="mb-3"
-            >
+          <Form className="registration-form p-4">
+            <FloatingLabel label={t("fullName")} className="mb-3">
               <Form.Control
                 value={name.ge}
-                onChange={(e) => handleNameChange('ge', e)}
-                type="text"
-                placeholder="Full name"
+                onChange={(e) => {
+                  setName((prev) => ({ ...prev, ge: e.target.value }));
+                  setFieldErrors((prev) => {
+                    const { name, ...rest } = prev;
+                    return rest;
+                  });
+                }}
+                isInvalid={!!fieldErrors.name}
+                placeholder={t("fullName")}
               />
+              <Form.Control.Feedback type="invalid">
+                {fieldErrors.name}
+              </Form.Control.Feedback>
             </FloatingLabel>
-            <FloatingLabel
-              controlId="floatingInput"
-              label="Full name ENG"
-              className="mb-3"
-            >
+
+            <FloatingLabel label="Full name ENG" className="mb-3">
               <Form.Control
                 value={name.en}
-                onChange={(e) => handleNameChange('en', e)}
-                type="text"
+                onChange={(e) => setName((prev) => ({ ...prev, en: e.target.value }))}
                 placeholder="Full name ENG"
               />
             </FloatingLabel>
 
-            <textarea
+            <Form.Control
+              as="textarea"
+              rows={3}
+              className="mb-3"
               value={text.ge}
-              rows={3}
-              onChange={(e) => handleTextChange('ge', e)}
-              type="text"
+              onChange={(e) => setText((prev) => ({ ...prev, ge: e.target.value }))}
               placeholder="ქართ ტექსტი"
-              className="mb-3"
             />
-
-            <textarea
+            <Form.Control
+              as="textarea"
               rows={3}
-              value={text.en}
-              onChange={(e) => handleTextChange('en', e)}
-              type="text"
-              placeholder="TEXT ENG"
               className="mb-3"
+              value={text.en}
+              onChange={(e) => setText((prev) => ({ ...prev, en: e.target.value }))}
+              placeholder="Text ENG"
             />
 
-            <div className="mb-3">
-              <p>COMPANY / PERSON</p>
-              <Form.Check
-                type="radio"
-                label="Company"
-                name="companyPerson"
-                value="company"
-                checked={companyPerson === "company"}
-                onChange={handleCompanyPersonChange}
-              />
-              <Form.Check
-                type="radio"
-                label="Person"
-                name="companyPerson"
-                value="person"
-                checked={companyPerson === "person"}
-                onChange={handleCompanyPersonChange}
-              />
-            </div>
-
-            <FloatingLabel
-              controlId="floatingEmail"
-              label="Email address"
-              className="mb-3"
-            >
+            <FloatingLabel label="Email" className="mb-3">
               <Form.Control
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 type="email"
-                placeholder="Email address"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setFieldErrors((prev) => {
+                    const { email, ...rest } = prev;
+                    return rest;
+                  });
+                }}
+                isInvalid={!!fieldErrors.email}
               />
+              <Form.Control.Feedback type="invalid">
+                {fieldErrors.email}
+              </Form.Control.Feedback>
             </FloatingLabel>
 
-            <FloatingLabel
-              controlId="floatingPhone"
-              label="Phone number"
-              className="mb-3"
-            >
+            <FloatingLabel label="Phone" className="mb-3">
               <Form.Control
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
                 type="tel"
-                placeholder="Phone number"
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  setFieldErrors((prev) => {
+                    const { phone, ...rest } = prev;
+                    return rest;
+                  });
+                }}
+                isInvalid={!!fieldErrors.phone}
               />
+              <Form.Control.Feedback type="invalid">
+                {fieldErrors.phone}
+              </Form.Control.Feedback>
             </FloatingLabel>
 
             <FloatingLabel
-              controlId="floatingProfilePhoto"
-              label="Upload profile photo"
-              className="mb-3"
+              label={fieldErrors.profilePhoto ? t("uploadProfilePhoto") : profilePhoto ? t("uploadedProfilePhoto") : t("uploadProfilePhoto")}
+              className={`upload-label mb-3 ${
+                fieldErrors.profilePhoto
+                  ? "is-invalid border border-danger rounded-2"
+                  : profilePhoto
+                  ? "border border-success rounded-2"
+                  : ""
+              }`}
             >
+              <div
+                className="form-control"
+                onClick={() => document.getElementById("adminProfilePhoto").click()}
+              >
+                {profilePhoto?.name || t("clickToUpload")}
+              </div>
               <Form.Control
+                id="adminProfilePhoto"
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
                 onChange={handleProfilePhotoChange}
-                type="file"
-                accept="image/*"
               />
-              {profilePhoto && (
-                <img
-                  src={URL.createObjectURL(profilePhoto)}
-                  alt="Profile Preview"
-                  style={{ width: "100px", marginTop: "10px" }}
-                />
-              )}
             </FloatingLabel>
 
             <FloatingLabel
-              controlId="floatingProjectPhoto"
-              label="Upload project's photo"
-              className="mb-3"
+              label={fieldErrors.projectPhoto ? t("uploadProjectsPhoto") : projectPhoto ? t("uploadedProjectsPhoto") : t("uploadProjectsPhoto")}
+              className={`upload-label mb-3 ${
+                fieldErrors.projectPhoto
+                  ? "is-invalid border border-danger rounded-2"
+                  : projectPhoto
+                  ? "border border-success rounded-2"
+                  : ""
+              }`}
             >
+              <div
+                className="form-control"
+                onClick={() => document.getElementById("adminProjectPhoto").click()}
+              >
+                {projectPhoto?.name || t("clickToUpload")}
+              </div>
               <Form.Control
+                id="adminProjectPhoto"
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
                 onChange={handleProjectPhotoChange}
-                type="file"
-                accept="image/*"
               />
-              {projectPhoto && (
-                <img
-                  src={URL.createObjectURL(projectPhoto)}
-                  alt="Project Preview"
-                  style={{ width: "100px", marginTop: "10px" }}
-                />
-              )}
             </FloatingLabel>
 
-            <FloatingLabel
-              controlId="floatingBehance"
-              label="Behance link"
-              className="mb-3"
-            >
+            {/* Social Links */}
+            <FloatingLabel label="Behance / Website" className="mb-3">
               <Form.Control
+                type="url"
                 value={behance}
                 onChange={(e) => setBehance(e.target.value)}
-                type="url"
-                placeholder="Behance link"
               />
             </FloatingLabel>
-
-            <FloatingLabel
-              controlId="floatingInstagram"
-              label="Instagram link"
-              className="mb-3"
-            >
+            <FloatingLabel label="Instagram" className="mb-3">
               <Form.Control
+                type="url"
                 value={instagram}
                 onChange={(e) => setInstagram(e.target.value)}
-                type="url"
-                placeholder="Instagram link"
               />
             </FloatingLabel>
-
-            <FloatingLabel
-              controlId="floatingFacebook"
-              label="Facebook link"
-              className="mb-3"
-            >
+            <FloatingLabel label="Facebook" className="mb-3">
               <Form.Control
+                type="url"
                 value={facebook}
                 onChange={(e) => setFacebook(e.target.value)}
-                type="url"
-                placeholder="Facebook link"
               />
             </FloatingLabel>
 
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className="w-100 py-2 fw-bold"
+            >
+              {isLoading ? <Spinner animation="border" size="sm" /> : t("submit")}
+            </Button>
+
+            {message.text && (
+              <Alert variant={message.variant} className="mt-3">
+                {message.text}
+              </Alert>
+            )}
           </Form>
         </Col>
       </Row>

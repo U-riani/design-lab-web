@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import he from "he";
 
-import { Alert, Button, Col, Container, Row, Spinner } from "react-bootstrap";
+import { Alert, Col, Container, Row, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGetAllBlogsQuery } from "../../data/blogSlice";
@@ -9,12 +9,6 @@ import { useGetAllBlogsQuery } from "../../data/blogSlice";
 const AdminAllBlogs = () => {
   const { data: allBlogs, isLoading, error, refetch } = useGetAllBlogsQuery();
   const { i18n } = useTranslation();
-  // const extractText = (html) => {
-  //   console.log(html);
-  //   const parser = new DOMParser();
-  //   const doc = parser.parseFromString(html, "text/html");
-  //   return doc.body.textContent || "";
-  // };
   const extractTextRegex = (html) => {
     const textOnly = html.replace(/<[^>]*>/g, " ");
     // Decode HTML entities

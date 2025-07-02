@@ -12,6 +12,7 @@ const HeroBannerCarousel = ({ data }) => {
         className="h-100 hero-banner-carousel"
         autoPlay={true}
         touch={true}
+        controls={true}
       >
         {data &&
           data.map((el, i) => (

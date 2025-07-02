@@ -34,14 +34,21 @@
   "person": "Person",
   "company": "Company",
   "phoneNumber": "Phone Number",
+  "nameRequired": "Name is required",
+  "emailRequired": "Email is required",
+  "phoneRequired": "Phone number is required",
   "uploadProfilePhoto": "Upload Profile Photo",
   "uploadProjectsPhoto": "Upload Project's Photo",
   "errorPhotoSize": "max size 10MB",
   "uploadedProfilePhoto": "Profile Photo Uploaded",
   "uploadedProjectsPhoto": "Profile Photo Uploaded",
+  "maxSizeErroProfilePhoto": "profile image size should not exceed 10MB",
+  "maxSizeErroProjectPhoto": "project image size should not exceed 10MB",
   "behanceLink": "Behance Link",
   "instagramLink": "Instagram Link",
   "facebookLink": "Facebook Link",
   "imageSizeError": "Too big image, max size for profile and cover photo is 4MB",
-  "blog": "BLOG"
+  "blog": "BLOG",
+    "BlogComingSoon": "Blog coming soon"
+
 }

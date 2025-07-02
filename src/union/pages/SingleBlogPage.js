@@ -10,7 +10,6 @@ const SingleBlogPage = () => {
   const { t, i18n } = useTranslation();
   const blogsData = useLocalStorage().localStorageData.allBlogs;
   const blog = blogsData.find((blog) => blog._id.toString() === id.toString());
-  console.log(blog);
 
   return (
     <Container

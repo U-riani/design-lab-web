@@ -34,8 +34,7 @@ const AdminAllDesigners = () => {
   const [updateCol, setUpdateCol] = useState(null);
   const [text, setText] = useState({ ge: "", en: "" });
   const [name, setName] = useState({ ge: "", en: "" });
-  const [image, setImage] = useState(null);
-  const [phone, setPhone] = useState('')
+  const [phone, setPhone] = useState("");
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [projectPhoto, setProjectPhoto] = useState(null);
   const [facebook, setFacebook] = useState("");
@@ -43,12 +42,8 @@ const AdminAllDesigners = () => {
   const [behance, setBehance] = useState("");
   const [activeStatus, setActiveStatus] = useState(false);
   const [companyPerson, setCompanyPerson] = useState("");
+  const [email, setEmail] = useState("");
   const [id, setId] = useState(null);
-
-  // console.log(allDesigners);
-  // const handleImageChange = (e) => {
-  //   setImage(e.target.files[0]);
-  // };
 
   const handleProfilePhotoChange = (e) => {
     setProfilePhoto(e.target.files[0]);
@@ -72,51 +67,54 @@ const AdminAllDesigners = () => {
     }));
   };
 
-  // const handleCompanynameChange = (e) => {
-  //   setCompanyPerson(e.target.value); // This will automatically set activeStatus to true/false
-  // };
-
   const handlePhoneChange = (e) => {
-    setPhone(e.target.value); // This will automatically set activeStatus to true/false
+    setPhone(e.target.value);
   };
+
   const handleStatusChange = (e) => {
-    setActiveStatus(e.target.checked); // This will automatically set activeStatus to true/false
+    setActiveStatus(e.target.checked);
   };
-  console.log(companyPerson);
+
   const handleSubmitUpdate = async (e) => {
     e.preventDefault();
     try {
-      const images = [profilePhoto, projectPhoto];
-      console.log('images', images)
       await updateDesigner({
         id,
         text,
         name,
         companyPerson,
-        images,
+        profilePhoto: profilePhoto instanceof File ? profilePhoto : undefined,
+        projectPhoto: projectPhoto instanceof File ? projectPhoto : undefined,
         facebook,
         instagram,
         behance,
-        activeStatus, // Add activeStatus here
-        phone
-      }).unwrap();
+        activeStatus,
+        phone,
+        email,
+      });
       alert("Designer updated successfully!");
+
       // Reset form and hide update section after success
       setText({ ge: "", en: "" });
       setName({ ge: "", en: "" });
-      setImage(null);
+      setProfilePhoto(null);
+      setProjectPhoto(null);
       setPhone("");
       setFacebook("");
       setInstagram("");
       setBehance("");
-      setActiveStatus(false); // Reset activeStatus after successful update
+      setEmail("");
+      setActiveStatus(false);
+      setCompanyPerson("");
       setShowUpdate(false);
       setUpdateCol(null);
     } catch (error) {
-      alert("Designer Update error:", error.message);
+      console.log(error);
+      alert(
+        "Designer Update error: " + (error?.data?.message || error?.message)
+      );
     }
   };
-  // console.log(companyPerson)
 
   const handleShowUpdate = (item) => {
     setShowUpdate(!showUpdate);
@@ -129,10 +127,12 @@ const AdminAllDesigners = () => {
     setPhone(item.phone);
     setUpdateCol(updateCol === item._id ? null : item._id);
     setActiveStatus(item.activeStatus === true || false);
-    console.log(item);
     setCompanyPerson(item.companyPerson);
-    setProfilePhoto(item.images[0]);
-    setProjectPhoto(item.images[1]);
+    setEmail(item.email);
+
+    // Use optional chaining and fallback to null
+    setProfilePhoto(item.profilePhoto?.[0] || null);
+    setProjectPhoto(item.projectPhoto?.[0] || null);
   };
 
   const handleDelete = async (id) => {
@@ -172,18 +172,17 @@ const AdminAllDesigners = () => {
                 <Card className="designersPage-card">
                   <div className="designersPage-cards-images-top">
                     <div className="designersPage-background-image-container">
-                      <Card.Img src={item.images[1]} />
+                      <Card.Img src={item.projectPhoto?.[0] || null} />
                     </div>
                     <div className="designersPage-designer-image-container">
                       <Card.Img
-                        src={item.images[0]}
+                        src={item.profilePhoto?.[0] || null}
                         className="object-fit-cover"
                       />
                     </div>
                   </div>
                   <Card.Body className="designersPage-card-body text-white">
                     <Card.Title>{item.name[i18n.language]}</Card.Title>
-                    {/* <Card.Title>{item.companyPerson}</Card.Title> */}
                     <Card.Text>{item.text[i18n.language]}</Card.Text>
                     <ButtonGroup
                       aria-label="designersPage-button-group"
@@ -242,11 +241,6 @@ const AdminAllDesigners = () => {
                 </div>
                 {updateCol === item._id && (
                   <form onSubmit={handleSubmitUpdate} className="mt-3">
-                    {/* <input
-                      type="file"
-                      onChange={handleProfilePhotoChange}
-                      className="mb-2"
-                    /> */}
                     <label htmlFor="profImag">profile image</label>
                     <input
                       id="profImg"
@@ -351,9 +345,6 @@ const AdminAllDesigners = () => {
                     </Button>
                   </form>
                 )}
-                {/* {allDesigners &&
-                    allDesigners.map((item, i) => (
-                    ))} */}
               </Col>
             </Col>
           ))}

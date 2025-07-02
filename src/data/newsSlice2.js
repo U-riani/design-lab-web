@@ -29,6 +29,10 @@ export const apiNewsSlice = createApi({
     getLast5News: builder.query({
       query: () => `last5News`,
     }),
+    getSomeNews: builder.query({
+      query: ({ page = 1, limit = 8 }) =>
+        `paginated?page=${page}&limit=${limit}`,
+    }),
 
     deleteNews: builder.mutation({
       query: (id) => ({
@@ -75,6 +79,7 @@ export const {
   useGetSingleNewsQuery,
   useCreateNewsMutation,
   useGetLast5NewsQuery,
+  useGetSomeNewsQuery,
   useDeleteNewsMutation,
   useUpdateNewsMutation,
 } = apiNewsSlice;

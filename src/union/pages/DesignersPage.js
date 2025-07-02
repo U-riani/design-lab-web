@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -16,153 +16,195 @@ import {
 import { faXmark, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import SpaceComponent from "../../components/SpaceComponent";
 import { useTranslation } from "react-i18next";
-import { useGetAllDesignersQuery } from "../../data/designersSlice2";
+import { useGetSomeDesignersQuery } from "../../data/designersSlice2";
 import { useLocalStorage } from "../../context/LocalStorageContext";
+import Paginations from "../../components/Paginations";
+import { getVersionedImage } from "../../utils/imageUtils";
+import { useSearchParams } from "react-router-dom";
 
 const DesignersPage = () => {
+  const SpaceComonentRef = useRef(null);
+
   const { localStorageData, updateLocalStorageData } = useLocalStorage();
-  const localDesignersData = localStorageData.allDesigners;
-  // console.log("storage", localStorageData.allDesigners);
-
   const { t, i18n } = useTranslation();
-  const { data: allDesigners } = useGetAllDesignersQuery();
-  // const [activeDesigners, setAllDesigners] = useState([]);
+
+  const itemsPerPage = 12;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+  const [totalItems, setTotalItems] = useState(100);
   const [openImage, setOpenImage] = useState(null);
+  const [visibleDesigners, setVisibleDesigners] = useState([]);
 
-  // Helper function to compare news data arrays
-  const isDataDifferent = (localData, serverData) => {
-    if (!localData || localData.length !== serverData.length) return true;
-    return JSON.stringify(localData) !== JSON.stringify(serverData);
-  };
+  const { data: allDesigners } = useGetSomeDesignersQuery({
+    page: currentPage,
+    limit: itemsPerPage,
+  });
 
-  // Load data from server and update localStorage if data has changed
+  // Only compare and cache on page 1
   useEffect(() => {
-    if (
-      allDesigners &&
-      isDataDifferent(
-        localDesignersData,
-        allDesigners?.filter((item) => item.activeStatus)
-      )
-    ) {
-      updateLocalStorageData(
-        "allDesigners",
-        allDesigners?.filter((item) => item.activeStatus)
-      );
+    if (allDesigners?.data) {
+      setTotalItems(allDesigners.totalCount);
+
+      if (currentPage === 1) {
+        const cached = localStorageData.allDesigners;
+        const isDifferent =
+          !cached ||
+          JSON.stringify(cached.data) !== JSON.stringify(allDesigners.data);
+
+        if (isDifferent) {
+          updateLocalStorageData("allDesigners", allDesigners);
+        }
+
+        setVisibleDesigners(cached?.data || allDesigners.data);
+      } else {
+        setVisibleDesigners(allDesigners.data);
+      }
     }
-  }, [allDesigners, localDesignersData]);
+  }, [allDesigners, currentPage]);
+
+  useEffect(() => {
+    if (SpaceComonentRef.current) {
+      const y =
+        SpaceComonentRef.current.getBoundingClientRect().top +
+        window.pageYOffset -
+        74;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  }, [currentPage]);
 
   const handleOpenImage = (e) => {
     setOpenImage(e.target.src);
-    // console.log(openImage);
-    document.querySelector(".designers-page-row").classList.add("blur");
-    document.querySelector(".space-component").classList.add("blur");
+    console.log(openImage, e.target.src)
+    document.querySelector(".designers-page-row")?.classList.add("blur");
+    document.querySelector(".space-component")?.classList.add("blur");
   };
 
   const handleCloseImage = () => {
-    if (openImage !== null) {
-      setOpenImage(null);
-      document.querySelector(".designers-page-row").classList.remove("blur");
-      document.querySelector(".space-component").classList.remove("blur");
-    }
+    setOpenImage(null);
+    document.querySelector(".designers-page-row")?.classList.remove("blur");
+    document.querySelector(".space-component")?.classList.remove("blur");
+  };
+
+  const getSafeImage = (imagesArray, updatedAt) => {
+    const image = imagesArray?.[0];
+    return getVersionedImage(image, updatedAt) || "/notAvaliableImage.jpg";
   };
 
   return (
-    <Container fluid className="designersPage px-0 " onClick={handleCloseImage}>
-      <SpaceComponent info={{ h1: t("designers") }} className="w-100" />
+    <Container fluid className="designersPage px-0">
+      <SpaceComponent
+        ref={SpaceComonentRef}
+        info={{ h1: t("designers") }}
+        className="w-100"
+      />
+
       {openImage && (
         <Row className="open-image-container">
-          {
-            <Col sm={12} className="col">
-              {/* <div className="background-filter"></div> */}
-              <div className="open-image-container-inner">
-                <FontAwesomeIcon icon={faXmark} />
-                <img className="" src={openImage} alt="" />
-              </div>
-            </Col>
-          }
+          <Col sm={12} className="col">
+            <div className="open-image-container-inner">
+              <FontAwesomeIcon icon={faXmark} onClick={handleCloseImage}/>
+              <img src={openImage} alt="" />
+            </div>
+          </Col>
         </Row>
       )}
+
       <Row className="designers-page-row py-3 py-lg-5">
-        {localDesignersData &&
-          localDesignersData.map((item, i) => (
-            <Col
-              key={i}
-              xs={6}
-              sm={5}
-              md={4}
-              lg={3}
-              xl={3}
-              className="designersPage-card-col py-3 d-flex justify-content-center align-items-start"
-            >
-              <Card className="designersPage-card">
-                <div className="designersPage-cards-images-top">
-                  <div className="designersPage-background-image-container">
-                    <Card.Img src={item.images[1] || '/notAvaliableImage.jpg'} onClick={handleOpenImage} />
-                  </div>
-                  <div className="designersPage-designer-image-container">
-                    <Card.Img
-                      className="object-fit-cover"
-                      src={item.images[0] || '/notAvaliableImage.jpg'}
-                      onClick={handleOpenImage}
-                    />
-                  </div>
+        {visibleDesigners?.map((item, i) => (
+          <Col
+            key={i}
+            xs={6}
+            sm={5}
+            md={4}
+            lg={3}
+            xl={3}
+            className="designersPage-card-col py-3 d-flex justify-content-center align-items-start"
+          >
+            <Card className="designersPage-card">
+              <div className="designersPage-cards-images-top">
+                <div className="designersPage-background-image-container">
+                  <Card.Img
+                    src={getSafeImage(item.projectPhoto, item.updatedAt)}
+                    onClick={handleOpenImage}
+                  />
                 </div>
-                <Card.Body className="designersPage-card-body text-white">
-                  {/* <Card.Title className="text-center">
-                    {item.name[i18n.language].split(' ')[0]} 
-                    <br/>
-                    {item.name[i18n.language].split(' ')[1]}
-                  </Card.Title> */}
-                  <Card.Text className="text-center">
-                    {item.name[i18n.language].split(" ")[0]}
-                    <br />
-                    {item.name[i18n.language].split(" ")[1]}
-                  </Card.Text>
-                  <ButtonGroup
-                    aria-label="designersPage-button-group"
-                    className="designersPage-button-group pb-2"
+                <div className="designersPage-designer-image-container">
+                  <Card.Img
+                    className="object-fit-cover"
+                    src={getSafeImage(item.profilePhoto, item.updatedAt)}
+                    onClick={handleOpenImage}
+                  />
+                </div>
+              </div>
+              <Card.Body className="designersPage-card-body text-white">
+                <Card.Text className="text-center d-flex flex-column">
+                  <span className="mb-0">
+                    {item.name[i18n.language]?.split(" ")[0] ||
+                      item.name["ge"]?.split(" ")[0]}
+                  </span>
+                  <span>
+                    {item.name[i18n.language]?.split(" ")[1] ||
+                      item.name["ge"]?.split(" ")[1]}
+                  </span>
+                </Card.Text>
+                <ButtonGroup
+                  aria-label="designersPage-button-group"
+                  className="designersPage-button-group pb-2"
+                >
+                  <Button
+                    href={
+                      item.behance?.startsWith("http")
+                        ? item.behance
+                        : `https://${item.behance}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-link"
+                    variant="secondary"
                   >
-                    
-                      
-                      <Button
-                        href={`${item.behance}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-link"
-                        variant="secondary"
-                      >
-                        <div>
-                          {item.companyPerson === 'person' ? <FontAwesomeIcon icon={faBehance} />: <FontAwesomeIcon icon={faGlobe} />}
-                        </div>
-                      </Button>
-                    
-                    <Button
-                      href={`${item.facebook}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-link"
-                      variant="secondary"
-                    >
-                      <div>
-                        <FontAwesomeIcon icon={faFacebookF} />
-                      </div>
-                    </Button>
-                    <Button
-                      href={`${item.instagram}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-link"
-                      variant="secondary"
-                    >
-                      <div>
-                        <FontAwesomeIcon icon={faInstagram} />
-                      </div>
-                    </Button>
-                  </ButtonGroup>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
+                    <div>
+                      {item.companyPerson === "person" ? (
+                        <FontAwesomeIcon icon={faBehance} />
+                      ) : (
+                        <FontAwesomeIcon icon={faGlobe} />
+                      )}
+                    </div>
+                  </Button>
+                  <Button
+                    href={item.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-link"
+                    variant="secondary"
+                  >
+                    <div>
+                      <FontAwesomeIcon icon={faFacebookF} />
+                    </div>
+                  </Button>
+                  <Button
+                    href={item.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-link"
+                    variant="secondary"
+                  >
+                    <div>
+                      <FontAwesomeIcon icon={faInstagram} />
+                    </div>
+                  </Button>
+                </ButtonGroup>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+        <Row className="mb-0">
+          <Paginations
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={(page) => setSearchParams({ page })}
+          />
+        </Row>
       </Row>
     </Container>
   );

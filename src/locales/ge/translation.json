@@ -34,15 +34,20 @@
   "person": "ფიზ. პირი",
   "company": "კომპანია",
   "phoneNumber": "ტელეფონის ნომერი",
+  "nameRequired": "სახელი სავალდებულოა",
+  "emailRequired": "მეილი სავალდებულოა",
+  "phoneRequired": "ტელ.ნომერი სავალდებულოა",
   "uploadProfilePhoto": "ატვირთე პროფილის ფოტო",
   "uploadProjectsPhoto": "ატვირთე პროექტის ფოტო",
   "errorPhotoSize": "მაქს. ზომა 10მბ",
   "uploadedProfilePhoto": "პროფილის ფოტო აიტვირთა",
   "uploadedProjectsPhoto": "პროექტის ფოტო აიტვირთა",
+  "maxSizeErroProfilePhoto": "პროფილის ფოტოს ზომა აღემატება 10მბ-ს!",
+  "maxSizeErroProjectPhoto": "პროექტის ფოტოს ზომა აღემატება 10მბ-ს!",
   "behanceLink": "Behance Link",
   "instagramLink": "Instagram Link",
   "facebookLink": "Facebook Link",
   "imageSizeError": "გთხოვთ შეცვალოთ ფოტო. ორივე ფოტოს ზომა ჯამში არ უნდა აღემატებოდეს 4 მეგაბაიტს",
-  "blog": "ბლოგი"
-
+  "blog": "ბლოგი",
+  "BlogComingSoon": "მალე დაემატება"
 }

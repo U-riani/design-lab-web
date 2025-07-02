@@ -241,6 +241,14 @@ button,
   display: none !important;
 }
 
+.hero-banner .carousel-control-prev,
+.hero-banner .carousel-control-next {
+  display: flex !important;
+  height: 80%;
+  min-width: 30px;
+  max-width: 70px;
+}
+
 .carousel-indicators {
   margin-bottom: 0px !important;
   /* margin-top: 5px !important; */
@@ -276,7 +284,7 @@ button,
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-right: 10px solid #a4ce4d !important;
+  border-right: 10px solid #8d9889 !important;
 }
 .spaceComponent-text-container {
   max-width: 95%;
@@ -290,9 +298,6 @@ button,
 .space-component {
   overflow: hidden;
   position: relative;
-}
-.space-component h1 {
-  /* text-align: right; */
 }
 
 .space-component strong {
@@ -1407,6 +1412,10 @@ button,
   font-weight: 600;
 }
 
+.designersPage-card-body span {
+  height: 19.5px;
+}
+
 .designersPage-button-group {
   /* border: 1px solid white; */
   /* display: flex !important; */
@@ -1854,6 +1863,18 @@ button,
   border: 1px solid rgba(128, 128, 128, 0.193) !important;
 }
 
+.upload-registration-photo,
+.upload-registration-photo .form-control {
+  height: 54px;
+}
+
+.upload-registration-photo .form-control {
+  height: 50px;
+  padding: 0;
+  margin-top: -6px;
+  border: none;
+}
+
 .green-border {
   border: 1px solid green !important;
   border-radius: 5px;
@@ -1885,6 +1906,7 @@ button,
   aspect-ratio: 2 / 3;
   overflow: hidden;
   max-height: 400px;
+  transition: box-shadow 0.2s;
 }
 
 .blogs-card .card-header {
@@ -1921,11 +1943,32 @@ button,
   overflow: hidden;
 }
 
+.blogs-card img {
+  transition: all 0.5s;
+}
+
+.blogs-card:hover img {
+  transform: scale(1.1);
+}
+
+.blogs-card:hover {
+  box-shadow: 0px 2px 10px 6px rgba(99, 119, 88, 0.442);
+}
+
 /*Single Blog*/
 .single-blog-main-image {
   max-width: 80%;
   max-height: 90vh;
   object-fit: contain;
+}
+
+/* image load */
+.fade-in-image {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.fade-in-image.loaded {
+  opacity: 1;
 }
 
 /* admin dashbord */
