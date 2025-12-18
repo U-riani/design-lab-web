@@ -44,6 +44,7 @@ import AdminAddBlogs from "./adminPages/pages/AdminAddBlogs";
 import SingleBlogPage from "./union/pages/SingleBlogPage";
 import AdminAllBlogs from "./adminPages/pages/AdminAllBlogs";
 import AdminEditBlog from "./adminPages/pages/AdminEditBlog";
+import AdminAllDesignersInfo from "./adminPages/pages/AdminAllDesignersInfo";
 
 const App = () => (
   <AuthProvider>
@@ -104,6 +105,10 @@ const App = () => (
             <Route
               path="all-designers"
               element={<ProtectedRoute element={<AdminAllDesigners />} />}
+            />
+            <Route
+              path="all-designers-info"
+              element={<ProtectedRoute element={<AdminAllDesignersInfo />} />}
             />
             <Route
               path="add-projects"

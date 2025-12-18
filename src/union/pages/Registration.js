@@ -49,6 +49,9 @@ const Registration = () => {
 
   const validateForm = () => {
     const errors = {};
+    const isBehanceUrl = /^https:\/\//;
+    const isInstagramUrl = /^https:\/\/(www\.)?instagram\.com\/.+/;
+    const isFacebookUrl = /^https:\/\/(www\.)?facebook\.com\/.+/;
 
     if (!name.ge.trim()) errors.name = t("nameRequired");
     if (!email.trim()) errors.email = t("emailRequired");
@@ -56,6 +59,17 @@ const Registration = () => {
 
     if (!phone.trim()) errors.phone = t("phoneRequired");
     else if (!/^\+?\d{7,15}$/.test(phone)) errors.phone = t("invalidPhone");
+
+    if (!behance.trim()) errors.behance = t("behanceRequired");
+    else if (!isBehanceUrl.test(behance)) errors.behance = t("invalidBehance");
+
+    if (!instagram.trim()) errors.instagram = t("instagramRequired");
+    else if (!isInstagramUrl.test(instagram))
+      errors.instagram = t("invalidInstagram");
+
+    if (!facebook.trim()) errors.facebook = t("facebookRequired");
+    else if (!isFacebookUrl.test(facebook))
+      errors.facebook = t("invalidFacebook");
 
     if (profilePhoto && profilePhoto.size > maxSize)
       errors.profilePhoto = t("maxSizeErroProfilePhoto");
@@ -407,10 +421,20 @@ const Registration = () => {
               >
                 <Form.Control
                   value={behance}
-                  onChange={(e) => setBehance(e.target.value)}
+                  onChange={(e) => {
+                    setBehance(e.target.value);
+                    setFieldErrors((prev) => {
+                      const { behance, ...rest } = prev;
+                      return rest;
+                    });
+                  }}
                   type="url"
-                  placeholder="Behance"
+                  isInvalid={!!fieldErrors.behance}
+                  placeholder="exp: https://www.behance.net/username"
                 />
+                <Form.Control.Feedback type="invalid">
+                  {fieldErrors.behance}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
             <Col sm={12} lg={4} className="px-lg-3">
@@ -421,10 +445,20 @@ const Registration = () => {
               >
                 <Form.Control
                   value={instagram}
-                  onChange={(e) => setInstagram(e.target.value)}
+                  onChange={(e) => {
+                    setInstagram(e.target.value);
+                    setFieldErrors((prev) => {
+                      const { instagram, ...rest } = prev;
+                      return rest;
+                    });
+                  }}
                   type="url"
+                  isInvalid={!!fieldErrors.instagram}
                   placeholder="Instagram link"
                 />
+                <Form.Control.Feedback type="invalid">
+                  {fieldErrors.instagram}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
             <Col sm={12} lg={4}>
@@ -435,10 +469,20 @@ const Registration = () => {
               >
                 <Form.Control
                   value={facebook}
-                  onChange={(e) => setFacebook(e.target.value)}
+                  onChange={(e) => {
+                    setFacebook(e.target.value);
+                    setFieldErrors((prev) => {
+                      const { facebook, ...rest } = prev;
+                      return rest;
+                    });
+                  }}
                   type="url"
+                  isInvalid={!!fieldErrors.facebook}
                   placeholder="Facebook link"
                 />
+                <Form.Control.Feedback type="invalid">
+                  {fieldErrors.facebook}
+                </Form.Control.Feedback>
               </FloatingLabel>
             </Col>
 

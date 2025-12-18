@@ -29,7 +29,7 @@
   --projectsContentMaxWidthDesktop: 800px;
   --singleNewsMaxWidth: 800px;
   --registrationFormPhoneWidth: 85%;
-  --registrationFormDesktopWidth: 800px;
+  --registrationFormDesktopWidth: 900px;
 }
 
 h1,
@@ -1392,6 +1392,8 @@ button,
 
 .designersPage-designer-image-container img {
   height: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .designersPage-card-body {
@@ -1481,6 +1483,22 @@ button,
   transform: translate(-50%, -50%);
   transition: 0.5s;
 } */
+
+/* Paginatiosh buttons style */
+.page-item .page-link {
+  color: #6d7c67;
+}
+
+.page-item .page-link:hover,
+.page-item .page-link:active,
+.page-item .page-link:focus {
+  color: #6d7c67;
+}
+.page-item.active,
+.page-item.active span {
+  background-color: #6d7c67;
+  border-color: #6d7c67;
+}
 
 /* single news page styles */
 .news-article {
@@ -2474,6 +2492,10 @@ button:disabled {
     justify-content: center;
     align-items: flex-start;
     row-gap: 20px;
+  }
+
+  .invalid-feedback {
+    font-size: 12px !important;
   }
 
   /* see more button*/
