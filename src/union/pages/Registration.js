@@ -14,6 +14,8 @@ import { useTranslation } from "react-i18next";
 import SpaceComponent from "../../components/SpaceComponent";
 import { useCreateDesignerMutation } from "../../data/designersSlice2";
 import DesignerCardComponent from "../../components/DesignerCardComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 const Registration = () => {
   const maxSize = 10 * 1024 * 1024; // 10MB
@@ -209,6 +211,24 @@ const Registration = () => {
     <Container fluid className="px-0 registration-page">
       <SpaceComponent info={{ h1: t("registration") }} className="w-100" />
       <Row className="my-0 mx-0 ">
+        <Col sm={12} className="mt-4 mt-md-4 mt-lg-5 px-0 d-flex justify-content-center">
+          <div className="terms-inner-container">
+            <button className="bg-white my-2 my-md-0 p-0 shadow mx-2 mx-lg-0">
+              <a
+                href="/assets/documents/designerUnionTerms.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="d-block text-secondary fs-6 py-3 px-3"
+              >
+                {t("terms")}
+                <FontAwesomeIcon
+                  className="ps-2 font"
+                  icon={faArrowUpRightFromSquare}
+                />
+              </a>
+            </button>
+          </div>
+        </Col>
         <Col className="d-flex justify-content-center py-4 py-lg-5">
           <Form className="registration-form p-4 p-lg-5">
             {/* Name */}

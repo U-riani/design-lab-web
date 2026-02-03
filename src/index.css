@@ -1850,6 +1850,11 @@ button,
   color: grey;
 }
 
+.terms-inner-container {
+  width: var(--registrationFormPhoneWidth);
+  min-width: 300px;
+}
+
 .upload-label label {
   width: 100% !important;
   height: 100% !important;
@@ -2100,6 +2105,36 @@ button:disabled {
 .admin-about-us-image-container {
   height: 600px !important;
   aspect-ratio: 2/1;
+}
+
+.max-h-80 {
+  max-height: 60vh;
+}
+
+.president-text-container {
+  background-color: rgba(231, 231, 231, 0.404);
+}
+
+.president-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.president-title {
+  font-size: 12px;
+  font-weight: bold;
+  color: gray;
+}
+
+.board-members-cards {
+  height: 100% !important;
+  box-shadow: 1px 5px 7px rgb(211, 210, 210);
+}
+
+.board-members-position {
+  font-size: 12px;
+  font-weight: bold;
+  color: gray;
 }
 
 @keyframes carouselItemAnimation {
@@ -2645,6 +2680,10 @@ button:disabled {
 
   /*Registration page*/
   .registration-form {
+    width: var(--registrationFormDesktopWidth);
+  }
+
+  .terms-inner-container {
     width: var(--registrationFormDesktopWidth);
   }
 

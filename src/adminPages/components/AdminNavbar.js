@@ -96,6 +96,12 @@ const AdminNavbar = () => {
               <NavDropdown.Item as={Link} to="edit-about-us-main-page">
                 EDIT AboutUsMainPage
               </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="team/add">
+                Add team member
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="team">
+                Edit team member
+              </NavDropdown.Item>
               {/* ...other dropdown items */}
             </NavDropdown>
           </Nav>

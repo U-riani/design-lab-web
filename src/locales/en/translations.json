@@ -1,7 +1,7 @@
 {
   "main": "MAIN",
-  "news":  "NEWS",
-  "aboutUs":  "ABOUT US",
+  "news": "NEWS",
+  "aboutUs": "ABOUT US",
   "designers": "DESIGNERS",
   "projects": "PROJECTS",
   "partners": "PARTNERS",
@@ -49,6 +49,8 @@
   "facebookLink": "Facebook Link",
   "imageSizeError": "Too big image, max size for profile and cover photo is 4MB",
   "blog": "BLOG",
-    "BlogComingSoon": "Blog coming soon"
-
+  "BlogComingSoon": "Blog coming soon",
+  "terms": "Internal Regulations of the Designers' Union",
+  "ourTeam": "Our Team",
+  "boardMembers": "Board Members"
 }

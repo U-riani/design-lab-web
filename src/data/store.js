@@ -13,6 +13,7 @@ import { partnersApiSlice } from "./partnersSlice";
 import { designersApiSlice } from "./designersSlice2";
 import { projectsApiSlice } from "./projectsSlice.js";
 import { projectContentApiSlice } from "./projectContentSlice.js";
+import { apiTeamSlice } from "./apiTeamSlice";
 
 const store = configureStore({
   reducer: {
@@ -29,6 +30,7 @@ const store = configureStore({
     [designersApiSlice.reducerPath]: designersApiSlice.reducer,
     [projectsApiSlice.reducerPath]: projectsApiSlice.reducer,
     [projectContentApiSlice.reducerPath]: projectContentApiSlice.reducer,
+    [apiTeamSlice.reducerPath]: apiTeamSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -41,6 +43,7 @@ const store = configureStore({
       designersApiSlice.middleware,
       projectsApiSlice.middleware,
       projectContentApiSlice.middleware,
+      apiTeamSlice.middleware
     ),
 });
 

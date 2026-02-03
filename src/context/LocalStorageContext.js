@@ -1,4 +1,4 @@
-// LocalStorageContext.js
+// context/LocalStorageContext.js
 import React, { createContext, useContext, useState } from 'react';
 
 // Create the LocalStorage context
@@ -36,6 +36,7 @@ export const LocalStorageProvider = ({ children }) => {
     aboutUs: loadFromLocalStorage('aboutUs'),
     aboutUsMainPage: loadFromLocalStorage('aboutUsMainPage'),
     allBlogs: loadFromLocalStorage('allBlogs'),
+    allTeamMembers: loadFromLocalStorage('allTeamMembers'),
   });
 
   // Function to update localStorage data

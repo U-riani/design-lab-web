@@ -44,6 +44,9 @@ import AdminAddBlogs from "./adminPages/pages/AdminAddBlogs";
 import SingleBlogPage from "./union/pages/SingleBlogPage";
 import AdminAllBlogs from "./adminPages/pages/AdminAllBlogs";
 import AdminEditBlog from "./adminPages/pages/AdminEditBlog";
+import AdminAddTeamMember from "./adminPages/pages/AdminAddTeamMember";
+import AdminEditTeamMember from "./adminPages/pages/AdminEditTeamMember";
+import AdminTeamList from "./adminPages/pages/AdminTeamList ";
 
 const App = () => (
   <AuthProvider>
@@ -130,8 +133,24 @@ const App = () => (
               element={<ProtectedRoute element={<AdminAddAboutUsMainPage />} />}
             />
             <Route
+              path="team"
+              element={<ProtectedRoute element={<AdminTeamList />} />}
+            />
+
+            <Route
+              path="team/add"
+              element={<ProtectedRoute element={<AdminAddTeamMember />} />}
+            />
+
+            <Route
+              path="team/edit/:id"
+              element={<ProtectedRoute element={<AdminEditTeamMember />} />}
+            />
+            <Route
               path="edit-about-us-main-page"
-              element={<ProtectedRoute element={<AdminEditAboutUsMainPage />} />}
+              element={
+                <ProtectedRoute element={<AdminEditAboutUsMainPage />} />
+              }
             />
           </Route>
           {/* Add more routes as needed */}

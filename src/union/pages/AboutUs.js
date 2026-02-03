@@ -3,28 +3,33 @@ import { Col, Container, Row, Card } from "react-bootstrap";
 import SpaceComponent from "../../components/SpaceComponent";
 import { useTranslation } from "react-i18next";
 import { useGetAboutUsQuery } from "../../data/aboutUsSlice";
+import { useGetTeamMembersQuery } from "../../data/apiTeamSlice";
 import { useLocalStorage } from "../../context/LocalStorageContext";
 
 const AboutUs = () => {
   const { localStorageData, updateLocalStorageData } = useLocalStorage();
   const localAboutUsData = localStorageData.aboutUs;
+  const localTeamMembers = localStorageData.allTeamMembers;
 
   const { t, i18n } = useTranslation();
-  const { data } = useGetAboutUsQuery();
+  const { data: aboutUsData } = useGetAboutUsQuery();
+  const { data: teamData } = useGetTeamMembersQuery();
+
   const [imageSrc, setImageSrc] = useState("");
 
-  // Helper function to compare news data arrays
+  // ---------- helpers ----------
   const isDataDifferent = (localData, serverData) => {
-    if (!localData || localData.length !== serverData.length) return true;
+    if (!localData || !serverData) return true;
+    if (localData.length !== serverData.length) return true;
     return JSON.stringify(localData) !== JSON.stringify(serverData);
   };
 
-  // Load data from server and update localStorage if data has changed
+  // ---------- sync AboutUs ----------
   useEffect(() => {
-    if (data && isDataDifferent(localAboutUsData, data)) {
-      updateLocalStorageData("aboutUs", data);
+    if (aboutUsData && isDataDifferent(localAboutUsData, aboutUsData)) {
+      updateLocalStorageData("aboutUs", aboutUsData);
     }
-  }, [data, localAboutUsData]);
+  }, [aboutUsData, localAboutUsData]);
 
   useEffect(() => {
     if (localAboutUsData && localAboutUsData[0]?.image?.length > 0) {
@@ -32,34 +37,48 @@ const AboutUs = () => {
     }
   }, [localAboutUsData]);
 
+  // ---------- sync Team ----------
+  useEffect(() => {
+    if (teamData && isDataDifferent(localTeamMembers, teamData)) {
+      updateLocalStorageData("allTeamMembers", teamData);
+    }
+  }, [teamData, localTeamMembers]);
+
+  // ---------- sanitize ----------
   const sanitizeHtml = (input) => {
     if (typeof input !== "string") return input;
 
-    // Remove all inline styles
     let result = input.replace(/ style="[^"]*"/g, "");
-
-    // Replace <br> with <br/>
     result = result.replace(/<br>/g, "<br/> </br>");
 
-    // Remove all tags except allowed ones
     const allowedTags = ["ul", "ol", "li", "strong", "br"];
-    result = result.replace(/<\/?([a-zA-Z0-9]+)[^>]*>/g, (match, tag) => {
-      return allowedTags.includes(tag.toLowerCase()) ? match : "";
-    });
+    result = result.replace(/<\/?([a-zA-Z0-9]+)[^>]*>/g, (match, tag) =>
+      allowedTags.includes(tag.toLowerCase()) ? match : "",
+    );
 
-    // Preserve \n and \t as plain text
     result = result.replace(/\n/g, "\\n").replace(/\t/g, "\\t");
 
-    const newResult = `<img src="${imageSrc}" class="aboutUs-page-image mb-3 ms-lg-3" alt="aboutUs Image"/> ${result}`;
-    return newResult;
+    return `<img src="${imageSrc}" class="aboutUs-page-image mb-3 ms-lg-3" alt="aboutUs Image"/> ${result}`;
   };
 
+  // ---------- team split ----------
+  const featuredMember =
+    localTeamMembers
+      ?.filter((m) => m.type === "featured")
+      ?.sort((a, b) => a.order - b.order)[0] || null;
+
+  const boardMembers =
+    localTeamMembers?.filter((m) => m.type === "board") || [];
+
+  // ---------- render ----------
   return (
     <Container
       fluid
       className="about-us-page px-0 d-flex flex-column align-items-center justify-content-start"
     >
       <SpaceComponent info={{ h1: t("aboutUs") }} className="w-100" />
+
+      {/* ABOUT TEXT */}
       <Row className="about-us-page-inner-container my-3 my-md-5 py-4 px-2">
         <Col sm={12}>
           {localAboutUsData && (
@@ -69,126 +88,111 @@ const AboutUs = () => {
               dangerouslySetInnerHTML={{
                 __html: sanitizeHtml(localAboutUsData[0].text[i18n.language]),
               }}
-            >
-              {/* <img
-              className="aboutUs-page-image mb-3 ms-lg-3"
-              src="/aboutUs-1.jpg"
-              alt="About Us"
             />
-            {t("aboutUs1")}
-            <br />
-            <br />
-            {t("aboutUs2")} */}
-            </p>
           )}
-          {/* <p className="mb-0">{t("aboutUs2")}</p> */}
-        </Col>
-        {/* <Col sm={12} md={6}>
-            <img src='/aboutUs-1.jpg'/>
-        </Col> */}
-        <Col sm={12}></Col>
-      </Row>
-      <Row className="about-us-page-inner-container my-3 my-md-5 py-4 px-2">
-        <Col sm={12}>
-          <h3 className="mb-4 fw-bold fs-3">{t("ourTeam")}</h3>
-        </Col>
-        <Col
-          sm={12}
-          className="d-flex flex-column justify-content-center gap-4"
-        >
-          <div>
-            <img
-              className="w-100 object-fit-cover"
-              src="/aboutUs-1.jpg"
-              alt="About Us"
-            />
-          </div>
-          <div>
-            <div>
-              <h5 className="f4-4">Mtavari saxeli</h5>
-              <p className="fs-6">pozicia</p>
-              <hr className="w-25" />
-            </div>
-            <div>
-              <ul className="ps-3">
-                <li>Responsibility 1</li>
-                <li>Responsibility 2</li>
-                <li>Responsibility 3</li>
-                <li>Responsibility 4</li>
-              </ul>
-            </div>
-          </div>
-        </Col>
-        <Col sm={12} className="pt-5">
-          <h3>Board Members</h3>
-        </Col>
-        <Col xs={12} sm={6} md={6} lg={4} xxl={3} className="pt-3">
-          <Card className="mb-4 border-0 shadow-sm">
-            <Card.Img variant="top" src="/aboutUs-1.jpg" />
-            <Card.Body>
-              <Card.Title className="fs-5">Saxeli Gvari</Card.Title>
-              <Card.Text className="fs-6">
-                Pozicia Some quick example text to build on the card title
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xs={12} sm={6} md={6} lg={4} xxl={3} className="pt-3">
-          <Card className="mb-4 border-0 shadow-sm">
-            <Card.Img variant="top" src="/aboutUs-1.jpg" />
-            <Card.Body>
-              <Card.Title className="fs-5">Saxeli Gvari</Card.Title>
-              <Card.Text className="fs-6">
-                Pozicia Some quick example text to build on the card title
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xs={12} sm={6} md={6} lg={4} xxl={3} className="pt-3">
-          <Card className="mb-4 border-0 shadow-sm">
-            <Card.Img variant="top" src="/aboutUs-1.jpg" />
-            <Card.Body>
-              <Card.Title className="fs-5">Saxeli Gvari</Card.Title>
-              <Card.Text className="fs-6">
-                Pozicia Some quick example text to build on the card title
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xs={12} sm={6} md={6} lg={4} xxl={3} className="pt-3">
-          <Card className="mb-4 border-0 shadow-sm">
-            <Card.Img variant="top" src="/aboutUs-1.jpg" />
-            <Card.Body>
-              <Card.Title className="fs-5">Saxeli Gvari</Card.Title>
-              <Card.Text className="fs-6">
-                Pozicia Some quick example text to build on the card title
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xs={12} sm={6} md={6} lg={4} xxl={3} className="pt-3">
-          <Card className="mb-4 border-0 shadow-sm">
-            <Card.Img variant="top" src="/aboutUs-1.jpg" />
-            <Card.Body>
-              <Card.Title className="fs-5">Saxeli Gvari</Card.Title>
-              <Card.Text className="fs-6">
-                Pozicia Some quick example text to build on the card title
-              </Card.Text>
-            </Card.Body>
-          </Card>
         </Col>
       </Row>
+
+      {/* FEATURED MEMBER */}
       <Row className="about-us-page-inner-container my-3 my-md-5 py-4 px-2">
         <Col sm={12}>
-          <a
-            href="/assets/documents/test.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-decoration-none"
-          >
-            pdf1
-          </a>
+          <h3 className="mb-4 fw-bold fs-4">{t("ourTeam")}</h3>
         </Col>
+
+        {/* team section using real data */}
+        {featuredMember && (
+          <>
+            <Col
+              sm={12}
+              className="d-flex flex-column flex-md-row justify-content-center justify-content-md-between px-lg-5 gap-4 gap-md-3"
+            >
+              {/* left side big image */}
+              <Col sm={12} md={7} lg={6}>
+                <img
+                  className="max-h-80 ratio aspect-1x1  px-2 px-md-0 object-fit-cover"
+                  src={featuredMember.image}
+                  alt={featuredMember.name[i18n.language]}
+                />
+              </Col>
+
+              {/* right side text + bullets */}
+              <Col
+                sm={12}
+                md={5}
+                lg={6}
+                className="president-text-container px-2 pt-3 pb-1 px-md-3 pt-4 pb-md-2 px-lg-4 pt-3 pb-1"
+              >
+                <div className="">
+                  <h5 className="president-name">
+                    {featuredMember.name[i18n.language]}
+                  </h5>
+                  <p className="about-us-page-p fw-bold president-title">
+                    {featuredMember.position[i18n.language]}
+                  </p>
+                  <hr className="w-25" />
+                  {featuredMember.description?.[i18n.language] && (
+                    <p className="about-us-page-p ">
+                      {featuredMember.description?.[i18n.language]}
+                    </p>
+                  )}
+                  {featuredMember.responsibilities?.[i18n.language] && (
+                    <ul className="ps-3 about-us-page-p">
+                      {featuredMember.responsibilities[i18n.language].map(
+                        (item, idx) => (
+                          <li key={idx}>{item}</li>
+                        ),
+                      )}
+                    </ul>
+                  )}
+                </div>
+              </Col>
+            </Col>
+
+            {/* Board members */}
+            <Col sm={12} className="pt-5">
+              <h3 className="fs-4 fw-semibold">{t("boardMembers")}</h3>
+            </Col>
+
+            {boardMembers.map((member) => (
+              <Col
+                key={member._id}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={4}
+                xxl={3}
+                className="pt-3 rounded-0"
+              >
+                <Card className="pb-0 border-0 board-members-cards rounded-0">
+                  <Card.Img
+                    className="rounded-0"
+                    variant="top"
+                    src={member.image}
+                    alt={member.name[i18n.language]}
+                    style={{
+                      width: "100%",
+                      objectFit: "cover",
+                      aspectRatio: "4/3",
+                    }}
+                  />
+                  <Card.Body>
+                    <Card.Title className="fs-6 fw-semibold">
+                      {member.name[i18n.language]}
+                    </Card.Title>
+                    <Card.Text className="board-members-position">
+                      {member.position[i18n.language]}
+                    </Card.Text>
+                    {member.shortDescription?.[i18n.language] && (
+                      <Card.Text className="about-us-page-p ">
+                        {member.shortDescription[i18n.language]}
+                      </Card.Text>
+                    )}
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </>
+        )}
       </Row>
     </Container>
   );
