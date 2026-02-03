@@ -72,6 +72,9 @@ const AdminNavbar = () => {
               <NavDropdown.Item as={Link} to="all-designers">
                 ALL DESIGNERS
               </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="all-designers-info">
+                ALL DESIGNERS INFO
+              </NavDropdown.Item>
               {/* ...other dropdown items */}
             </NavDropdown>
             <NavDropdown title="PROJECTS" id="basic-nav-dropdown">

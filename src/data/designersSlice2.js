@@ -15,6 +15,10 @@ export const designersApiSlice = createApi({
       query: () => "designers",
       providesTags: ["Designer"],
     }),
+    getAllDesignersInfo: builder.query({
+      query: () => "designers/allDesignersInfo",
+      providesTags: ["Designer"],
+    }),
     getSomeDesigners: builder.query({
       query: ({ page = 1, limit = 8 }) =>
         `designers/paginated?page=${page}&limit=${limit}`,
@@ -123,6 +127,7 @@ export const designersApiSlice = createApi({
 
 export const {
   useGetAllDesignersQuery,
+  useGetAllDesignersInfoQuery,
   useGetSomeDesignersQuery,
   useGetSingleDesignerQuery,
   useCreateDesignerMutation,

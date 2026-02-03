@@ -41,26 +41,55 @@ const DesignersPage = () => {
   });
 
   // Only compare and cache on page 1
+  // useEffect(() => {
+  //   if (allDesigners?.data) {
+  //     setTotalItems(allDesigners.totalCount);
+
+  //     if (currentPage === 1) {
+  //       const cached = localStorageData.allDesigners;
+  //       const isDifferent =
+  //         !cached ||
+  //         JSON.stringify(cached.data) !== JSON.stringify(allDesigners.data);
+
+  //       if (isDifferent) {
+  //         updateLocalStorageData("allDesigners", allDesigners);
+  //       }
+
+  //       setVisibleDesigners(cached?.data || allDesigners.data);
+  //     } else {
+  //       setVisibleDesigners(allDesigners.data);
+  //     }
+  //   }
+  // }, [allDesigners, currentPage]);
   useEffect(() => {
-    if (allDesigners?.data) {
-      setTotalItems(allDesigners.totalCount);
+    if (!allDesigners?.data) return;
 
-      if (currentPage === 1) {
-        const cached = localStorageData.allDesigners;
-        const isDifferent =
-          !cached ||
-          JSON.stringify(cached.data) !== JSON.stringify(allDesigners.data);
+    setTotalItems(allDesigners.totalCount);
 
-        if (isDifferent) {
-          updateLocalStorageData("allDesigners", allDesigners);
-        }
+    if (currentPage === 1) {
+          console.log('111')
 
-        setVisibleDesigners(cached?.data || allDesigners.data);
-      } else {
-        setVisibleDesigners(allDesigners.data);
+      const cached = localStorageData.allDesigners;
+      const isDifferent =
+        !cached ||
+        JSON.stringify(cached.data) !== JSON.stringify(allDesigners.data);
+
+      if (isDifferent) {
+            console.log('222')
+
+        updateLocalStorageData("allDesigners", allDesigners);
       }
+
+      // ✅ Always prefer fresh server data if available
+      setVisibleDesigners(allDesigners.data);
+    } else {
+          console.log('33')
+
+      setVisibleDesigners(allDesigners.data);
     }
-  }, [allDesigners, currentPage]);
+    console.log("Effect run:", { currentPage, allDesigners });
+
+  }, [allDesigners, currentPage, updateLocalStorageData, localStorageData]);
 
   useEffect(() => {
     if (SpaceComonentRef.current) {
@@ -74,7 +103,7 @@ const DesignersPage = () => {
 
   const handleOpenImage = (e) => {
     setOpenImage(e.target.src);
-    console.log(openImage, e.target.src)
+    console.log(openImage, e.target.src);
     document.querySelector(".designers-page-row")?.classList.add("blur");
     document.querySelector(".space-component")?.classList.add("blur");
   };
@@ -102,7 +131,7 @@ const DesignersPage = () => {
         <Row className="open-image-container">
           <Col sm={12} className="col">
             <div className="open-image-container-inner">
-              <FontAwesomeIcon icon={faXmark} onClick={handleCloseImage}/>
+              <FontAwesomeIcon icon={faXmark} onClick={handleCloseImage} />
               <img src={openImage} alt="" />
             </div>
           </Col>

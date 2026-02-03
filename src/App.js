@@ -44,9 +44,13 @@ import AdminAddBlogs from "./adminPages/pages/AdminAddBlogs";
 import SingleBlogPage from "./union/pages/SingleBlogPage";
 import AdminAllBlogs from "./adminPages/pages/AdminAllBlogs";
 import AdminEditBlog from "./adminPages/pages/AdminEditBlog";
+// <<<<<<< HEAD
 import AdminAddTeamMember from "./adminPages/pages/AdminAddTeamMember";
 import AdminEditTeamMember from "./adminPages/pages/AdminEditTeamMember";
 import AdminTeamList from "./adminPages/pages/AdminTeamList ";
+// =======
+import AdminAllDesignersInfo from "./adminPages/pages/AdminAllDesignersInfo";
+// >>>>>>> 97b230ca10e7e55557d3a2df3842b8c86634a7d5
 
 const App = () => (
   <AuthProvider>
@@ -107,6 +111,10 @@ const App = () => (
             <Route
               path="all-designers"
               element={<ProtectedRoute element={<AdminAllDesigners />} />}
+            />
+            <Route
+              path="all-designers-info"
+              element={<ProtectedRoute element={<AdminAllDesignersInfo />} />}
             />
             <Route
               path="add-projects"
